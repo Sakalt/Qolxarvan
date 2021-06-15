@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+@import "/client/component/function.scss";
+
+
+$root-size: 16px;
+
+$european-serif-font-family: "Times New Roman", "Times";
+$japanese-serif-font-family: "IPA P明朝", "IPAex明朝", "BIZ UDPMincho", "YuMincho", "Yu Mincho", "ＭＳ Ｐ明朝", "ＭＳ 明朝";
+$european-sans-font-family: "Arial";
+$european-sans-font-family: "IPA Pゴシック", "IPAexゴシック", "BIZ UDPGothic", "YuGothic", "Yu Gothic", "ＭＳ Ｐゴシック", "ＭＳ ゴシック";
+
+
+@mixin smartphone {
+  @media screen and (max-width: 640px) {
+    @content;
+  }
+}

@@ -1,0 +1,20 @@
+@charset "utf-8";
+
+@import "/client/component/mixin.scss";
+
+
+html {
+  font-size: $root-size;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: $european-serif-font-family, $japanese-serif-font-family, serif;
+  font-feature-settings: "palt" 1, "pkna" 1;
+  line-height: 1;
+  overflow-x: auto;
+  overflow-y: scroll;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
