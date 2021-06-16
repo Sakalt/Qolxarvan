@@ -109,7 +109,7 @@ let config = {
     historyApiFallback: true,
     contentBase: path.join(__dirname, "dist", "client"),
     proxy: {
-      "/internal": "http://localhost:8050",
+      "/api": "http://localhost:8050",
       "/static": "http://localhost:8050"
     }
   },
