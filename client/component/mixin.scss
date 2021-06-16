@@ -5,6 +5,11 @@
 
 $root-size: 16px;
 
+$blue-color: #33C3FF;
+$orange-color: #FFAB33;
+
+$background-color: tint($blue-color, 90%);
+
 $page-width: 800rpx;
 $page-top-margin: 60rpx;
 $page-bottom-margin: 80rpx;

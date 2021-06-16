@@ -13,6 +13,7 @@ body {
   font-family: $european-serif-font-family, $japanese-serif-font-family, serif;
   font-feature-settings: "palt" 1, "pkna" 1;
   line-height: 1;
+  background-color: $background-color;
   overflow-x: auto;
   overflow-y: scroll;
   text-size-adjust: 100%;
