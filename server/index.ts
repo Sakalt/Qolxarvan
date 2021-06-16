@@ -9,9 +9,12 @@ import {
   Response
 } from "express";
 import {
+  DictionaryController
+} from "/server/controller";
+import {
   COOKIE_SECRET,
   PORT
-} from "./variable";
+} from "/server/variable";
 
 
 export class Main {
@@ -43,6 +46,7 @@ export class Main {
   }
 
   private setupRouters(): void {
+    DictionaryController.use(this.application);
   }
 
   private setupStatic(): void {
@@ -67,7 +71,7 @@ export class Main {
         next();
       }
     };
-    this.application.use("/internal*", internalHandler);
+    this.application.use("/api*", internalHandler);
     this.application.use("*", otherHandler);
   }
 

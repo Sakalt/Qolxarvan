@@ -58,6 +58,7 @@
     "eslint-plugin-jsdoc": "^30.7.8",
     "express": "^4.17.1",
     "file-loader": "^6.2.0",
+    "googleapis": "^76.0.0",
     "html-webpack-plugin": "^4.5.0",
     "json-loader": "^0.5.7",
     "loader-utils": "^2.0.0",
