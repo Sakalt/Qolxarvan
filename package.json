@@ -14,9 +14,8 @@
     "build:client": "webpack -p --mode production --config webpack-client.ts",
     "build:client:analyze": "cross-env ANALYZE=1 npm run build:client",
     "build:server": "webpack --mode production --config webpack-server.ts",
-    "start": "node dist/index.js",
-    "start:service": "node dist/service.js",
-    "xxpostinstall": "npm run build",
+    "start": "npm run build && node dist/index.js",
+    "start:service": "npm run build && node dist/service.js",
     "lint": "eslint client/**/*.ts client/**/*.tsx server/**/*.ts",
     "command:tsnode": "ts-node -r tsconfig-paths/register",
     "command:tsc": "tsc"
