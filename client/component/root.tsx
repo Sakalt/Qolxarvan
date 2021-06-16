@@ -23,7 +23,7 @@ import Component from "/client/component/component";
 import {
   style
 } from "/client/component/decorator";
-import TopPage from "/client/component/page/top-page";
+import DictionaryPage from "/client/component/page/dictionary-page";
 import {
   GlobalStore
 } from "/client/component/store";
@@ -52,7 +52,7 @@ export class Root extends Component<Props, State> {
           <IntlProvider defaultLocale="ja" locale={this.store.locale} messages={this.store.messages}>
             <ScrollTop>
               <Switch>
-                <Route exact sensitive path="/" component={TopPage}/>
+                <Route exact sensitive path="/" component={DictionaryPage}/>
               </Switch>
             </ScrollTop>
           </IntlProvider>

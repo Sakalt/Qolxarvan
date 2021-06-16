@@ -8,16 +8,17 @@ import Component from "/client/component/component";
 import {
   style
 } from "/client/component/decorator";
+import Page from "/client/component/page/page";
 
 
-@style(require("./top-page.scss"))
-export default class TopPage extends Component<Props, State> {
+@style(require("./dictionary-page.scss"))
+export default class DictionaryPage extends Component<Props, State> {
 
   public render(): ReactNode {
     let node = (
-      <div>
+      <Page>
         Hello!
-      </div>
+      </Page>
     );
     return node;
   }
