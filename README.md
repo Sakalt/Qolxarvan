@@ -2,7 +2,6 @@
 <h1>シャレイア語オンライン辞典</h1>
 </div>
 
-![](https://img.shields.io/github/package-json/v/Ziphil/ShaleianOnline)
 ![](https://img.shields.io/github/commit-activity/y/Ziphil/ShaleianOnline?label=commits)
 
 
