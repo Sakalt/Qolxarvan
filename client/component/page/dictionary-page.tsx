@@ -17,7 +17,10 @@ export default class DictionaryPage extends Component<Props, State> {
   public render(): ReactNode {
     let node = (
       <Page>
-        Hello!
+        <div styleName="header">
+          <img styleName="logo" src="http://ziphil.com/material/logo/2.svg"/>
+          <span styleName="orange">sOxsOt</span> <span styleName="blue">IvO lIvAt</span>
+        </div>
       </Page>
     );
     return node;

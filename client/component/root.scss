@@ -3,6 +3,20 @@
 @import "/client/component/mixin.scss";
 
 
+@font-face {
+  font-family: $vekos-font-family;
+  src: url("http://ziphil.com/material/font/7.woff") format("woff"), url("http://ziphil.com/material/font/7.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: $gilit-font-family;
+  src: url("https://ziphil.com/material/font/9.woff") format("woff"), url("https://ziphil.com/material/font/9.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 html {
   font-size: $root-size;
 }
