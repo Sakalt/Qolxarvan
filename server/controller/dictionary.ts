@@ -29,4 +29,11 @@ export class DictionaryController extends Controller {
     stream.pipe(response);
   }
 
+  @get("/download")
+  public async [Symbol()](request: Request, response: Response): Promise<void> {
+    let stream = await GoogleUtils.downloadFile(DICTIONARY_ID);
+    response.attachment("shaleian.xdn");
+    stream.pipe(response);
+  }
+
 }
