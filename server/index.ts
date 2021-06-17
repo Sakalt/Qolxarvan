@@ -8,6 +8,7 @@ import {
   Request,
   Response
 } from "express";
+import fs from "fs";
 import {
   DictionaryController
 } from "/server/controller";
@@ -25,6 +26,7 @@ export class Main {
     this.application = express();
     this.setupBodyParsers();
     this.setupCookie();
+    this.setupDirectories();
     this.setupRouters();
     this.setupStatic();
     this.setupFallbackHandlers();
@@ -43,6 +45,10 @@ export class Main {
   private setupCookie(): void {
     let middleware = cookieParser(COOKIE_SECRET);
     this.application.use(middleware);
+  }
+
+  private setupDirectories(): void {
+    fs.mkdirSync("./dist/temp", {recursive: true});
   }
 
   private setupRouters(): void {
