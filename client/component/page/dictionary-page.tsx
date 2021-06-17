@@ -37,7 +37,7 @@ export default class DictionaryPage extends Component<Props, State> {
     dictionary: null,
     parameter: NormalParameter.createEmpty("ja"),
     page: 0,
-    showExplanation: false,
+    showExplanation: true,
     searchResult: SearchResult.createEmpty()
   };
 
@@ -157,7 +157,7 @@ export default class DictionaryPage extends Component<Props, State> {
 
   public render(): ReactNode {
     let innerNode = (this.state.dictionary !== null) && (
-      (this.state.showExplanation) ? "" : this.renderWordList()
+      (this.state.showExplanation) ? this.renderWordList() : this.renderWordList()
     );
     let node = (
       <Page>
