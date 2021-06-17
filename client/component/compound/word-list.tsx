@@ -2,6 +2,7 @@
 
 import * as react from "react";
 import {
+  MouseEvent,
   ReactNode
 } from "react";
 import {
@@ -26,6 +27,7 @@ export default class WordList extends Component<Props, State> {
           dictionary={this.props.dictionary}
           word={word}
           key={word.uid}
+          onLinkClick={this.props.onLinkClick}
         />
       );
       return wordPane;
@@ -44,7 +46,8 @@ export default class WordList extends Component<Props, State> {
 type Props = {
   dictionary: Dictionary,
   searchResult: SearchResult,
-  page: number
+  page: number,
+  onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
 };
 type State = {
 };

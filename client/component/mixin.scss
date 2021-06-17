@@ -9,6 +9,8 @@ $blue-color: #33C3FF;
 $dark-blue-color: #33ABFF;
 $orange-color: #FFAB33;
 $dark-orange-color: #FF9433;
+$black-color: shade($blue-color, 70%);
+$mute-color: tint($black-color, 70%);
 
 $background-color: tint($blue-color, 90%);
 

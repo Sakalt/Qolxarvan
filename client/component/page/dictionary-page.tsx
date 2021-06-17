@@ -87,6 +87,14 @@ export default class DictionaryPage extends Component<Props, State> {
     await this.updateWordsImmediately();
   }
 
+  private updateWordsByName(name: string): void {
+    let language = this.props.store!.locale;
+    let parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false});
+    this.setState({parameter}, () => {
+      this.updateWordsImmediately();
+    });
+  }
+
   private deserializeQuery(first: boolean, callback?: () => void): void {
     let queryString = this.props.location!.search;
     let query = queryParser.parse(queryString);
@@ -117,6 +125,7 @@ export default class DictionaryPage extends Component<Props, State> {
             dictionary={this.state.dictionary!}
             searchResult={this.state.searchResult}
             page={this.state.page}
+            onLinkClick={(name) => this.updateWordsByName(name)}
           />
         </div>
       </Fragment>
