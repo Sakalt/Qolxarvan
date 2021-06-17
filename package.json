@@ -20,6 +20,9 @@
     "command:tsnode": "ts-node -r tsconfig-paths/register",
     "command:tsc": "tsc"
   },
+  "engines": {
+    "node": "12.x"
+  },
   "eslintConfig": {
     "extends": "ziphil",
     "ignorePatterns": "webpack-*.ts"
