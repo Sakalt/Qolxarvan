@@ -55,6 +55,7 @@
 .button.icon {
   @include icon-font;
   width: 36px;
+  font-size: 100%;
 }
 
 .center .button {
