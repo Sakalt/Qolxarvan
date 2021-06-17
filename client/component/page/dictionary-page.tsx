@@ -117,7 +117,7 @@ export default class DictionaryPage extends Component<Props, State> {
 
   private serializeQuery(): void {
     let queryString = queryParser.stringify(ParameterUtils.serialize(this.state.parameter)) + `&page=${this.state.page}`;
-    this.props.history!.replace({search: queryString});
+    this.props.history!.push({search: queryString});
   }
 
   private async handleParameterSet(parameter: Parameter): Promise<void> {
