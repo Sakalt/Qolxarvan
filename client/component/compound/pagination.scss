@@ -1,0 +1,61 @@
+@charset "utf-8";
+
+@import "/client/component/mixin.scss";
+
+
+.root {
+  display: flex;
+  flex-direction: row;
+}
+
+.left {
+  width: 100%;
+  margin: 0rpx 10rpx 0rpx 0rpx;
+  text-align: right;
+  flex-grow: 1;
+}
+
+.right {
+  width: 100%;
+  margin: 0rpx 0rpx 0rpx 10rpx;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.leftmost,
+.rightmost {
+  white-space: nowrap;
+}
+
+.group {
+  display: inline-block;
+}
+
+.group >* {
+  margin: 0rpx 0rpx 0rpx 10rpx;
+  &:first-child {
+    margin: 0rpx;
+  }
+}
+
+.button {
+  width: 42rpx;
+  height: 36rpx;
+  background-color: white;
+  box-shadow: 0rpx 2rpx 10rpx $shadow-color;
+  display: inline-flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: tint($blue-color, 70%);
+  }
+}
+
+.center .button {
+  background-color: $blue-color;
+  color: white;
+  &:hover {
+    background-color: $blue-color;
+  }
+}

@@ -14,6 +14,7 @@ import {
   SearchResult
 } from "soxsot";
 import Component from "/client/component/component";
+import Pagination from "/client/component/compound/pagination";
 import SearchForm from "/client/component/compound/search-form";
 import WordList from "/client/component/compound/word-list";
 import {
@@ -133,6 +134,8 @@ export default class DictionaryPage extends Component<Props, State> {
   }
 
   private renderWordList(): ReactNode {
+    let minPage = this.state.searchResult.minPage;
+    let maxPage = this.state.searchResult.maxPage;
     let node = (
       <Fragment>
         <div styleName="word-list">
@@ -142,6 +145,9 @@ export default class DictionaryPage extends Component<Props, State> {
             page={this.state.page}
             onLinkClick={(name) => this.updateWordsByName(name)}
           />
+        </div>
+        <div styleName="pagination">
+          <Pagination page={this.state.page} minPage={minPage} maxPage={maxPage} onSet={this.handlePageSet.bind(this)}/>
         </div>
       </Fragment>
     );
