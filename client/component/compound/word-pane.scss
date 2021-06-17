@@ -10,9 +10,9 @@ $example-marker-width: 20rpx;
 $relation-marker-width: 7rpx;
 
 .section {
-  margin: 0rpx 0rpx 10rpx 0rpx;
-  padding: 0rpx 0rpx 10rpx 0rpx;
-  border-bottom: 1px tint($blue-color, 50%) dashed;
+  margin: 0rpx -30rpx 15rpx -30rpx;
+  padding: 0rpx 30rpx 15rpx 30rpx;
+  border-bottom: 1px $blue-color dashed;
   &:last-child {
     margin-bottom: 0px;
     padding-bottom: 0px;
@@ -21,16 +21,9 @@ $relation-marker-width: 7rpx;
 }
 
 .head {
-  margin-bottom: 10rpx;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.head-left {
   height: $head-height;
-  margin: 0rpx 0rpx 0rpx -40rpx;
-  padding: 0rpx 0rpx 0rpx 40rpx;
+  margin: 0rpx -40rpx 10rpx -40rpx;
+  padding: 0rpx 40rpx 0rpx 40rpx;
   color: white;
   background: linear-gradient(to right, $dark-blue-color, $blue-color);
   box-shadow: 0rpx 1rpx 4rpx rgba($dark-blue-color, 0.3);
@@ -49,13 +42,11 @@ $relation-marker-width: 7rpx;
     content: "";
   }
   &::after {
-    width: 0rpx;
-    height: 0rpx;
-    top: -10rpx;
-    right: -4rpx;
-    border-width: ($head-height / 2 + 10rpx) 12rpx ($head-height / 2 + 10rpx) 0rpx;
-    border-color: transparent white transparent transparent;
-    border-style: solid;
+    top: 100%;
+    right: 0rpx;
+    border: none;
+    border-bottom: solid 10rpx transparent;
+    border-left: solid 10rpx shade($dark-blue-color, 20%);
     position: absolute;
     z-index: 1;
     content: "";
@@ -85,9 +76,12 @@ $relation-marker-width: 7rpx;
   }
 }
 
+.head-left {
+  flex-grow: 1;
+}
+
 .head-right {
   width: 30rpx;
-  color: $blue-color;
   text-align: right;
   flex-grow: 0;
 }
@@ -190,7 +184,7 @@ $relation-marker-width: 7rpx;
 .tag {
   min-width: 1em;
   padding: 1rpx 2rpx;
-  background-color: tint($blue-color, 60%);
+  background-color: tint($blue-color, 70%);
   font-size: 80%;
 }
 

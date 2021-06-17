@@ -52,11 +52,9 @@ export default class WordPane extends Component<Props, State> {
     let node = (
       <div styleName="head">
         <div styleName="head-left">
-          <div styleName="head-left-inner">
-            {categoryNode}
-            {nameNode}
-            {pronunciationNode}
-          </div>
+          {categoryNode}
+          {nameNode}
+          {pronunciationNode}
         </div>
         <div styleName="head-right">
           {dateNode}
