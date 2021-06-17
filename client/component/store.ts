@@ -21,7 +21,7 @@ export class GlobalStore {
   public async changeLocale(locale: string): Promise<void> {
     let language = LANGUAGES.find((language) => language.locale === locale) ?? LANGUAGES[0];
     this.locale = locale;
-    this.messages = await language.fetchMessages().then((module) => module.default);
+    this.messages = language.messages;
     localStorage.setItem("locale", locale);
   }
 
