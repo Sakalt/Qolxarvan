@@ -8,6 +8,9 @@
   padding: 30rpx 30rpx;
   background-color: white;
   box-shadow: 0rpx 2rpx 10rpx $shadow-color;
+  @include smartphone {
+    padding: 30rpx 15rpx;
+  }
 }
 
 .root >* {

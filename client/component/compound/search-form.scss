@@ -9,6 +9,9 @@
   line-height: 1.6;
   background-color: white;
   box-shadow: 0rpx 2rpx 10rpx $shadow-color;
+  @include smartphone {
+    padding: 30rpx 15rpx;
+  }
 }
 
 .radio-wrapper {

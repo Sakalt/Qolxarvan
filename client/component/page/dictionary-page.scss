@@ -13,4 +13,7 @@
 
 .pagination {
   margin: 30rpx 0rpx 0rpx 0rpx;
+  @include smartphone {
+    margin: 30rpx 15rpx 0rpx 15rpx;
+  }
 }

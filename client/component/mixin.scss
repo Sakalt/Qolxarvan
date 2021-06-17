@@ -32,7 +32,7 @@ $icon-font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "Font Awesome 5 
 
 
 @mixin smartphone {
-  @media screen and (max-width: 640px) {
+  @media screen and (max-width: 600px) {
     @content;
   }
 }

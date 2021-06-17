@@ -8,12 +8,20 @@
   font-size: 52rpx;
   text-align: center;
   cursor: pointer;
+  @include smartphone {
+    font-size: 52rpx * 0.6;
+  }
 }
 
 .logo {
   width: 120rpx;
   margin-right: 10rpx;
   vertical-align: -43rpx;
+  @include smartphone {
+    width: 120rpx * 0.6;
+    margin-right: 10rpx * 0.6;
+    vertical-align: -43rpx * 0.6;
+  }
 }
 
 .orange {

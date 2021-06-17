@@ -22,6 +22,13 @@
   flex-grow: 1;
 }
 
+.left .group,
+.right .group {
+  @include smartphone {
+    display: none;
+  }
+}
+
 .leftmost,
 .rightmost {
   white-space: nowrap;
@@ -54,7 +61,7 @@
 
 .button.icon {
   @include icon-font;
-  width: 36px;
+  width: 36rpx;
   font-size: 100%;
 }
 
