@@ -49,12 +49,19 @@
 }
 
 .locale {
+  height: 26rpx;
   margin: 0rpx 0rpx 0rpx 10rpx;
-  padding: 2rpx 10rpx;
+  padding: 0rpx 10rpx;
   line-height: 1.6;
-  background: white;
+  background-color: white;
   box-shadow: 0rpx 2rpx 10rpx $shadow-color;
+  display: flex;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: tint($blue-color, 95%);
+  }
   &:first-child {
     margin: 0rpx;
   }
@@ -63,4 +70,7 @@
 .locale.selected {
   background-color: $blue-color;
   color: white;
+  &:hover {
+    background-color: $blue-color;
+  }
 }
