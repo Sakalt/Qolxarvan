@@ -4,6 +4,7 @@ import axios from "axios";
 import * as queryParser from "query-string";
 import * as react from "react";
 import {
+  Fragment,
   ReactNode
 } from "react";
 import {
@@ -13,6 +14,7 @@ import {
   SearchResult
 } from "soxsot";
 import Component from "/client/component/component";
+import WordList from "/client/component/compound/word-list";
 import {
   style
 } from "/client/component/decorator";
@@ -32,7 +34,7 @@ export default class DictionaryPage extends Component<Props, State> {
     dictionary: null,
     parameter: NormalParameter.createEmpty("ja"),
     page: 0,
-    showExplanation: true,
+    showExplanation: false,
     searchResult: SearchResult.createEmpty()
   };
 
@@ -107,13 +109,32 @@ export default class DictionaryPage extends Component<Props, State> {
     this.props.history!.replace({search: queryString});
   }
 
+  private renderWordList(): ReactNode {
+    let node = (
+      <Fragment>
+        <div styleName="word-list">
+          <WordList
+            dictionary={this.state.dictionary!}
+            searchResult={this.state.searchResult}
+            page={this.state.page}
+          />
+        </div>
+      </Fragment>
+    );
+    return node;
+  }
+
   public render(): ReactNode {
+    let innerNode = (this.state.dictionary !== null) && (
+      (this.state.showExplanation) ? "" : this.renderWordList()
+    );
     let node = (
       <Page>
         <div styleName="header">
           <img styleName="logo" src="http://ziphil.com/material/logo/2.svg"/>
           <span styleName="orange">sOxsOt</span> <span styleName="blue">IvO lIvAt</span>
         </div>
+        {innerNode}
       </Page>
     );
     return node;
