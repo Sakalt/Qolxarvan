@@ -183,7 +183,7 @@ $blank-margin: 6rpx;
 }
 
 .relation .link {
-  color: $blue-color;
+  color: shade($blue-color, 30%);
   text-decoration: underline;
   cursor: pointer;
 }
