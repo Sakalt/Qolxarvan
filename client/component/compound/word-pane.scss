@@ -5,9 +5,9 @@
 
 $head-height: 36rpx;
 $small-head-height: 18rpx;
-$marker-width: 5rpx;
-$example-marker-width: 20rpx;
-$relation-marker-width: 7rpx;
+$marker-width: 6rpx;
+$example-marker-width: 25rpx;
+$relation-marker-width: 15rpx;
 
 .section {
   margin: 0rpx -30rpx 15rpx -30rpx;
@@ -46,7 +46,7 @@ $relation-marker-width: 7rpx;
     right: 0rpx;
     border: none;
     border-bottom: solid 10rpx transparent;
-    border-left: solid 10rpx shade($dark-blue-color, 20%);
+    border-left: solid 10rpx shade($blue-color, 20%);
     position: absolute;
     z-index: 1;
     content: "";
@@ -125,11 +125,12 @@ $relation-marker-width: 7rpx;
 .example-sentence {
   margin-left: $marker-width + $blank-margin;
   &::before {
+    @include icon-font;
     width: $marker-width;
     margin-right: $blank-margin;
     margin-left: -$marker-width - $blank-margin;
     color: $blue-color;
-    content: "•";
+    content: "\F0DA";
     display: inline-block;
   }
 }
@@ -148,12 +149,13 @@ $relation-marker-width: 7rpx;
   margin: 0px;
   margin-left: $example-marker-width + $blank-margin;
   &::before {
+    @include icon-font;
     width: $example-marker-width;
     margin-right: $blank-margin;
     margin-left: -$example-marker-width - $blank-margin;
     color: $blue-color;
     text-align: right;
-    content: "└";
+    content: "\F061";
     display: inline-block;
   }
 }
@@ -161,13 +163,15 @@ $relation-marker-width: 7rpx;
 .relation {
   margin-left: $relation-marker-width + $blank-margin;
   &::before {
+    @include icon-font(false);
     width: $relation-marker-width;
     margin-right: $blank-margin;
     margin-left: -$relation-marker-width - $blank-margin;
-    font-size: 90%;
     color: $blue-color;
-    content: "🞂";
+    content: "\F0A4";
     display: inline-block;
+    position: relative;
+    bottom: -1rpx;
   }
 }
 

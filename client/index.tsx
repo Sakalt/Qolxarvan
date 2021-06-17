@@ -12,11 +12,20 @@ import {
 export class Main {
 
   public main(): void {
+    this.appendIconElement();
     this.render();
   }
 
   private render(): void {
     render(<Root/>, document.getElementById("root"));
+  }
+
+  private appendIconElement(): void {
+    let element = document.createElement("link");
+    element.href = "https://kit-free.fontawesome.com/releases/latest/css/free.min.css";
+    element.rel = "stylesheet";
+    element.media = "all";
+    document.head.appendChild(element);
   }
 
 }

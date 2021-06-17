@@ -58,8 +58,8 @@ export default class Pagination extends Component<Props, State> {
       <div styleName="root">
         <div styleName="leftmost">
           <div styleName="group">
-            <div styleName="button" tabIndex={0} onClick={() => this.handleSet("first")}>←</div>
-            <div styleName="button" tabIndex={0} onClick={() => this.handleSet(page - 1)}>←</div>
+            <div styleName="button icon" tabIndex={0} onClick={() => this.handleSet("first")}>&#xF100;</div>
+            <div styleName="button icon" tabIndex={0} onClick={() => this.handleSet(page - 1)}>&#xF104;</div>
           </div>
         </div>
         <div styleName="left">
@@ -77,8 +77,8 @@ export default class Pagination extends Component<Props, State> {
         </div>
         <div styleName="rightmost">
           <div styleName="group">
-            <div styleName="button" tabIndex={0} onClick={() => this.handleSet(page + 1)}>→</div>
-            <div styleName="button" tabIndex={0} onClick={() => this.handleSet("last")}>→</div>
+            <div styleName="button icon" tabIndex={0} onClick={() => this.handleSet(page + 1)}>&#xF105;</div>
+            <div styleName="button icon" tabIndex={0} onClick={() => this.handleSet("last")}>&#xF101;</div>
           </div>
         </div>
       </div>

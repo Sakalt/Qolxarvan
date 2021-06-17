@@ -52,6 +52,11 @@
   }
 }
 
+.button.icon {
+  @include icon-font;
+  width: 36px;
+}
+
 .center .button {
   background-color: $blue-color;
   color: white;
