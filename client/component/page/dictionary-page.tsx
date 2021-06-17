@@ -14,6 +14,7 @@ import {
   SearchResult
 } from "soxsot";
 import Component from "/client/component/component";
+import Logo from "/client/component/compound/logo";
 import Pagination from "/client/component/compound/pagination";
 import SearchForm from "/client/component/compound/search-form";
 import WordList from "/client/component/compound/word-list";
@@ -161,8 +162,7 @@ export default class DictionaryPage extends Component<Props, State> {
     let node = (
       <Page>
         <div styleName="header">
-          <img styleName="logo" src="http://ziphil.com/material/logo/2.svg"/>
-          <span styleName="orange">sOxsOt</span> <span styleName="blue">IvO lIvAt</span>
+          <Logo/>
         </div>
         <div styleName="search-form">
           <SearchForm dictionary={this.state.dictionary!} parameter={this.state.parameter} onParameterSet={this.handleParameterSet.bind(this)}/>

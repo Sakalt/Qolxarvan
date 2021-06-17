@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+@import "/client/component/mixin.scss";
+
+
+.root {
+  font-family: $gilit-font-family;
+  font-size: 52rpx;
+  text-align: center;
+  cursor: pointer;
+}
+
+.logo {
+  width: 120rpx;
+  margin-right: 10rpx;
+  vertical-align: -43rpx;
+}
+
+.orange {
+  color: $orange-color;
+}
+
+.blue {
+  color: $blue-color;
+}

@@ -3,26 +3,6 @@
 @import "/client/component/mixin.scss";
 
 
-.header {
-  font-family: $gilit-font-family;
-  font-size: 52rpx;
-  text-align: center;
-}
-
-.logo {
-  width: 120rpx;
-  margin-right: 10rpx;
-  vertical-align: -43rpx;
-}
-
-.orange {
-  color: $orange-color;
-}
-
-.blue {
-  color: $blue-color;
-}
-
 .search-form {
   margin: 30rpx 0rpx 0rpx 0rpx;
 }
