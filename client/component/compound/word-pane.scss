@@ -14,8 +14,8 @@ $relation-marker-width: 15rpx;
   padding: 0rpx 30rpx 15rpx 30rpx;
   border-bottom: 1px $blue-color dashed;
   &:last-child {
-    margin-bottom: 0px;
-    padding-bottom: 0px;
+    margin-bottom: 0rpx;
+    padding-bottom: 0rpx;
     border-bottom: none;
   }
 }
@@ -107,18 +107,18 @@ $relation-marker-width: 15rpx;
 }
 
 .list {
-  padding: 0px;
+  padding: 0rpx;
   list-style: none;
 }
 
 .list-item {
-  margin: 0px;
-  padding: 0px;
+  margin: 0rpx;
+  padding: 0rpx;
 }
 
 .phrase-text,
 .example-text {
-  margin: 0px;
+  margin: 0rpx;
 }
 
 .phrase-expression,
@@ -146,7 +146,7 @@ $relation-marker-width: 15rpx;
 }
 
 .example-translation {
-  margin: 0px;
+  margin: 0rpx;
   margin-left: $example-marker-width + $blank-margin;
   &::before {
     @include icon-font;
