@@ -190,9 +190,12 @@ $relation-marker-width: 15rpx;
 
 .tag {
   min-width: 1em;
-  padding: 1rpx 2rpx;
+  padding: 2rpx 2rpx;
   background-color: tint($blue-color, 70%);
   font-size: 80%;
+  text-align: center;
+  line-height: 1;
+  display: inline-block;
 }
 
 .head .tag {
