@@ -4,23 +4,34 @@
 
 
 .root {
-  font-family: $gilit-font-family;
-  font-size: 52rpx;
-  text-align: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   cursor: pointer;
-  @include smartphone {
-    font-size: 52rpx * 0.6;
-  }
 }
 
 .logo {
   width: 120rpx;
   margin-right: 10rpx;
-  vertical-align: -43rpx;
   @include smartphone {
     width: 120rpx * 0.6;
     margin-right: 10rpx * 0.6;
-    vertical-align: -43rpx * 0.6;
+  }
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text {
+  margin-top: 45rpx;
+  font-family: $gilit-font-family;
+  font-size: 52rpx;
+  @include smartphone {
+    margin-top: 45rpx * 0.6;
+    font-size: 52rpx * 0.6;
   }
 }
 
@@ -30,4 +41,26 @@
 
 .blue {
   color: $blue-color;
+}
+
+.language {
+  margin-top: 15rpx;
+  display: flex;
+}
+
+.locale {
+  margin: 0rpx 0rpx 0rpx 10rpx;
+  padding: 2rpx 10rpx;
+  line-height: 1.6;
+  background: white;
+  box-shadow: 0rpx 2rpx 10rpx $shadow-color;
+  cursor: pointer;
+  &:first-child {
+    margin: 0rpx;
+  }
+}
+
+.locale.selected {
+  background-color: $blue-color;
+  color: white;
 }
