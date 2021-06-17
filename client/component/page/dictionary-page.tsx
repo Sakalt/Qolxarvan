@@ -85,7 +85,7 @@ export default class DictionaryPage extends Component<Props, State> {
     }
   }
 
-  @debounce(500)
+  @debounce(200)
   private async updateWords(): Promise<void> {
     await this.updateWordsImmediately();
   }
