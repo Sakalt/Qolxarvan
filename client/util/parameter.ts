@@ -29,6 +29,15 @@ export class ParameterUtils {
     }
   }
 
+  public static getNormal(parameter: Parameter): NormalParameter {
+    let language = parameter.language;
+    if (parameter instanceof NormalParameter) {
+      return parameter;
+    } else {
+      return NormalParameter.createEmpty(language);
+    }
+  }
+
   private static castMode(rawMode: string): WordMode {
     let anyRawMode = rawMode as any;
     if (WORD_MODES.includes(anyRawMode)) {

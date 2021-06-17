@@ -3,3 +3,15 @@ common:
   shortDateFormat: "dd/LLL"
   dateUndefined: "?"
   numberUndefined: "?"
+
+searchForm:
+  both: "Both"
+  name: "Headword"
+  equivalent: "Translation"
+  content: "Whole"
+  prefix: "Prefix"
+  suffix: "Suffix"
+  part: "Part"
+  pair: "Pair"
+  exact: "Exact"
+  regular: "Regexp"

@@ -14,6 +14,7 @@ import {
   SearchResult
 } from "soxsot";
 import Component from "/client/component/component";
+import SearchForm from "/client/component/compound/search-form";
 import WordList from "/client/component/compound/word-list";
 import {
   style
@@ -117,6 +118,20 @@ export default class DictionaryPage extends Component<Props, State> {
     this.props.history!.replace({search: queryString});
   }
 
+  private async handleParameterSet(parameter: Parameter): Promise<void> {
+    let page = 0;
+    this.setState({parameter, page}, async () => {
+      await this.updateWords();
+    });
+  }
+
+  private handlePageSet(page: number): void {
+    this.setState({page}, async () => {
+      window.scrollTo(0, 0);
+      await this.updateWordsImmediately(true);
+    });
+  }
+
   private renderWordList(): ReactNode {
     let node = (
       <Fragment>
@@ -142,6 +157,9 @@ export default class DictionaryPage extends Component<Props, State> {
         <div styleName="header">
           <img styleName="logo" src="http://ziphil.com/material/logo/2.svg"/>
           <span styleName="orange">sOxsOt</span> <span styleName="blue">IvO lIvAt</span>
+        </div>
+        <div styleName="search-form">
+          <SearchForm dictionary={this.state.dictionary!} parameter={this.state.parameter} onParameterSet={this.handleParameterSet.bind(this)}/>
         </div>
         {innerNode}
       </Page>

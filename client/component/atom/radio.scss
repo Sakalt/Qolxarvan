@@ -1,0 +1,40 @@
+@charset "utf-8";
+
+@import "/client/component/mixin.scss";
+
+
+.radio {
+  display: none;
+}
+
+.radio +.label {
+  padding: 0em 0em 0em calc(1em + #{$blank-margin});
+  position: relative;
+  cursor: pointer;
+}
+
+.radio +.label::before {
+  top: 0.1em;
+  left: 0em;
+  width: 1em;
+  height: 1em;
+  background-color: $background-color;
+  box-shadow: 0rpx 2rpx 6rpx $shadow-color inset;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+  content: "";
+}
+
+.radio:checked +.label::after {
+  top: calc(0.1em + 4rpx);
+  left: 4rpx;
+  width: calc(1em - 8rpx);
+  height: calc(1em - 8rpx);
+  background-color: $blue-color;
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  content: "";
+}

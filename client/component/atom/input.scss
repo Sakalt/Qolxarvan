@@ -1,0 +1,24 @@
+@charset "utf-8";
+
+@import "/client/component/mixin.scss";
+
+
+.root {
+  margin: 0rpx;
+  padding: 5rpx 15rpx;
+  background-color: $background-color;
+  box-shadow: 0rpx 2rpx 6rpx $shadow-color inset;
+}
+
+.input-inner {
+  width: 100%;
+  margin: 0rpx;
+  padding: 0rpx;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  flex-grow: 1;
+}

@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+@import "/client/component/mixin.scss";
+
+
+.root {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.root >* {
+  margin: 0rpx 0rpx 0rpx 15rpx;
+  &:first-child {
+    margin: 0rpx;
+  }
+}
