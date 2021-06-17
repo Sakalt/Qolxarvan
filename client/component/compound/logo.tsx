@@ -25,10 +25,10 @@ export default class Logo extends Component<Props, State> {
       return languageNode;
     });
     let node = (
-      <div styleName="root" tabIndex={0} onClick={() => this.pushPath("/")}>
+      <div styleName="root">
         <img styleName="logo" src="http://ziphil.com/material/logo/2.svg"/>
         <div styleName="text-container">
-          <div styleName="text">
+          <div styleName="text" tabIndex={0} onClick={() => this.pushPath("/")}>
             <span styleName="orange">sOxsOt</span> <span styleName="blue">IvO lIvAt</span>
           </div>
           <div styleName="language">

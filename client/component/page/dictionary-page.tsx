@@ -53,7 +53,7 @@ export default class DictionaryPage extends Component<Props, State> {
   public async componentDidUpdate(previousProps: any): Promise<void> {
     if (this.props.location!.key !== previousProps.location!.key) {
       this.deserializeQuery(false, () => {
-        if (!this.state.showExplanation) {
+        if (true || !this.state.showExplanation) {
           this.updateWordsImmediately(false);
         }
       });
