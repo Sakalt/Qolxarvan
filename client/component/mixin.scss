@@ -6,11 +6,13 @@
 $root-size: 16px;
 
 $blue-color: #33C3FF;
+$dark-blue-color: #33ABFF;
 $orange-color: #FFAB33;
+$dark-orange-color: #FF9433;
 
-$background-color: tint($blue-color, 92%);
+$background-color: tint($blue-color, 90%);
 
-$page-width: 800rpx;
+$page-width: 900rpx;
 $page-top-margin: 20rpx;
 $page-bottom-margin: 80rpx;
 $page-horizontal-margin: 30rpx;
@@ -18,7 +20,7 @@ $page-horizontal-margin: 30rpx;
 $european-serif-font-family: "Times New Roman", "Times";
 $japanese-serif-font-family: "IPA P明朝", "IPAex明朝", "BIZ UDPMincho", "YuMincho", "Yu Mincho", "ＭＳ Ｐ明朝", "ＭＳ 明朝";
 $european-sans-font-family: "Arial";
-$european-sans-font-family: "IPA Pゴシック", "IPAexゴシック", "BIZ UDPGothic", "YuGothic", "Yu Gothic", "ＭＳ Ｐゴシック", "ＭＳ ゴシック";
+$japanese-sans-font-family: "IPA Pゴシック", "IPAexゴシック", "BIZ UDPGothic", "YuGothic", "Yu Gothic", "ＭＳ Ｐゴシック", "ＭＳ ゴシック";
 $vekos-font-family: "Vekos Web";
 $gilit-font-family: "Gilit Web";
 

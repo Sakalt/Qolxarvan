@@ -1,3 +1,220 @@
 @charset "utf-8";
 
 @import "/client/component/mixin.scss";
+
+
+$head-height: 36rpx;
+$small-head-height: 18rpx;
+$marker-width: 5rpx;
+$example-marker-width: 20rpx;
+$relation-marker-width: 7rpx;
+$blank-margin: 6rpx;
+
+.section {
+  margin: 0rpx 0rpx 10rpx 0rpx;
+  padding: 0rpx 0rpx 10rpx 0rpx;
+  border-bottom: 1px tint($blue-color, 50%) dashed;
+  &:last-child {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    border-bottom: none;
+  }
+}
+
+.head {
+  margin-bottom: 10rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.head-left {
+  height: $head-height;
+  margin: 0rpx 0rpx 0rpx -40rpx;
+  padding: 0rpx 0rpx 0rpx 40rpx;
+  color: white;
+  background: linear-gradient(to right, $dark-blue-color, $blue-color);
+  box-shadow: 0rpx 1rpx 4rpx rgba($dark-blue-color, 0.3);
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  &::before {
+    top: 100%;
+    left: 0rpx;
+    border: none;
+    border-bottom: solid 10rpx transparent;
+    border-right: solid 10rpx shade($dark-blue-color, 20%);
+    position: absolute;
+    z-index: 1;
+    content: "";
+  }
+  &::after {
+    width: 0rpx;
+    height: 0rpx;
+    top: -10rpx;
+    right: -4rpx;
+    border-width: ($head-height / 2 + 10rpx) 12rpx ($head-height / 2 + 10rpx) 0rpx;
+    border-color: transparent white transparent transparent;
+    border-style: solid;
+    position: absolute;
+    z-index: 1;
+    content: "";
+  }
+}
+
+.small-head-inner {
+  height: $small-head-height;
+  margin: 0rpx 0rpx 5rpx -35rpx;
+  padding: 0rpx 8rpx 0rpx 35rpx;
+  font-size: 80%;
+  color: white;
+  background: linear-gradient(to right, $dark-blue-color, $blue-color);
+  box-shadow: 0rpx 1rpx 4rpx rgba($dark-blue-color, 0.3);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  &::before {
+    top: 100%;
+    left: 0rpx;
+    border: none;
+    border-bottom: solid 5rpx transparent;
+    border-right: solid 5rpx shade($dark-blue-color, 20%);
+    position: absolute;
+    z-index: 1;
+    content: "";
+  }
+}
+
+.head-right {
+  width: 30rpx;
+  color: $blue-color;
+  text-align: right;
+  flex-grow: 0;
+}
+
+.head-name {
+  font-size: 120%;
+}
+
+.head-pronunciation {
+  font-size: 80%;
+}
+
+.head-date {
+  font-size: 80%;
+}
+
+.section-item {
+  margin: 0rpx;
+  margin-bottom: 10rpx;
+  &:last-child {
+    margin-bottom: 0rpx;
+  }
+}
+
+.list {
+  padding: 0px;
+  list-style: none;
+}
+
+.list-item {
+  margin: 0px;
+  padding: 0px;
+}
+
+.phrase-text,
+.example-text {
+  margin: 0px;
+}
+
+.phrase-expression,
+.example-sentence {
+  margin-left: $marker-width + $blank-margin;
+  &::before {
+    width: $marker-width;
+    margin-right: $blank-margin;
+    margin-left: -$marker-width - $blank-margin;
+    color: $blue-color;
+    content: "•";
+    display: inline-block;
+  }
+}
+
+.phrease-divider {
+  margin: 0rpx $blank-margin;
+  color: $blue-color;
+}
+
+.phrase-inner-text {
+  margin: 0rpx;
+  margin-left: $marker-width + $blank-margin;
+}
+
+.example-translation {
+  margin: 0px;
+  margin-left: $example-marker-width + $blank-margin;
+  &::before {
+    width: $example-marker-width;
+    margin-right: $blank-margin;
+    margin-left: -$example-marker-width - $blank-margin;
+    color: $blue-color;
+    text-align: right;
+    content: "└";
+    display: inline-block;
+  }
+}
+
+.relation {
+  margin-left: $relation-marker-width + $blank-margin;
+  &::before {
+    width: $relation-marker-width;
+    margin-right: $blank-margin;
+    margin-left: -$relation-marker-width - $blank-margin;
+    font-size: 90%;
+    color: $blue-color;
+    content: "🞂";
+    display: inline-block;
+  }
+}
+
+.refer {
+  color: $blue-color;
+}
+
+.tag {
+  min-width: 1em;
+  padding: 1rpx 2rpx;
+  background-color: tint($blue-color, 60%);
+  font-size: 80%;
+}
+
+.head .tag {
+  background-color: white;
+  color: $dark-blue-color;
+  position: relative;
+  bottom: 2rpx;
+}
+
+.text {
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.small {
+  font-size: 80%;
+}
+
+.right-margin {
+  margin: 0rpx $blank-margin 0rpx 0rpx;
+}
+
+.sans {
+  font-family: $european-sans-font-family, $japanese-sans-font-family;
+  font-size: 96%;
+  line-height: 96%;
+}
+
+.italic {
+  font-style: italic;
+}
