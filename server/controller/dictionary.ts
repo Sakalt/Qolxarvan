@@ -6,7 +6,11 @@ import {
 } from "express";
 import fs from "fs";
 import {
-  SingleLoader
+  nanoid
+} from "nanoid";
+import {
+  SaverCreator,
+  SaverKind
 } from "soxsot/dist/io";
 import {
   Controller
@@ -19,9 +23,6 @@ import {
 import {
   GoogleUtils
 } from "/server/util/google";
-import {
-  DICTIONARY_ID
-} from "/server/variable";
 
 
 @controller("/api/dictionary")
@@ -29,30 +30,25 @@ export class DictionaryController extends Controller {
 
   @get("/fetch")
   public async [Symbol()](request: Request, response: Response): Promise<void> {
-    let stream = await GoogleUtils.downloadFile(DICTIONARY_ID);
-    let path = "./dist/temp/temp.xdn";
-    let fileStream = fs.createWriteStream(path, {encoding: "utf-8"});
-    stream.on("data", (chunk) => {
-      fileStream.write(chunk);
-    });
-    stream.on("end", async () => {
-      fileStream.end();
-      let loader = new SingleLoader(path);
-      let dictionary = await loader.asPromise();
-      let plainDictionary = dictionary.toPlain();
-      response.json(plainDictionary).end();
-    });
-    stream.on("error", (error) => {
-      console.error(error);
-      response.sendStatus(500).end();
-    });
+    let dictionary = await GoogleUtils.fetchDictionary();
+    let plainDictionary = dictionary.toPlain();
+    response.json(plainDictionary).end();
   }
 
   @get("/download")
   public async [Symbol()](request: Request, response: Response): Promise<void> {
-    let stream = await GoogleUtils.downloadFile(DICTIONARY_ID);
-    response.attachment("shaleian.xdn");
-    stream.pipe(response);
+    if (request.query.kind === "single" || request.query.kind === "oldShaleian") {
+      let kind = request.query.kind as SaverKind;
+      let path = `./dist/temp/temp-${nanoid()}.xdn`;
+      let fileName = "shaleian" + ((kind === "single") ? ".xdn" : ".xdc");
+      let dictionary = await GoogleUtils.fetchDictionary();
+      let saver = SaverCreator.createByKind(kind, dictionary, path);
+      await saver.asPromise();
+      response.download(path, fileName);
+      fs.promises.unlink(path);
+    } else {
+      response.sendStatus(400).end();
+    }
   }
 
 }
