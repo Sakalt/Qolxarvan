@@ -17,6 +17,7 @@ import {
 } from "/server/controller/controller";
 import {
   controller,
+  cron,
   get,
   post
 } from "/server/controller/decorator";
@@ -62,8 +63,10 @@ export class DictionaryController extends Controller {
     }
   }
 
-  public static async saveHistory(): Promise<void> {
+  @cron("0 5 * * *")
+  public async [Symbol()](): Promise<void> {
     await DictionaryUtils.saveHistory();
+    console.log("history saved");
   }
 
 }
