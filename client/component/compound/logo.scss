@@ -13,8 +13,8 @@
   width: 120rpx;
   margin-right: 10rpx;
   @include smartphone {
-    width: 120rpx * 0.6;
-    margin-right: 10rpx * 0.6;
+    width: 120rpx * 0.7;
+    margin-right: 10rpx * 0.7;
   }
 }
 
@@ -30,8 +30,8 @@
   font-size: 52rpx;
   cursor: pointer;
   @include smartphone {
-    margin-top: 45rpx * 0.6;
-    font-size: 52rpx * 0.6;
+    margin-top: 45rpx * 0.7;
+    font-size: 52rpx * 0.7;
   }
 }
 

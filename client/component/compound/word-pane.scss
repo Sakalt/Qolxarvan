@@ -13,6 +13,10 @@ $relation-marker-width: 15rpx;
   margin: 0rpx -30rpx 15rpx -30rpx;
   padding: 0rpx 30rpx 15rpx 30rpx;
   border-bottom: 1px $blue-color dashed;
+  @include smartphone {
+    margin: 0rpx -15rpx 15rpx -15rpx;
+    padding: 0rpx 15rpx 15rpx 15rpx;
+  }
   &:last-child {
     margin-bottom: 0rpx;
     padding-bottom: 0rpx;
@@ -31,6 +35,10 @@ $relation-marker-width: 15rpx;
   flex-grow: 1;
   display: flex;
   align-items: center;
+  @include smartphone {
+    margin: 0rpx -15rpx 10rpx -15rpx;
+    padding: 0rpx 15rpx 0rpx 15rpx;
+  }
   &::before {
     top: 100%;
     left: 0rpx;
@@ -40,6 +48,9 @@ $relation-marker-width: 15rpx;
     position: absolute;
     z-index: 1;
     content: "";
+    @include smartphone {
+      display: none;
+    }
   }
   &::after {
     top: 100%;
@@ -50,6 +61,9 @@ $relation-marker-width: 15rpx;
     position: absolute;
     z-index: 1;
     content: "";
+    @include smartphone {
+      display: none;
+    }
   }
 }
 
@@ -64,6 +78,10 @@ $relation-marker-width: 15rpx;
   position: relative;
   display: inline-flex;
   align-items: center;
+  @include smartphone {
+    margin: 0rpx 0rpx 5rpx -15rpx;
+    padding: 0rpx 8rpx 0rpx 15rpx;
+  }
   &::before {
     top: 100%;
     left: 0rpx;
@@ -73,6 +91,9 @@ $relation-marker-width: 15rpx;
     position: absolute;
     z-index: 1;
     content: "";
+    @include smartphone {
+      display: none;
+    }
   }
 }
 
