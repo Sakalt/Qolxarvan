@@ -54,6 +54,14 @@ export class DictionaryController extends Controller {
     }
   }
 
+  @get("/count")
+  @before(cors())
+  public async [Symbol()](request: Request, response: Response): Promise<void> {
+    let dictionary = await DictionaryUtils.fetch();
+    let count = dictionary.words.length;
+    response.json(count).end();
+  }
+
   @get("/difference")
   @before(cors())
   public async [Symbol()](request: Request, response: Response): Promise<void> {
