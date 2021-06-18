@@ -1,6 +1,9 @@
 //
 
 import {
+  OAuth2Client
+} from "google-auth-library/build/src";
+import {
   GoogleSpreadsheet
 } from "google-spreadsheet";
 import {
@@ -26,7 +29,7 @@ export class GoogleUtils {
       "https://www.googleapis.com/auth/drive.metadata",
       "https://www.googleapis.com/auth/drive.photos.readonly"
     ];
-    let auth = new google.auth.JWT(GOOGLE_CREDENTIALS["client_email"], undefined, GOOGLE_CREDENTIALS["private_key"], scopes, undefined);
+    let auth = GoogleUtils.createClient(scopes);
     let drive = google.drive({version: "v3", auth});
     let response = await drive.files.get({fileId, alt: "media"}, {responseType: "stream"});
     let stream = response.data;
@@ -38,6 +41,11 @@ export class GoogleUtils {
     await spreadsheet.useServiceAccountAuth(GOOGLE_CREDENTIALS);
     await spreadsheet.loadInfo();
     return spreadsheet;
+  }
+
+  private static createClient(scopes: Array<string>): OAuth2Client {
+    let client = new google.auth.JWT(GOOGLE_CREDENTIALS["client_email"], undefined, GOOGLE_CREDENTIALS["private_key"], scopes, undefined);
+    return client;
   }
 
 }
