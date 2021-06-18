@@ -8,3 +8,12 @@
 @function shade($color, $percent) {
   @return mix(black, $color, $percent);
 }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

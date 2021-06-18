@@ -3,17 +3,21 @@
 @import "/client/component/mixin.scss";
 
 
+.header {
+  margin: 0rpx 0rpx 40rpx 0rpx;
+}
+
 .search-form {
-  margin: 40rpx 0rpx 0rpx 0rpx;
+  margin: 0rpx 0rpx 40rpx 0rpx;
 }
 
 .word-list {
-  margin: 40rpx 0rpx 0rpx 0rpx;
+  margin: 0rpx 0rpx 30rpx 0rpx;
 }
 
 .pagination {
-  margin: 30rpx 0rpx 0rpx 0rpx;
+  margin: 0rpx;
   @include smartphone {
-    margin: 30rpx $content-smartphone-horizontal-padding 0rpx $content-smartphone-horizontal-padding;
+    margin: 0rpx $content-smartphone-horizontal-padding;
   }
 }

@@ -14,6 +14,7 @@ import {
   SearchResult
 } from "soxsot";
 import Component from "/client/component/component";
+import Loading from "/client/component/compound/loading";
 import Logo from "/client/component/compound/logo";
 import Pagination from "/client/component/compound/pagination";
 import SearchForm from "/client/component/compound/search-form";
@@ -164,10 +165,12 @@ export default class DictionaryPage extends Component<Props, State> {
         <div styleName="header">
           <Logo/>
         </div>
-        <div styleName="search-form">
-          <SearchForm dictionary={this.state.dictionary!} parameter={this.state.parameter} onParameterSet={this.handleParameterSet.bind(this)}/>
-        </div>
-        {innerNode}
+        <Loading loading={this.state.dictionary === null}>
+          <div styleName="search-form">
+            <SearchForm dictionary={this.state.dictionary!} parameter={this.state.parameter} onParameterSet={this.handleParameterSet.bind(this)}/>
+          </div>
+          {innerNode}
+        </Loading>
       </Page>
     );
     return node;
