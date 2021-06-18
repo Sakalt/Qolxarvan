@@ -1,5 +1,8 @@
 //
 
+import {
+  formatToTimeZone
+} from "date-fns-timezone";
 import fs from "fs";
 import {
   nanoid
@@ -51,9 +54,11 @@ export class DictionaryUtils {
     let [spreadsheet, dictionary] = await Promise.all([GoogleUtils.fetchSpreadsheet(HISTORY_SPREADSHEET_ID), DictionaryUtils.fetch()]);
     let sheet = spreadsheet.sheetsByIndex[0];
     let rawDate = new Date(new Date().getTime() - 6 * 60 * 60 * 1000);
-    let date = ("0000" + rawDate.getFullYear()).slice(-4) + "/" + ("00" + (rawDate.getMonth() + 1)).slice(-2) + "/" + ("00" + rawDate.getDate()).slice(-2);
+    let rawUnsiftedDate = new Date();
+    let date = formatToTimeZone(rawDate, "YYYY/MM/DD", {timeZone: "Asia/Tokyo"});
+    let time = formatToTimeZone(rawUnsiftedDate, "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
     let count = dictionary.words.length;
-    await sheet.addRow({date, count});
+    await sheet.addRow({date, time, count});
   }
 
   public static async fetchWordCountDifference(duration: number): Promise<number | null> {
@@ -61,7 +66,7 @@ export class DictionaryUtils {
     let sheet = spreadsheet.sheetsByIndex[0];
     let rows = await sheet.getRows();
     let rawTargetDate = new Date(new Date().getTime() - duration * 24 * 60 * 60 * 1000 - 6 * 60 * 60 * 1000);
-    let targetDate = ("0000" + rawTargetDate.getFullYear()).slice(-4) + "/" + ("00" + (rawTargetDate.getMonth() + 1)).slice(-2) + "/" + ("00" + rawTargetDate.getDate()).slice(-2);
+    let targetDate = formatToTimeZone(rawTargetDate, "YYYY/MM/DD", {timeZone: "Asia/Tokyo"});
     let targetCount = rows.find((row) => row.date === targetDate)?.count;
     if (targetCount !== undefined) {
       let difference = dictionary.words.length - targetCount;
