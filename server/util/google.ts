@@ -1,23 +1,15 @@
 //
 
-import fs from "fs";
+import {
+  GoogleSpreadsheet
+} from "google-spreadsheet";
 import {
   google
 } from "googleapis";
 import {
-  nanoid
-} from "nanoid";
-import {
-  Dictionary
-} from "soxsot";
-import {
-  SingleLoader
-} from "soxsot/dist/io";
-import {
   Readable
 } from "stream";
 import {
-  DICTIONARY_ID,
   GOOGLE_CREDENTIALS
 } from "/server/variable";
 
@@ -41,28 +33,11 @@ export class GoogleUtils {
     return stream;
   }
 
-  public static async fetchDictionary(): Promise<Dictionary> {
-    let path = `./dist/temp/temp-${nanoid()}.xdn`;
-    let stream = await GoogleUtils.downloadFile(DICTIONARY_ID);
-    let fileStream = fs.createWriteStream(path, {encoding: "utf-8"});
-    let promise = new Promise<Dictionary>((resolve, reject) => {
-      stream.on("data", (chunk) => {
-        fileStream.write(chunk);
-      });
-      stream.on("end", async () => {
-        fileStream.end();
-        let loader = new SingleLoader(path);
-        let dictionary = await loader.asPromise();
-        await fs.promises.unlink(path);
-        resolve(dictionary);
-      });
-      stream.on("error", (error) => {
-        console.error(error);
-        reject(error);
-      });
-    });
-    let dictionary = await promise;
-    return dictionary;
+  public static async fetchSpreadsheet(fileId: string): Promise<GoogleSpreadsheet> {
+    let spreadsheet = new GoogleSpreadsheet(fileId);
+    await spreadsheet.useServiceAccountAuth(GOOGLE_CREDENTIALS);
+    await spreadsheet.loadInfo();
+    return spreadsheet;
   }
 
 }

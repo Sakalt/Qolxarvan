@@ -10,3 +10,5 @@ export const PORT = process.env["PORT"] || 8050;
 export const COOKIE_SECRET = process.env["COOKIE_SECRET"] || "cookie-shaleian";
 export const GOOGLE_CREDENTIALS = JSON.parse(process.env["GOOGLE_CREDENTIALS"] ?? "{}");
 export const DICTIONARY_ID = process.env["DICTIONARY_ID"] || "dummy";
+export const HISTORY_SPREADSHEET_ID = process.env["HISTORY_SPREADSHEET_ID"] || "dummy";
+export const QUIZ_SPREADSHEET_ID = process.env["QUIZ_SPREADSHEET_ID"] || "dummy";
