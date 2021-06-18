@@ -71,14 +71,14 @@ export function post(path: string): MethodDecorator {
   return decorator;
 }
 
-export function before<P extends Params = ParamsDictionary>(...middlewares: Array<RequestHandler<P>>): MethodDecorator {
+export function before(...middlewares: Array<RequestHandler<any>>): MethodDecorator {
   let decorator = function (target: object, name: string | symbol, descriptor: PropertyDescriptor): void {
     pushMiddlewares(target, name, "before", ...middlewares);
   };
   return decorator;
 }
 
-export function after<P extends Params = ParamsDictionary>(...middlewares: Array<RequestHandler<P>>): MethodDecorator {
+export function after(...middlewares: Array<RequestHandler<any>>): MethodDecorator {
   let decorator = function (target: object, name: string | symbol, descriptor: PropertyDescriptor): void {
     pushMiddlewares(target, name, "after", ...middlewares);
   };

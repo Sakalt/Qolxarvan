@@ -1,5 +1,6 @@
 //
 
+import cors from "cors";
 import {
   Request,
   Response
@@ -16,6 +17,7 @@ import {
   Controller
 } from "/server/controller/controller";
 import {
+  before,
   controller,
   cron,
   get,
@@ -53,6 +55,7 @@ export class DictionaryController extends Controller {
   }
 
   @get("/difference")
+  @before(cors())
   public async [Symbol()](request: Request, response: Response): Promise<void> {
     if (typeof request.query.duration === "string") {
       let duration = parseInt(request.query.duration, 10);
