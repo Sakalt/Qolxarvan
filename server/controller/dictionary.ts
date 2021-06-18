@@ -47,8 +47,9 @@ export class DictionaryController extends Controller {
       let dictionary = await DictionaryUtils.fetch();
       let saver = SaverCreator.createByKind(kind, dictionary, path);
       await saver.asPromise();
-      response.download(path, fileName);
-      fs.promises.unlink(path);
+      response.download(path, fileName, (error) => {
+        fs.promises.unlink(path);
+      });
     } else {
       response.sendStatus(400).end();
     }
