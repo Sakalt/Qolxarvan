@@ -3,19 +3,17 @@
 @import "/client/component/mixin.scss";
 
 
-$head-height: 36rpx;
-$small-head-height: 18rpx;
 $marker-width: 6rpx;
 $example-marker-width: 25rpx;
 $relation-marker-width: 15rpx;
 
 .section {
-  margin: 0rpx -30rpx 15rpx -30rpx;
-  padding: 0rpx 30rpx 15rpx 30rpx;
+  margin: 0rpx (-$content-horizontal-padding) 15rpx (-$content-horizontal-padding);
+  padding: 0rpx $content-horizontal-padding 15rpx $content-horizontal-padding;
   border-bottom: 1px $blue-color dashed;
   @include smartphone {
-    margin: 0rpx -15rpx 15rpx -15rpx;
-    padding: 0rpx 15rpx 15rpx 15rpx;
+    margin: 0rpx (-$content-smartphone-horizontal-padding) 15rpx (-$content-smartphone-horizontal-padding);
+    padding: 0rpx $content-smartphone-horizontal-padding 15rpx $content-smartphone-horizontal-padding;
   }
   &:last-child {
     margin-bottom: 0rpx;
@@ -25,9 +23,8 @@ $relation-marker-width: 15rpx;
 }
 
 .head {
-  height: $head-height;
-  margin: 0rpx -40rpx 10rpx -40rpx;
-  padding: 0rpx 40rpx 0rpx 40rpx;
+  margin: 0rpx (-$content-horizontal-padding - 10rpx) 10rpx (-$content-horizontal-padding - 10rpx);
+  padding: 8rpx ($content-horizontal-padding + 10rpx) 8rpx ($content-horizontal-padding + 10rpx);
   color: white;
   background: linear-gradient(to right, $dark-blue-color, $blue-color);
   box-shadow: 0rpx 1rpx 4rpx rgba($dark-blue-color, 0.3);
@@ -36,8 +33,8 @@ $relation-marker-width: 15rpx;
   display: flex;
   align-items: center;
   @include smartphone {
-    margin: 0rpx -15rpx 10rpx -15rpx;
-    padding: 0rpx 15rpx 0rpx 15rpx;
+    margin: 0rpx (-$content-smartphone-horizontal-padding) 10rpx (-$content-smartphone-horizontal-padding);
+    padding: 8rpx $content-smartphone-horizontal-padding 8rpx $content-smartphone-horizontal-padding;
   }
   &::before {
     top: 100%;
@@ -68,9 +65,8 @@ $relation-marker-width: 15rpx;
 }
 
 .small-head-inner {
-  height: $small-head-height;
-  margin: 0rpx 0rpx 5rpx -35rpx;
-  padding: 0rpx 8rpx 0rpx 35rpx;
+  margin: 0rpx 0rpx 5rpx (-$content-horizontal-padding - 5rpx);
+  padding: 3rpx 10rpx 3rpx ($content-horizontal-padding + 5rpx);
   font-size: 80%;
   color: white;
   background: linear-gradient(to right, $dark-blue-color, $blue-color);
@@ -79,8 +75,8 @@ $relation-marker-width: 15rpx;
   display: inline-flex;
   align-items: center;
   @include smartphone {
-    margin: 0rpx 0rpx 5rpx -15rpx;
-    padding: 0rpx 8rpx 0rpx 15rpx;
+    margin: 0rpx 0rpx 5rpx (-$content-smartphone-horizontal-padding);
+    padding: 3rpx 10rpx 3rpx $content-smartphone-horizontal-padding;
   }
   &::before {
     top: 100%;
@@ -210,12 +206,13 @@ $relation-marker-width: 15rpx;
 }
 
 .tag {
-  min-width: 1em;
-  padding: 2rpx 2rpx;
+  min-width: 16rpx;
+  padding: 2rpx 3rpx;
   background-color: tint($blue-color, 70%);
   font-size: 80%;
   text-align: center;
   line-height: 1;
+  box-sizing: border-box;
   display: inline-block;
 }
 
