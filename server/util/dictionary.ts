@@ -8,7 +8,8 @@ import {
   nanoid
 } from "nanoid";
 import {
-  Dictionary
+  Dictionary,
+  Parser
 } from "soxsot";
 import {
   SingleLoader
@@ -73,6 +74,37 @@ export class DictionaryUtils {
       return difference;
     } else {
       return null;
+    }
+  }
+
+  public static async fetchTwitterText(): Promise<string> {
+    let dictionary = await DictionaryUtils.fetch();
+    let word = Parser.createSimple().parse(dictionary.words[Math.floor(Math.random() * dictionary.words.length)]);
+    let section = word.parts["ja"]?.sections[0];
+    if (section !== undefined) {
+      let text = "";
+      text += word.name;
+      text += ` /${word.pronunciation}/ `;
+      let equivalentStrings = section.getEquivalents(true).map((equivalent) => {
+        let equivalentCategoryString = `〈${equivalent.category}〉`;
+        let equivalentFrameString = (equivalent.frame !== null && equivalent.frame !== "") ? `(${equivalent.frame}) ` : "";
+        let equivalentNameString = equivalent.names.join(", ");
+        let equivalentString = equivalentCategoryString + equivalentFrameString + equivalentNameString;
+        return equivalentString;
+      });
+      text += equivalentStrings?.join(" ") ?? "";
+      let meaningInformation = section.getNormalInformations(true).find((information) => information.kind === "meaning");
+      if (meaningInformation !== undefined) {
+        let meaningText = meaningInformation.text;
+        if (meaningText !== "?") {
+          text += ` ❖ ${meaningText}`;
+        }
+      }
+      text += " ";
+      text += `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact`;
+      return text;
+    } else {
+      return "";
     }
   }
 

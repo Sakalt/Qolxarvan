@@ -10,7 +10,8 @@ import {
 } from "express";
 import fs from "fs";
 import {
-  DictionaryController
+  DictionaryController,
+  TwitterController
 } from "/server/controller";
 import {
   COOKIE_SECRET,
@@ -53,6 +54,7 @@ export class Main {
 
   private setupRouters(): void {
     DictionaryController.use(this.application);
+    TwitterController.use(this.application);
   }
 
   private setupStatic(): void {
