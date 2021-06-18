@@ -45,10 +45,12 @@ export class DictionaryUtils {
     return dictionary;
   }
 
+  // 現在の単語数を Google スプレッドシートに保存します。
+  // 日付は 30 時間制のもの (0 時から 6 時までは通常の日付の前日になる) を利用します。
   public static async saveHistory(): Promise<void> {
     let [spreadsheet, dictionary] = await Promise.all([GoogleUtils.fetchSpreadsheet(HISTORY_SPREADSHEET_ID), DictionaryUtils.fetch()]);
     let sheet = spreadsheet.sheetsByIndex[0];
-    let rawDate = new Date();
+    let rawDate = new Date(new Date().getTime() - 6 * 60 * 60 * 1000);
     let date = ("0000" + rawDate.getFullYear()).slice(-4) + "/" + ("00" + (rawDate.getMonth() + 1)).slice(-2) + "/" + ("00" + rawDate.getDate()).slice(-2);
     let count = dictionary.words.length;
     await sheet.addRow({date, count});
@@ -58,7 +60,7 @@ export class DictionaryUtils {
     let [spreadsheet, dictionary] = await Promise.all([GoogleUtils.fetchSpreadsheet(HISTORY_SPREADSHEET_ID), DictionaryUtils.fetch()]);
     let sheet = spreadsheet.sheetsByIndex[0];
     let rows = await sheet.getRows();
-    let rawTargetDate = new Date(new Date().getTime() - duration * 24 * 60 * 60 * 1000);
+    let rawTargetDate = new Date(new Date().getTime() - duration * 24 * 60 * 60 * 1000 - 6 * 60 * 60 * 1000);
     let targetDate = ("0000" + rawTargetDate.getFullYear()).slice(-4) + "/" + ("00" + (rawTargetDate.getMonth() + 1)).slice(-2) + "/" + ("00" + rawTargetDate.getDate()).slice(-2);
     let targetCount = rows.find((row) => row.date === targetDate)?.count;
     if (targetCount !== undefined) {
