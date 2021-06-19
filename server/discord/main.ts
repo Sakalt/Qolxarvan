@@ -13,7 +13,7 @@ import {
 } from "/server/discord/decorator";
 import IDS from "/server/discord/id.json";
 import {
-  DictionaryUtils
+  ExtendedDictionary
 } from "/server/util/dictionary";
 import {
   Quiz
@@ -45,8 +45,9 @@ export class MainController extends Controller {
       if (deleteAfter) {
         await message.delete();
       }
+      let dictionary = await ExtendedDictionary.fetch();
       for (let name of names) {
-        let embed = await DictionaryUtils.fetchDiscordEmbed(name);
+        let embed = dictionary.createDiscordEmbed(name);
         if (embed !== undefined) {
           await message.channel.send({embed});
         } else {

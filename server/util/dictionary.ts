@@ -26,9 +26,9 @@ import {
 } from "/server/variable";
 
 
-export class DictionaryUtils {
+export class ExtendedDictionary extends Dictionary {
 
-  public static async fetch(): Promise<Dictionary> {
+  public static async fetch(): Promise<ExtendedDictionary> {
     let path = `./dist/temp/temp-${nanoid()}.xdn`;
     let stream = await GoogleClient.instance.downloadFile(DICTIONARY_ID);
     let fileStream = fs.createWriteStream(path, {encoding: "utf-8"});
@@ -48,41 +48,42 @@ export class DictionaryUtils {
         reject(error);
       });
     });
-    let dictionary = await promise;
+    let dictionary = await promise as any;
+    Object.setPrototypeOf(dictionary, ExtendedDictionary.prototype);
     return dictionary;
   }
 
   // 現在の単語数を Google スプレッドシートに保存します。
   // 日付は 30 時間制のもの (0 時から 6 時までは通常の日付の前日になる) を利用します。
-  public static async saveHistory(): Promise<void> {
-    let [spreadsheet, dictionary] = await Promise.all([GoogleClient.instance.fetchSpreadsheet(HISTORY_SPREADSHEET_ID), DictionaryUtils.fetch()]);
+  public async saveHistory(): Promise<void> {
+    let spreadsheet = await GoogleClient.instance.fetchSpreadsheet(HISTORY_SPREADSHEET_ID);
     let sheet = spreadsheet.sheetsByIndex[0];
     let rawDate = new Date(new Date().getTime() - 6 * 60 * 60 * 1000);
     let rawUnsiftedDate = new Date();
     let date = formatToTimeZone(rawDate, "YYYY/MM/DD", {timeZone: "Asia/Tokyo"});
     let time = formatToTimeZone(rawUnsiftedDate, "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
-    let count = dictionary.words.length;
+    let count = this.words.length;
     await sheet.addRow({date, time, count});
   }
 
-  public static async fetchWordCountDifference(duration: number): Promise<number | null> {
-    let [spreadsheet, dictionary] = await Promise.all([GoogleClient.instance.fetchSpreadsheet(HISTORY_SPREADSHEET_ID), DictionaryUtils.fetch()]);
+  public async fetchWordCountDifference(duration: number): Promise<number | null> {
+    let spreadsheet = await GoogleClient.instance.fetchSpreadsheet(HISTORY_SPREADSHEET_ID);
     let sheet = spreadsheet.sheetsByIndex[0];
     let rows = await sheet.getRows();
     let rawTargetDate = new Date(new Date().getTime() - duration * 24 * 60 * 60 * 1000 - 6 * 60 * 60 * 1000);
     let targetDate = formatToTimeZone(rawTargetDate, "YYYY/MM/DD", {timeZone: "Asia/Tokyo"});
     let targetCount = rows.find((row) => row.date === targetDate)?.count;
     if (targetCount !== undefined) {
-      let difference = dictionary.words.length - targetCount;
+      let difference = this.words.length - targetCount;
       return difference;
     } else {
       return null;
     }
   }
 
-  public static async fetchTwitterText(): Promise<string> {
-    let dictionary = await DictionaryUtils.fetch();
-    let word = Parser.createSimple().parse(dictionary.words[Math.floor(Math.random() * dictionary.words.length)]);
+  public createTwitterText(): string {
+    let rawWord = this.words[Math.floor(Math.random() * this.words.length)];
+    let word = Parser.createSimple().parse(rawWord);
     let section = word.parts["ja"]?.sections[0];
     if (section !== undefined) {
       let text = "";
@@ -111,9 +112,8 @@ export class DictionaryUtils {
     }
   }
 
-  public static async fetchDiscordEmbed(name?: string): Promise<MessageEmbed | undefined> {
-    let dictionary = await DictionaryUtils.fetch();
-    let rawWord = (name !== undefined) ? dictionary.words.find((word) => word.name === name) : dictionary.words[Math.floor(Math.random() * dictionary.words.length)];
+  public createDiscordEmbed(name?: string): MessageEmbed | undefined {
+    let rawWord = (name !== undefined) ? this.words.find((word) => word.name === name) : this.words[Math.floor(Math.random() * this.words.length)];
     if (rawWord !== undefined) {
       let word = Parser.createSimple().parse(rawWord);
       let section = word.parts["ja"]?.sections[0];

@@ -24,7 +24,7 @@ import {
   post
 } from "/server/controller/decorator";
 import {
-  DictionaryUtils
+  ExtendedDictionary
 } from "/server/util/dictionary";
 
 
@@ -33,7 +33,7 @@ export class DictionaryController extends Controller {
 
   @get("/fetch")
   public async [Symbol()](request: Request, response: Response): Promise<void> {
-    let dictionary = await DictionaryUtils.fetch();
+    let dictionary = await ExtendedDictionary.fetch();
     let plainDictionary = dictionary.toPlain();
     response.json(plainDictionary).end();
   }
@@ -44,7 +44,7 @@ export class DictionaryController extends Controller {
       let kind = request.query.kind as SaverKind;
       let path = `./dist/temp/temp-${nanoid()}.xdn`;
       let fileName = "shaleian" + ((kind === "single") ? ".xdn" : ".xdc");
-      let dictionary = await DictionaryUtils.fetch();
+      let dictionary = await ExtendedDictionary.fetch();
       let saver = SaverCreator.createByKind(kind, dictionary, path);
       await saver.asPromise();
       response.download(path, fileName, (error) => {
@@ -58,7 +58,7 @@ export class DictionaryController extends Controller {
   @get("/count")
   @before(cors())
   public async [Symbol()](request: Request, response: Response): Promise<void> {
-    let dictionary = await DictionaryUtils.fetch();
+    let dictionary = await ExtendedDictionary.fetch();
     let count = dictionary.words.length;
     response.json(count).end();
   }
@@ -68,7 +68,8 @@ export class DictionaryController extends Controller {
   public async [Symbol()](request: Request, response: Response): Promise<void> {
     if (typeof request.query.duration === "string") {
       let duration = parseInt(request.query.duration, 10);
-      let difference = await DictionaryUtils.fetchWordCountDifference(duration);
+      let dictionary = await ExtendedDictionary.fetch();
+      let difference = await dictionary.fetchWordCountDifference(duration);
       response.json(difference).end();
     } else {
       response.sendStatus(400).end();
@@ -77,7 +78,8 @@ export class DictionaryController extends Controller {
 
   @cron("0 5 * * *")
   public async [Symbol()](): Promise<void> {
-    await DictionaryUtils.saveHistory();
+    let dictionary = await ExtendedDictionary.fetch();
+    await dictionary.saveHistory();
     console.log("history saved");
   }
 
