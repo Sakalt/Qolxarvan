@@ -81,34 +81,38 @@ export class ExtendedDictionary extends Dictionary {
     }
   }
 
-  public createTwitterText(): string {
-    let rawWord = this.words[Math.floor(Math.random() * this.words.length)];
-    let word = Parser.createSimple().parse(rawWord);
-    let section = word.parts["ja"]?.sections[0];
-    if (section !== undefined) {
-      let text = "";
-      text += word.name;
-      text += ` /${word.pronunciation}/ `;
-      let equivalentStrings = section.getEquivalents(true).map((equivalent) => {
-        let equivalentCategoryString = `〈${equivalent.category}〉`;
-        let equivalentFrameString = (equivalent.frame !== null && equivalent.frame !== "") ? `(${equivalent.frame}) ` : "";
-        let equivalentNameString = equivalent.names.join(", ");
-        let equivalentString = equivalentCategoryString + equivalentFrameString + equivalentNameString;
-        return equivalentString;
-      });
-      text += equivalentStrings?.join(" ") ?? "";
-      let meaningInformation = section.getNormalInformations(true).find((information) => information.kind === "meaning");
-      if (meaningInformation !== undefined) {
-        let meaningText = meaningInformation.text;
-        if (meaningText !== "?") {
-          text += ` ❖ ${meaningText}`;
+  public createTwitterText(name?: string): string | undefined {
+    let rawWord = (name !== undefined) ? this.words.find((word) => word.name === name) : this.words[Math.floor(Math.random() * this.words.length)];
+    if (rawWord !== undefined) {
+      let word = Parser.createSimple().parse(rawWord);
+      let section = word.parts["ja"]?.sections[0];
+      if (section !== undefined) {
+        let text = "";
+        text += word.name;
+        text += ` /${word.pronunciation}/ `;
+        let equivalentStrings = section.getEquivalents(true).map((equivalent) => {
+          let equivalentCategoryString = `〈${equivalent.category}〉`;
+          let equivalentFrameString = (equivalent.frame !== null && equivalent.frame !== "") ? `(${equivalent.frame}) ` : "";
+          let equivalentNameString = equivalent.names.join(", ");
+          let equivalentString = equivalentCategoryString + equivalentFrameString + equivalentNameString;
+          return equivalentString;
+        });
+        text += equivalentStrings?.join(" ") ?? "";
+        let meaningInformation = section.getNormalInformations(true).find((information) => information.kind === "meaning");
+        if (meaningInformation !== undefined) {
+          let meaningText = meaningInformation.text;
+          if (meaningText !== "?") {
+            text += ` ❖ ${meaningText}`;
+          }
         }
+        text += " ";
+        text += `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact`;
+        return text;
+      } else {
+        return undefined;
       }
-      text += " ";
-      text += `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact`;
-      return text;
     } else {
-      return "";
+      return undefined;
     }
   }
 
