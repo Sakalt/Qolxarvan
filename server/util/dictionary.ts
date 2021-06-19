@@ -58,12 +58,20 @@ export class ExtendedDictionary extends Dictionary {
   public async saveHistory(): Promise<void> {
     let spreadsheet = await GoogleClient.instance.fetchSpreadsheet(HISTORY_SPREADSHEET_ID);
     let sheet = spreadsheet.sheetsByIndex[0];
+    let rows = await sheet.getRows();
     let rawDate = new Date(new Date().getTime() - 6 * 60 * 60 * 1000);
     let rawUnsiftedDate = new Date();
     let date = formatToTimeZone(rawDate, "YYYY/MM/DD", {timeZone: "Asia/Tokyo"});
     let time = formatToTimeZone(rawUnsiftedDate, "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
     let count = this.words.length;
-    await sheet.addRow({date, time, count});
+    let existingRow = rows.find((row) => row.date === date);
+    if (existingRow !== undefined) {
+      existingRow.time = time;
+      existingRow.count = count;
+      existingRow.save();
+    } else {
+      await sheet.addRow({date, time, count});
+    }
   }
 
   public async fetchWordCountDifferences(durations: Array<number>): Promise<WordCountDifferencesResult> {

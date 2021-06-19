@@ -85,7 +85,7 @@ export class DictionaryController extends Controller {
     }
   }
 
-  @cron("0 5 * * *")
+  @cron("*/30 * * * *")
   public async [Symbol()](): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
     await dictionary.saveHistory();
