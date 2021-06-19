@@ -1,7 +1,7 @@
 //
 
 import {
-  OAuth2Client
+  JWT as OriginalGoogleClient
 } from "google-auth-library/build/src";
 import {
   GoogleSpreadsheet
@@ -17,9 +17,11 @@ import {
 } from "/server/variable";
 
 
-export class GoogleUtils {
+export class GoogleClient extends OriginalGoogleClient {
 
-  public static async downloadFile(fileId: string): Promise<Readable> {
+  public static instance: GoogleClient = GoogleClient.create();
+
+  public static create(): GoogleClient {
     let scopes = [
       "https://www.googleapis.com/auth/drive",
       "https://www.googleapis.com/auth/drive.file",
@@ -29,23 +31,24 @@ export class GoogleUtils {
       "https://www.googleapis.com/auth/drive.metadata",
       "https://www.googleapis.com/auth/drive.photos.readonly"
     ];
-    let auth = GoogleUtils.createClient(scopes);
-    let drive = google.drive({version: "v3", auth});
+    let client = new OriginalGoogleClient(GOOGLE_CREDENTIALS["client_email"], undefined, GOOGLE_CREDENTIALS["private_key"], scopes, undefined) as any;
+    Object.setPrototypeOf(client, GoogleClient.prototype);
+    return client;
+  }
+
+  public async downloadFile(fileId: string): Promise<Readable> {
+    let drive = google.drive({version: "v3", auth: this});
     let response = await drive.files.get({fileId, alt: "media"}, {responseType: "stream"});
     let stream = response.data;
     return stream;
   }
 
-  public static async fetchSpreadsheet(fileId: string): Promise<GoogleSpreadsheet> {
+  public async fetchSpreadsheet(fileId: string): Promise<GoogleSpreadsheet> {
     let spreadsheet = new GoogleSpreadsheet(fileId);
-    await spreadsheet.useServiceAccountAuth(GOOGLE_CREDENTIALS);
+    let credentials = Object.fromEntries([["client_email", this.email!], ["private_key", this.key!]]) as any;
+    await spreadsheet.useServiceAccountAuth(credentials);
     await spreadsheet.loadInfo();
     return spreadsheet;
-  }
-
-  private static createClient(scopes: Array<string>): OAuth2Client {
-    let client = new google.auth.JWT(GOOGLE_CREDENTIALS["client_email"], undefined, GOOGLE_CREDENTIALS["private_key"], scopes, undefined);
-    return client;
   }
 
 }

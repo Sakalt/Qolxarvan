@@ -1,9 +1,6 @@
 //
 
 import cookieParser from "cookie-parser";
-import {
-  Client as DiscordClient
-} from "discord.js";
 import express from "express";
 import {
   Express,
@@ -20,8 +17,10 @@ import {
   MainController as MainDiscordController
 } from "/server/discord";
 import {
+  DiscordClient
+} from "/server/util/discord";
+import {
   COOKIE_SECRET,
-  DISCORD_KEY,
   PORT
 } from "/server/variable";
 
@@ -29,11 +28,9 @@ import {
 export class Main {
 
   private application!: Express;
-  private discordClient!: DiscordClient;
 
   public main(): void {
     this.application = express();
-    this.discordClient = this.createDiscordClient();
     this.setupBodyParsers();
     this.setupCookie();
     this.setupDirectories();
@@ -43,12 +40,6 @@ export class Main {
     this.setupFallbackHandlers();
     this.setupErrorHandler();
     this.listen();
-  }
-
-  private createDiscordClient(): DiscordClient {
-    let client = new DiscordClient();
-    client.login(DISCORD_KEY);
-    return client;
   }
 
   // リクエストボディをパースするミドルウェアの設定をします。
@@ -74,7 +65,7 @@ export class Main {
   }
 
   private setupDiscordControllers(): void {
-    MainDiscordController.setup(this.discordClient);
+    MainDiscordController.setup(DiscordClient.instance);
   }
 
   private setupStatic(): void {

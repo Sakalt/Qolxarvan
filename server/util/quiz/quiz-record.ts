@@ -10,7 +10,7 @@ import {
   GoogleSpreadsheetWorksheet
 } from "google-spreadsheet";
 import {
-  GoogleUtils
+  GoogleClient
 } from "/server/util/google";
 import {
   Quiz,
@@ -161,7 +161,7 @@ export class QuizRecord {
   }
 
   private static async getSheet(): Promise<GoogleSpreadsheetWorksheet> {
-    let spreadsheet = await GoogleUtils.fetchSpreadsheet(QUIZ_SPREADSHEET_ID);
+    let spreadsheet = await GoogleClient.instance.fetchSpreadsheet(QUIZ_SPREADSHEET_ID);
     let sheet = spreadsheet.sheetsByIndex[0];
     return sheet;
   }

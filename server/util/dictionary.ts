@@ -18,7 +18,7 @@ import {
   SingleLoader
 } from "soxsot/dist/io";
 import {
-  GoogleUtils
+  GoogleClient
 } from "/server/util/google";
 import {
   DICTIONARY_ID,
@@ -30,7 +30,7 @@ export class DictionaryUtils {
 
   public static async fetch(): Promise<Dictionary> {
     let path = `./dist/temp/temp-${nanoid()}.xdn`;
-    let stream = await GoogleUtils.downloadFile(DICTIONARY_ID);
+    let stream = await GoogleClient.instance.downloadFile(DICTIONARY_ID);
     let fileStream = fs.createWriteStream(path, {encoding: "utf-8"});
     let promise = new Promise<Dictionary>((resolve, reject) => {
       stream.on("data", (chunk) => {
@@ -55,7 +55,7 @@ export class DictionaryUtils {
   // 現在の単語数を Google スプレッドシートに保存します。
   // 日付は 30 時間制のもの (0 時から 6 時までは通常の日付の前日になる) を利用します。
   public static async saveHistory(): Promise<void> {
-    let [spreadsheet, dictionary] = await Promise.all([GoogleUtils.fetchSpreadsheet(HISTORY_SPREADSHEET_ID), DictionaryUtils.fetch()]);
+    let [spreadsheet, dictionary] = await Promise.all([GoogleClient.instance.fetchSpreadsheet(HISTORY_SPREADSHEET_ID), DictionaryUtils.fetch()]);
     let sheet = spreadsheet.sheetsByIndex[0];
     let rawDate = new Date(new Date().getTime() - 6 * 60 * 60 * 1000);
     let rawUnsiftedDate = new Date();
@@ -66,7 +66,7 @@ export class DictionaryUtils {
   }
 
   public static async fetchWordCountDifference(duration: number): Promise<number | null> {
-    let [spreadsheet, dictionary] = await Promise.all([GoogleUtils.fetchSpreadsheet(HISTORY_SPREADSHEET_ID), DictionaryUtils.fetch()]);
+    let [spreadsheet, dictionary] = await Promise.all([GoogleClient.instance.fetchSpreadsheet(HISTORY_SPREADSHEET_ID), DictionaryUtils.fetch()]);
     let sheet = spreadsheet.sheetsByIndex[0];
     let rows = await sheet.getRows();
     let rawTargetDate = new Date(new Date().getTime() - duration * 24 * 60 * 60 * 1000 - 6 * 60 * 60 * 1000);

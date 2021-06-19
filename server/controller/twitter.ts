@@ -18,7 +18,7 @@ import {
   DictionaryUtils
 } from "/server/util/dictionary";
 import {
-  TwitterUtils
+  TwitterClient
 } from "/server/util/twitter";
 
 
@@ -28,7 +28,7 @@ export class TwitterController extends Controller {
   @cron("*/15 * * * *")
   public async [Symbol()](): Promise<void> {
     let text = await DictionaryUtils.fetchTwitterText();
-    await TwitterUtils.tweet(text);
+    await TwitterClient.instance.tweet(text);
   }
 
 }

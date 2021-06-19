@@ -1,6 +1,6 @@
 //
 
-import Twitter from "twitter";
+import OriginalTwitterClient from "twitter";
 import {
   ResponseData
 } from "twitter";
@@ -12,23 +12,24 @@ import {
 } from "/server/variable";
 
 
-export class TwitterUtils {
+export class TwitterClient extends OriginalTwitterClient {
 
-  public static async tweet(text: string): Promise<ResponseData> {
-    let client = TwitterUtils.createClient();
-    let response = await client.post("statuses/update", {status: text});
-    return response;
-  }
+  public static instance: TwitterClient = TwitterClient.create();
 
-  private static createClient(): Twitter {
+  public static create(): TwitterClient {
     let options = Object.fromEntries([
       ["consumer_key", TWITTER_KEY],
       ["consumer_secret", TWITTER_SECRET],
       ["access_token_key", TWITTER_ACCESS_KEY],
       ["access_token_secret", TWITTER_ACCESS_SECRET]
     ]) as any;
-    let client = new Twitter(options);
+    let client = new TwitterClient(options);
     return client;
+  }
+
+  public async tweet(text: string): Promise<ResponseData> {
+    let response = await this.post("statuses/update", {status: text});
+    return response;
   }
 
 }
