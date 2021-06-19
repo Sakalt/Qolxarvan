@@ -15,11 +15,11 @@ import {
   post
 } from "/server/controller/decorator";
 import {
+  TwitterClient
+} from "/server/util/client";
+import {
   DictionaryUtils
 } from "/server/util/dictionary";
-import {
-  TwitterClient
-} from "/server/util/twitter";
 
 
 @controller("/api/twitter")

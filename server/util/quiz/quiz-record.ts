@@ -11,7 +11,7 @@ import {
 } from "google-spreadsheet";
 import {
   GoogleClient
-} from "/server/util/google";
+} from "/server/util/client";
 import {
   Quiz,
   QuizUrls

@@ -18,7 +18,7 @@ import {
 } from "/server/discord";
 import {
   DiscordClient
-} from "/server/util/discord";
+} from "/server/util/client";
 import {
   COOKIE_SECRET,
   PORT
