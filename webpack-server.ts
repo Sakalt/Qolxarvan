@@ -6,8 +6,7 @@ import externals from "webpack-node-externals";
 
 let config = {
   entry: {
-    index: ["./server/index.ts"],
-    service: ["./server/service.ts"]
+    index: ["./server/index.ts"]
   },
   output: {
     path: path.join(__dirname, "dist"),
