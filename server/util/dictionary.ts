@@ -66,19 +66,24 @@ export class ExtendedDictionary extends Dictionary {
     await sheet.addRow({date, time, count});
   }
 
-  public async fetchWordCountDifference(duration: number): Promise<number | null> {
+  public async fetchWordCountDifferences(durations: Array<number>): Promise<WordCountDifferencesResult> {
     let spreadsheet = await GoogleClient.instance.fetchSpreadsheet(HISTORY_SPREADSHEET_ID);
     let sheet = spreadsheet.sheetsByIndex[0];
     let rows = await sheet.getRows();
-    let rawTargetDate = new Date(new Date().getTime() - duration * 24 * 60 * 60 * 1000 - 6 * 60 * 60 * 1000);
-    let targetDate = formatToTimeZone(rawTargetDate, "YYYY/MM/DD", {timeZone: "Asia/Tokyo"});
-    let targetCount = rows.find((row) => row.date === targetDate)?.count;
-    if (targetCount !== undefined) {
-      let difference = this.words.length - targetCount;
-      return difference;
-    } else {
-      return null;
-    }
+    let differences = durations.map((duration) => {
+      let rawTargetDate = new Date(new Date().getTime() - duration * 24 * 60 * 60 * 1000 - 6 * 60 * 60 * 1000);
+      let targetDate = formatToTimeZone(rawTargetDate, "YYYY/MM/DD", {timeZone: "Asia/Tokyo"});
+      let targetCount = rows.find((row) => row.date === targetDate)?.count;
+      if (targetCount !== undefined) {
+        let difference = this.words.length - targetCount;
+        return {duration, difference};
+      } else {
+        return {duration, difference: null};
+      }
+    });
+    let count = this.words.length;
+    let result = {count, differences};
+    return result;
   }
 
   public createTwitterText(name?: string): string | undefined {
@@ -171,3 +176,6 @@ export class ExtendedDictionary extends Dictionary {
   }
 
 }
+
+
+export type WordCountDifferencesResult = {count: number, differences: Array<{duration: number, difference: number | null}>};

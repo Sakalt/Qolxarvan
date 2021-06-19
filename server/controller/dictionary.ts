@@ -5,7 +5,9 @@ import {
   Request,
   Response
 } from "express";
+import * as fp from "fp-ts";
 import fs from "fs";
+import * as io from "io-ts";
 import {
   nanoid
 } from "nanoid";
@@ -66,10 +68,14 @@ export class DictionaryController extends Controller {
   @get("/difference")
   @before(cors())
   public async [Symbol()](request: Request, response: Response): Promise<void> {
-    if (typeof request.query.duration === "string") {
-      let duration = parseInt(request.query.duration, 10);
+    let codec = io.type({
+      duration: io.union([io.string, io.array(io.string)])
+    });
+    let query = codec.decode(request.query);
+    if (fp.either.isRight(query)) {
+      let duration = (typeof query.right.duration === "string") ? [+query.right.duration] : query.right.duration.map((element) => +element);
       let dictionary = await ExtendedDictionary.fetch();
-      let difference = await dictionary.fetchWordCountDifference(duration);
+      let difference = await dictionary.fetchWordCountDifferences(duration);
       response.json(difference).end();
     } else {
       response.sendStatus(400).end();
