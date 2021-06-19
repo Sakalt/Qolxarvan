@@ -10,8 +10,9 @@ import {
 } from "express";
 import fs from "fs";
 import {
-  DictionaryController as DictionaryRouterController,
-  TwitterController as TwitterRouterController
+  DictionaryController,
+  DiscordController,
+  TwitterController
 } from "/server/controller";
 import {
   MainController as MainDiscordController
@@ -60,8 +61,9 @@ export class Main {
   }
 
   private setupRouterControllers(): void {
-    DictionaryRouterController.use(this.application);
-    TwitterRouterController.use(this.application);
+    DictionaryController.use(this.application);
+    DiscordController.use(this.application);
+    TwitterController.use(this.application);
   }
 
   private setupDiscordControllers(): void {
