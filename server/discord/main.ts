@@ -11,7 +11,7 @@ import {
   controller,
   listener
 } from "/server/discord/decorator";
-import IDS from "/server/discord/id.json";
+import DISCORD_IDS from "/server/discord/id.json";
 import {
   ExtendedDictionary
 } from "/server/util/dictionary";
@@ -70,7 +70,7 @@ export class MainController extends Controller {
       }
       let quiz = await Quiz.findByNumber(client, number);
       if (quiz !== undefined) {
-        let embed = quiz.createEmbed();
+        let embed = quiz.createDiscordEmbed();
         await message.channel.send({embed});
       } else {
         await message.channel.send("kodat e zel atùk.");
@@ -98,7 +98,7 @@ export class MainController extends Controller {
 
   @listener("message")
   private async [Symbol()](client: Client, message: Message): Promise<void> {
-    let hasPermission = message.member?.roles.cache.find((role) => role.id === IDS.role.zisvalod) !== undefined;
+    let hasPermission = message.member?.roles.cache.find((role) => role.id === DISCORD_IDS.role.zisvalod) !== undefined;
     if (hasPermission) {
       let match = message.content.match(/^!save\s+(\d+)$/);
       if (match) {
@@ -114,8 +114,8 @@ export class MainController extends Controller {
   // 選択肢として使える絵文字は、数字もしくはラテン文字の絵文字のみです。
   @listener("message")
   private async [Symbol()](client: Client, message: Message): Promise<void> {
-    let hasPermission = message.member?.roles.cache.find((role) => role.id === IDS.role.zisvalod) !== undefined;
-    let correctChannel = message.channel.id === IDS.channel.sokad.zelad || message.channel.id === IDS.channel.test;
+    let hasPermission = message.member?.roles.cache.find((role) => role.id === DISCORD_IDS.role.zisvalod) !== undefined;
+    let correctChannel = message.channel.id === DISCORD_IDS.channel.sokad.zelad || message.channel.id === DISCORD_IDS.channel.test;
     if (hasPermission && correctChannel) {
       if (message.content.match(/^\*\*\[\s*(\d+)\s*\]\*\*\s*(☆|★)*\s*\n/)) {
         let matches = message.content.matchAll(/(..\u{20E3}|[\u{1F1E6}-\u{1F1FF}])/gu);

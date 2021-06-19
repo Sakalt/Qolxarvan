@@ -7,7 +7,7 @@ import {
   Snowflake,
   TextChannel
 } from "discord.js";
-import IDS from "/server/discord/id.json";
+import DISCORD_IDS from "/server/discord/id.json";
 
 
 export class Quiz {
@@ -38,7 +38,7 @@ export class Quiz {
   }
 
   public static async *iterateRaw(client: Client): AsyncGenerator<QuizRawIteration> {
-    let channel = client.channels.cache.get(IDS.channel.sokad.zelad);
+    let channel = client.channels.cache.get(DISCORD_IDS.channel.sokad.zelad);
     if (channel instanceof TextChannel) {
       let before = undefined as Snowflake | undefined;
       let sourceMap = new Map<number, Partial<QuizSources>>();
@@ -109,7 +109,7 @@ export class Quiz {
     }
   }
 
-  public createEmbed(): MessageEmbed {
+  public createDiscordEmbed(): MessageEmbed {
     let embed = new MessageEmbed();
     embed.title = `第 ${this.number} 問`;
     embed.description = this.questionMarkup;

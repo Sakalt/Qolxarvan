@@ -4,7 +4,7 @@ import {
   Client,
   TextChannel
 } from "discord.js";
-import IDS from "/server/discord/id.json";
+import DISCORD_IDS from "/server/discord/id.json";
 
 
 export class Controller {
@@ -14,7 +14,7 @@ export class Controller {
 
   protected async log(client: Client, message: string): Promise<void> {
     try {
-      let channel = client.channels.resolve(IDS.channel.bot);
+      let channel = client.channels.resolve(DISCORD_IDS.channel.bot);
       if (channel instanceof TextChannel) {
         await channel.send(message);
       } else {
@@ -27,7 +27,7 @@ export class Controller {
 
   protected async error(client: Client, message: string, error: Error): Promise<void> {
     try {
-      let channel = client.channels.resolve(IDS.channel.bot);
+      let channel = client.channels.resolve(DISCORD_IDS.channel.bot);
       if (channel instanceof TextChannel) {
         let nextMessage = message + "\n```\n" + error.stack + "```";
         await channel.send(nextMessage);
