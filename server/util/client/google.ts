@@ -13,7 +13,8 @@ import {
   Readable
 } from "stream";
 import {
-  GOOGLE_CREDENTIALS
+  GOOGLE_EMAIL,
+  GOOGLE_KEY
 } from "/server/variable";
 
 
@@ -31,7 +32,7 @@ export class GoogleClient extends OriginalGoogleClient {
       "https://www.googleapis.com/auth/drive.metadata",
       "https://www.googleapis.com/auth/drive.photos.readonly"
     ];
-    let client = new OriginalGoogleClient(GOOGLE_CREDENTIALS["client_email"], undefined, GOOGLE_CREDENTIALS["private_key"], scopes, undefined) as any;
+    let client = new OriginalGoogleClient(GOOGLE_EMAIL, undefined, GOOGLE_KEY, scopes, undefined) as any;
     Object.setPrototypeOf(client, GoogleClient.prototype);
     return client;
   }
