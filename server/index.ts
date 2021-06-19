@@ -1,6 +1,9 @@
 //
 
 import cookieParser from "cookie-parser";
+import {
+  Client as DiscordClient
+} from "discord.js";
 import express from "express";
 import {
   Express,
@@ -10,11 +13,15 @@ import {
 } from "express";
 import fs from "fs";
 import {
-  DictionaryController,
-  TwitterController
+  DictionaryController as DictionaryRouterController,
+  TwitterController as TwitterRouterController
 } from "/server/controller";
 import {
+  MainController as MainDiscordController
+} from "/server/discord";
+import {
   COOKIE_SECRET,
+  DISCORD_KEY,
   PORT
 } from "/server/variable";
 
@@ -22,17 +29,26 @@ import {
 export class Main {
 
   private application!: Express;
+  private discordClient!: DiscordClient;
 
   public main(): void {
     this.application = express();
+    this.discordClient = this.createDiscordClient();
     this.setupBodyParsers();
     this.setupCookie();
     this.setupDirectories();
-    this.setupRouters();
+    this.setupRouterControllers();
+    this.setupDiscordControllers();
     this.setupStatic();
     this.setupFallbackHandlers();
     this.setupErrorHandler();
     this.listen();
+  }
+
+  private createDiscordClient(): DiscordClient {
+    let client = new DiscordClient();
+    client.login(DISCORD_KEY);
+    return client;
   }
 
   // リクエストボディをパースするミドルウェアの設定をします。
@@ -52,9 +68,13 @@ export class Main {
     fs.mkdirSync("./dist/temp", {recursive: true});
   }
 
-  private setupRouters(): void {
-    DictionaryController.use(this.application);
-    TwitterController.use(this.application);
+  private setupRouterControllers(): void {
+    DictionaryRouterController.use(this.application);
+    TwitterRouterController.use(this.application);
+  }
+
+  private setupDiscordControllers(): void {
+    MainDiscordController.setup(this.discordClient);
   }
 
   private setupStatic(): void {

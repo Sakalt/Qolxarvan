@@ -26,7 +26,7 @@ export class TwitterUtils {
       ["consumer_secret", TWITTER_SECRET],
       ["access_token_key", TWITTER_ACCESS_KEY],
       ["access_token_secret", TWITTER_ACCESS_SECRET]
-    ]);
+    ]) as any;
     let client = new Twitter(options);
     return client;
   }

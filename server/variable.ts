@@ -13,6 +13,7 @@ export const TWITTER_KEY = process.env["TWITTER_KEY"] || "dummy";
 export const TWITTER_SECRET = process.env["TWITTER_SECRET"] || "dummy";
 export const TWITTER_ACCESS_KEY = process.env["TWITTER_ACCESS_KEY"] || "dummy";
 export const TWITTER_ACCESS_SECRET = process.env["TWITTER_ACCESS_SECRET"] || "dummy";
+export const DISCORD_KEY = process.env["DISCORD_KEY"] || "dummy";
 export const DICTIONARY_ID = process.env["DICTIONARY_ID"] || "dummy";
 export const HISTORY_SPREADSHEET_ID = process.env["HISTORY_SPREADSHEET_ID"] || "dummy";
 export const QUIZ_SPREADSHEET_ID = process.env["QUIZ_SPREADSHEET_ID"] || "dummy";
