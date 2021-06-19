@@ -29,7 +29,9 @@ export class TwitterController extends Controller {
   public async [Symbol()](): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
     let text = dictionary.createTwitterText();
-    await TwitterClient.instance.tweet(text);
+    if (text !== undefined) {
+      await TwitterClient.instance.tweet(text);
+    }
   }
 
 }
