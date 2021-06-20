@@ -48,14 +48,17 @@ export class ExtendedDictionary extends Dictionary {
         reject(error);
       });
     });
-    let dictionary = await promise as any;
+    let dictionary = await promise;
     Object.setPrototypeOf(dictionary, ExtendedDictionary.prototype);
-    return dictionary;
+    return dictionary as any;
   }
 
-  public static async upload(path: string): Promise<void> {
+  public static async upload(path: string): Promise<ExtendedDictionary> {
     let stream = fs.createReadStream(path);
-    await GoogleClient.instance.uploadFile(DICTIONARY_ID, stream);
+    let loader = new SingleLoader(path);
+    let [, dictionary] = await Promise.all([GoogleClient.instance.uploadFile(DICTIONARY_ID, stream), loader.asPromise()]);
+    Object.setPrototypeOf(dictionary, ExtendedDictionary.prototype);
+    return dictionary as any;
   }
 
   // 現在の単語数を Google スプレッドシートに保存します。

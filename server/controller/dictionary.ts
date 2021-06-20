@@ -24,6 +24,9 @@ import {
   post
 } from "/server/controller/decorator";
 import {
+  TwitterClient
+} from "/server/util/client";
+import {
   ExtendedDictionary
 } from "/server/util/dictionary";
 import {
@@ -46,7 +49,8 @@ export class DictionaryController extends Controller {
     let password = request.body.password;
     let path = request.file?.path;
     if (password === PASSWORD && path !== undefined) {
-      await ExtendedDictionary.upload(path);
+      let dictionary = await ExtendedDictionary.upload(path);
+      await TwitterClient.instance.tweet(`◆ 辞書データが更新されました (${dictionary.words.length} 語)。`);
       await fs.promises.unlink(path);
       response.json(null).end();
     } else {
