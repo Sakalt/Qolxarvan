@@ -7,6 +7,7 @@ dotenv.config({path: "./variable.env"});
 
 export const VERSION = process.env["npm_package_version"] || "?";
 export const PORT = process.env["PORT"] || 8050;
+export const PASSWORD = process.env["PASSWORD"] || "dummy";
 export const COOKIE_SECRET = process.env["COOKIE_SECRET"] || "cookie-shaleian";
 export const GOOGLE_EMAIL = process.env["GOOGLE_EMAIL"] || "dummy";
 export const GOOGLE_KEY = process.env["GOOGLE_KEY"]?.replace(/\\n/g, "\n") || "dummy";

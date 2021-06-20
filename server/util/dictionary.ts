@@ -53,6 +53,11 @@ export class ExtendedDictionary extends Dictionary {
     return dictionary;
   }
 
+  public static async upload(path: string): Promise<void> {
+    let stream = fs.createReadStream(path);
+    await GoogleClient.instance.uploadFile(DICTIONARY_ID, stream);
+  }
+
   // 現在の単語数を Google スプレッドシートに保存します。
   // 日付は 30 時間制のもの (0 時から 6 時までは通常の日付の前日になる) を利用します。
   public async saveHistory(): Promise<void> {

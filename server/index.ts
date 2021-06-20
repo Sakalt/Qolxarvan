@@ -9,6 +9,7 @@ import {
   Response
 } from "express";
 import fs from "fs";
+import multer from "multer";
 import {
   DictionaryController,
   DiscordController,
@@ -34,6 +35,7 @@ export class Main {
     this.application = express();
     this.setupBodyParsers();
     this.setupCookie();
+    this.setupMulter();
     this.setupDirectories();
     this.setupRouterControllers();
     this.setupDiscordControllers();
@@ -56,8 +58,14 @@ export class Main {
     this.application.use(middleware);
   }
 
+  private setupMulter(): void {
+    let middleware = multer({dest: "./dist/upload/"}).single("file");
+    this.application.use("/api*", middleware);
+  }
+
   private setupDirectories(): void {
     fs.mkdirSync("./dist/temp", {recursive: true});
+    fs.mkdirSync("./dist/upload", {recursive: true});
   }
 
   private setupRouterControllers(): void {

@@ -26,6 +26,9 @@ import {
 import {
   ExtendedDictionary
 } from "/server/util/dictionary";
+import {
+  PASSWORD
+} from "/server/variable";
 
 
 @controller("/api/dictionary")
@@ -36,6 +39,19 @@ export class DictionaryController extends Controller {
     let dictionary = await ExtendedDictionary.fetch();
     let plainDictionary = dictionary.toPlain();
     response.json(plainDictionary).end();
+  }
+
+  @post("/upload")
+  public async [Symbol()](request: Request, response: Response): Promise<void> {
+    let password = request.body.password;
+    let path = request.file?.path;
+    if (password === PASSWORD && path !== undefined) {
+      await ExtendedDictionary.upload(path);
+      await fs.promises.unlink(path);
+      response.json(null).end();
+    } else {
+      response.sendStatus(400).end();
+    }
   }
 
   @get("/download")

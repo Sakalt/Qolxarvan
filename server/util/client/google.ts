@@ -44,6 +44,11 @@ export class GoogleClient extends OriginalGoogleClient {
     return stream;
   }
 
+  public async uploadFile(fileId: string, stream: Readable): Promise<void> {
+    let drive = google.drive({version: "v3", auth: this});
+    await drive.files.update({fileId, media: {body: stream}});
+  }
+
   public async fetchSpreadsheet(fileId: string): Promise<GoogleSpreadsheet> {
     let spreadsheet = new GoogleSpreadsheet(fileId);
     let credentials = Object.fromEntries([["client_email", this.email!], ["private_key", this.key!]]) as any;
