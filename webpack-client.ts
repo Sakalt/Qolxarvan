@@ -116,7 +116,7 @@ let config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./client/public/index.html",
-      title: "Shaleian Online Dictionary"
+      title: "soxsot ivo livat"
     }),
     new BundleAnalyzerPlugin({
       analyzerMode: (!!process.env["ANALYZE"]) ? "static" : "disabled",
