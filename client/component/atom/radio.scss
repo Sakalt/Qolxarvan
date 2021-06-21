@@ -18,13 +18,26 @@
   left: 0em;
   width: 1em;
   height: 1em;
-  background-color: $background-color;
-  box-shadow: 0rpx 2rpx 6rpx $shadow-color inset;
+  border: 1px input-border-color($white-border-color) solid;
+  border-radius: 50%;
+  background: $background;
+  background-attachment: fixed;
+  box-shadow: 0rpx 2rpx 6rpx $input-shadow-color inset;
   box-sizing: border-box;
   display: inline-block;
   vertical-align: middle;
   position: absolute;
   content: "";
+  .root:hover & {
+    border: 1px input-border-color($hover-border-color) solid;
+  }
+}
+
+.radio:checked +.label::before {
+  border: 1px input-border-color($head-border-color) solid;
+  .root:hover & {
+    border: 1px input-border-color($head-border-color) solid;
+  }
 }
 
 .radio:checked +.label::after {
@@ -32,6 +45,7 @@
   left: 4rpx;
   width: calc(1em - 8rpx);
   height: calc(1em - 8rpx);
+  border-radius: 50%;
   background-color: $blue-color;
   box-sizing: border-box;
   display: block;

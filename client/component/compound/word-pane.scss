@@ -7,89 +7,59 @@ $marker-width: 6rpx;
 $example-marker-width: 25rpx;
 $relation-marker-width: 15rpx;
 
-.section {
-  margin: 0rpx (-$content-horizontal-padding) 15rpx (-$content-horizontal-padding);
-  padding: 0rpx $content-horizontal-padding 15rpx $content-horizontal-padding;
-  border-bottom: 1px $blue-color dashed;
-  @include smartphone {
-    margin: 0rpx (-$content-smartphone-horizontal-padding) 15rpx (-$content-smartphone-horizontal-padding);
-    padding: 0rpx $content-smartphone-horizontal-padding 15rpx $content-smartphone-horizontal-padding;
-  }
-  &:last-child {
-    margin-bottom: 0rpx;
-    padding-bottom: 0rpx;
-    border-bottom: none;
-  }
-}
-
 .head {
-  margin: 0rpx (-$content-horizontal-padding - 10rpx) 10rpx (-$content-horizontal-padding - 10rpx);
-  padding: 8rpx ($content-horizontal-padding + 10rpx) 8rpx ($content-horizontal-padding + 10rpx);
-  color: white;
-  background: linear-gradient(to right, $dark-blue-color, $blue-color);
-  box-shadow: 0rpx 1rpx 4rpx rgba($dark-blue-color, 0.3);
+  @include pane($head-background-color, $head-border-color);
+  margin: 0rpx;
+  padding: 10rpx $content-horizontal-padding 10rpx $content-horizontal-padding;
+  color: $blue-color;
+  border-radius: $border-radius $border-radius 0rpx 0rpx;
   position: relative;
   flex-grow: 1;
   display: flex;
   align-items: center;
+  z-index: 1;
   @include smartphone {
-    margin: 0rpx (-$content-smartphone-horizontal-padding) 10rpx (-$content-smartphone-horizontal-padding);
-    padding: 8rpx $content-smartphone-horizontal-padding 8rpx $content-smartphone-horizontal-padding;
+    margin: 0rpx;
+    padding: 10rpx $content-smartphone-horizontal-padding 10rpx $content-smartphone-horizontal-padding;
   }
-  &::before {
-    top: 100%;
-    left: 0rpx;
-    border: none;
-    border-bottom: solid 10rpx transparent;
-    border-right: solid 10rpx shade($dark-blue-color, 20%);
-    position: absolute;
-    z-index: 1;
-    content: "";
-    @include smartphone {
-      display: none;
-    }
+  &:last-child {
+    border-radius: $border-radius;
   }
-  &::after {
-    top: 100%;
-    right: 0rpx;
-    border: none;
-    border-bottom: solid 10rpx transparent;
-    border-left: solid 10rpx shade($blue-color, 20%);
-    position: absolute;
-    z-index: 1;
-    content: "";
-    @include smartphone {
-      display: none;
-    }
+}
+
+.sections {
+  @include pane;
+  margin: 1px 0rpx 0rpx 0rpx;
+  padding: 15rpx 0rpx 15rpx 0rpx;
+  border-radius: 0rpx 0rpx $border-radius $border-radius;
+}
+
+.section {
+  margin: 15rpx 0rpx 0rpx 0rpx;
+  padding: 15rpx $content-horizontal-padding 0rpx $content-horizontal-padding;
+  border-top: 1px $white-border-color dashed;
+  @include smartphone {
+    padding: 15rpx $content-smartphone-horizontal-padding 0rpx $content-smartphone-horizontal-padding;
+  }
+  &:first-child {
+    margin-top: 0rpx;
+    padding-top: 0rpx;
+    border-top: none;
   }
 }
 
 .small-head-inner {
-  margin: 0rpx 0rpx 5rpx (-$content-horizontal-padding - 5rpx);
-  padding: 3rpx 10rpx 3rpx ($content-horizontal-padding + 5rpx);
+  margin: 0rpx 0rpx 5rpx (0rpx - $content-horizontal-padding);
+  padding: 0rpx 5rpx 3rpx $content-horizontal-padding;
   font-size: 80%;
-  color: white;
-  background: linear-gradient(to right, $dark-blue-color, $blue-color);
-  box-shadow: 0rpx 1rpx 4rpx rgba($dark-blue-color, 0.3);
+  color: $blue-color;
+  border-bottom: 1px $head-border-color solid;
   position: relative;
   display: inline-flex;
   align-items: center;
   @include smartphone {
-    margin: 0rpx 0rpx 5rpx (-$content-smartphone-horizontal-padding);
-    padding: 3rpx 10rpx 3rpx $content-smartphone-horizontal-padding;
-  }
-  &::before {
-    top: 100%;
-    left: 0rpx;
-    border: none;
-    border-bottom: solid 5rpx transparent;
-    border-right: solid 5rpx shade($dark-blue-color, 20%);
-    position: absolute;
-    z-index: 1;
-    content: "";
-    @include smartphone {
-      display: none;
-    }
+    margin: 0rpx 0rpx 5rpx (0rpx - $content-smartphone-horizontal-padding);
+    padding: 0rpx 5rpx 3rpx $content-smartphone-horizontal-padding;
   }
 }
 
@@ -104,7 +74,7 @@ $relation-marker-width: 15rpx;
 }
 
 .head-name {
-  font-size: 120%;
+  font-size: 125%;
 }
 
 .head-pronunciation {
@@ -196,31 +166,37 @@ $relation-marker-width: 15rpx;
   color: $mute-color;
 }
 
-.relation .link {
-  color: darken($blue-color, 20%);
-  text-decoration: underline;
+.link {
   cursor: pointer;
+}
+
+.relation .link {
+  color: $orange-color;
+  text-decoration: underline;
   &:hover {
-    color: darken($blue-color, 10%);
+    color: tint($orange-color, 30%);
   }
 }
 
 .tag {
-  min-width: 16rpx;
+  min-width: 18rpx;
   padding: 2rpx 3rpx;
-  background-color: tint($blue-color, 70%);
   font-size: 80%;
   text-align: center;
   line-height: 1;
+  background-color: $white-background-color;
+  border: 1px $white-border-color solid;
+  border-radius: $tag-border-radius;
   box-sizing: border-box;
   display: inline-block;
+  position: relative;
+  bottom: 1px;
 }
 
 .head .tag {
-  background-color: white;
-  color: $dark-blue-color;
-  position: relative;
-  bottom: 2rpx;
+  background-color: $head-background-color;
+  border: 1px $head-border-color solid;
+  bottom: calc(1rpx + 1px);
 }
 
 .text {

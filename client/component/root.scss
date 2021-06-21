@@ -31,7 +31,8 @@ body {
   font-feature-settings: "palt" 1, "pkna" 1;
   color: $black-color;
   line-height: 1;
-  background-color: $background-color;
+  background: $background;
+  background-attachment: fixed;
   overflow-x: auto;
   overflow-y: scroll;
   text-size-adjust: 100%;

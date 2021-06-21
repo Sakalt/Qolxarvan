@@ -6,8 +6,15 @@
 .root {
   margin: 0rpx;
   padding: 5rpx 15rpx;
-  background-color: $background-color;
-  box-shadow: 0rpx 2rpx 6rpx $shadow-color inset;
+  background: $background;
+  background-attachment: fixed;
+  border: 1px input-border-color($white-border-color) solid;
+  box-shadow: 0rpx 2rpx 6rpx $input-shadow-color inset;
+  border-radius: $small-border-radius;
+  &:hover,
+  &:focus-within {
+    border: 1px input-border-color($hover-border-color) solid;
+  }
 }
 
 .input-inner {
@@ -16,6 +23,7 @@
   padding: 0rpx;
   font-family: inherit;
   font-size: inherit;
+  color: inherit;
   line-height: inherit;
   background: none;
   border: none;

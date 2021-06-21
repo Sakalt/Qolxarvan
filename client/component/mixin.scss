@@ -3,17 +3,32 @@
 @import "/client/component/function.scss";
 
 
+@function mix-background($color, $percent) {
+  @return mix($background-color, $color, $percent);
+}
+
+
 $root-size: 16px;
 
 $blue-color: #33C3FF;
 $dark-blue-color: #33ABFF;
 $orange-color: #FFAB33;
 $dark-orange-color: #FF9433;
-$black-color: shade($blue-color, 70%);
-$mute-color: tint($black-color, 70%);
+$black-color: rgba(white, 0.8);
+$mute-color: rgba(white, 0.5);
 
-$background-color: tint($blue-color, 90%);
-$shadow-color: rgba($dark-blue-color, 0.2);
+$background-color: shade($blue-color, 80%);
+$background: stripe-gradient($background-color, shade($background-color, 1.5%), -45deg, 10px);
+
+$inner-shadow-color: rgba($background-color, 0.4);
+$input-shadow-color: rgba(black, 0.3);
+
+$white-background-color: rgba(white, 0.1);
+$white-border-color: mix-background(white, 40%);
+$head-background-color: rgba($blue-color, 0.15);
+$head-border-color: mix-background($blue-color, 25%);
+$hover-background-color: rgba($orange-color, 0.15);
+$hover-border-color: mix-background($orange-color, 25%);
 
 $page-width: 900rpx;
 $page-top-margin: 20rpx;
@@ -25,6 +40,10 @@ $content-smartphone-horizontal-padding: 15rpx;
 
 $blank-margin: 6rpx;
 
+$border-radius: 0rpx;
+$small-border-radius: 0rpx;
+$tag-border-radius: 0rpx;
+
 $european-serif-font-family: "Times New Roman", "Times";
 $japanese-serif-font-family: "IPA P明朝", "IPAex明朝", "BIZ UDPMincho", "YuMincho", "Yu Mincho", "ＭＳ Ｐ明朝", "ＭＳ 明朝";
 $european-sans-font-family: "Arial";
@@ -34,10 +53,27 @@ $gilit-font-family: "Gilit Web";
 $icon-font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "Font Awesome 5 Brands", "FontAwesome";
 
 
+@function background-gradient($color) {
+  @return linear-gradient(to right bottom, $color, scale-color($color, $alpha: 10%));
+}
+
+@function border-shadow($outer-color, $inner-color: $inner-shadow-color) {
+  @return 0px 0px 0px 1px $outer-color, 0px 0px 3px 1px $inner-color inset;
+}
+
+@function input-border-color($border-color) {
+  @return mix-background($border-color, 0%);
+}
+
 @mixin smartphone {
   @media screen and (max-width: 640px) {
     @content;
   }
+}
+
+@mixin pane($background-color: $white-background-color, $border-color: $white-border-color) {
+  background: background-gradient($background-color);
+  box-shadow: border-shadow($border-color);
 }
 
 @mixin icon-font($bold: true) {

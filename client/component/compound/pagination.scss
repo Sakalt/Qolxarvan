@@ -46,16 +46,16 @@
 }
 
 .button {
+  @include pane;
   width: 42rpx;
-  height: 36rpx;
-  background-color: white;
-  box-shadow: 0rpx 2rpx 10rpx $shadow-color;
+  padding: 10rpx 0rpx;
+  border-radius: $small-border-radius;
   display: inline-flex;
   cursor: pointer;
   align-items: center;
   justify-content: center;
   &:hover {
-    background-color: tint($blue-color, 95%);
+    @include pane($hover-background-color, $hover-border-color);
   }
 }
 
@@ -66,9 +66,8 @@
 }
 
 .center .button {
-  background-color: $blue-color;
-  color: white;
+  @include pane($head-background-color, $head-border-color);
   &:hover {
-    background-color: $blue-color;
+    @include pane($head-background-color, $head-border-color);
   }
 }

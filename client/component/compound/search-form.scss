@@ -4,13 +4,13 @@
 
 
 .root {
+  @include pane;
   margin: 0rpx;
-  padding: 30rpx $content-horizontal-padding;
+  padding: 25rpx $content-horizontal-padding;
   line-height: 1.6;
-  background-color: white;
-  box-shadow: 0rpx 2rpx 10rpx $shadow-color;
+  border-radius: $border-radius;
   @include smartphone {
-    padding: 30rpx $content-smartphone-horizontal-padding;
+    padding: 25rpx $content-smartphone-horizontal-padding;
   }
 }
 
