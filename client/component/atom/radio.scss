@@ -18,7 +18,7 @@
   left: 0em;
   width: 1em;
   height: 1em;
-  border: 1px input-border-color($white-border-color) solid;
+  border: 1rpx input-border-color($white-border-color) solid;
   border-radius: 50%;
   background: $background;
   background-attachment: fixed;
@@ -29,14 +29,14 @@
   position: absolute;
   content: "";
   .root:hover & {
-    border: 1px input-border-color($hover-border-color) solid;
+    border: 1rpx input-border-color($hover-border-color) solid;
   }
 }
 
 .radio:checked +.label::before {
-  border: 1px input-border-color($head-border-color) solid;
+  border: 1rpx input-border-color($head-border-color) solid;
   .root:hover & {
-    border: 1px input-border-color($head-border-color) solid;
+    border: 1rpx input-border-color($head-border-color) solid;
   }
 }
 

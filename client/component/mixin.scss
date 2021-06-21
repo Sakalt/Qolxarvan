@@ -18,7 +18,7 @@ $black-color: rgba(white, 0.8);
 $mute-color: rgba(white, 0.5);
 
 $background-color: shade($blue-color, 80%);
-$background: stripe-gradient($background-color, shade($background-color, 1.5%), -45deg, 10px);
+$background: stripe-gradient($background-color, shade($background-color, 1.5%), -45deg, 10rpx);
 
 $inner-shadow-color: rgba($background-color, 0.4);
 $input-shadow-color: rgba(black, 0.3);
@@ -58,7 +58,7 @@ $icon-font-family: "Font Awesome 5 Pro", "Font Awesome 5 Free", "Font Awesome 5 
 }
 
 @function border-shadow($outer-color, $inner-color: $inner-shadow-color) {
-  @return 0px 0px 0px 1px $outer-color, 0px 0px 3px 1px $inner-color inset;
+  @return 0rpx 0rpx 0rpx 1rpx $outer-color, 0rpx 0rpx 3rpx 1rpx $inner-color inset;
 }
 
 @function input-border-color($border-color) {

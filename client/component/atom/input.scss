@@ -8,12 +8,12 @@
   padding: 5rpx 15rpx;
   background: $background;
   background-attachment: fixed;
-  border: 1px input-border-color($white-border-color) solid;
+  border: 1rpx input-border-color($white-border-color) solid;
   box-shadow: 0rpx 2rpx 6rpx $input-shadow-color inset;
   border-radius: $small-border-radius;
   &:hover,
   &:focus-within {
-    border: 1px input-border-color($hover-border-color) solid;
+    border: 1rpx input-border-color($hover-border-color) solid;
   }
 }
 
