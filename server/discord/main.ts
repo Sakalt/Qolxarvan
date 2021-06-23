@@ -1,6 +1,9 @@
 //
 
 import {
+  formatToTimeZone
+} from "date-fns-timezone";
+import {
   Client,
   Message
 } from "discord.js";
@@ -28,8 +31,9 @@ export class MainController extends Controller {
 
   @listener("ready")
   private async [Symbol()](client: Client): Promise<void> {
+    let date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
     await client.user?.setPresence({activity: {name: "xalzih", url: "https://github.com/Ziphil/ShaleianOnline"}});
-    await this.log(client, "Ready");
+    await this.log(client, `Ready ${date}`);
     console.log("discord ready");
   }
 
