@@ -47,7 +47,7 @@ export class DiscordController extends Controller {
   // 単語はスペース区切りで複数個指定できます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!sotik(-detuk)?\s+(.+)$/);
+    let match = message.content.match(/^!(sotik|word)(-detuk)?\s+(.+)$/);
     if (match) {
       let deleteAfter = match[1];
       let names = match[2].trim().split(/\s+/);
@@ -72,7 +72,7 @@ export class DiscordController extends Controller {
   // 検索は、見出し語と訳語の両方から完全一致と前方一致で行われ、完全一致したものが優先的に表示されます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!palev(-detuk)?\s+(.+)$/);
+    let match = message.content.match(/^!(palev|search)(-detuk)?\s+(.+)$/);
     if (match) {
       let deleteAfter = match[1];
       let search = match[2].trim();
@@ -102,7 +102,7 @@ export class DiscordController extends Controller {
   // 依頼語はスペース区切りで複数個指定できます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!cipas(-detuk)?\s+(.+)$/);
+    let match = message.content.match(/^!(cipas|request)(-detuk)?\s+(.+)$/);
     if (match) {
       let deleteAfter = match[1];
       let names = match[2].trim().split(/\s+/);
@@ -119,7 +119,7 @@ export class DiscordController extends Controller {
   // コマンド名部分を「!zelad」の代わりに「!zelad-detuk」とすると、そのコマンドの投稿が削除されます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!zelad(-detuk)?\s+(\d+)$/);
+    let match = message.content.match(/^!(zelad|quiz)(-detuk)?\s+(\d+)$/);
     if (match) {
       let deleteAfter = match[1];
       let number = +match[2];
@@ -140,7 +140,7 @@ export class DiscordController extends Controller {
   // コマンド名部分を「!doklet」の代わりに「!doklet-detuk」とすると、そのコマンドの投稿が削除されます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!doklet(-detuk)?(?:\s+(\d+))?$/);
+    let match = message.content.match(/^!(doklet|grade)(-detuk)?(?:\s+(\d+))?$/);
     if (match) {
       let deleteAfter = match[1];
       let userId = match[2];
