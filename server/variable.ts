@@ -18,5 +18,5 @@ export const TWITTER_ACCESS_SECRET = process.env["TWITTER_ACCESS_SECRET"] || "du
 export const DISCORD_KEY = process.env["DISCORD_KEY"] || "dummy";
 export const DICTIONARY_ID = process.env["DICTIONARY_ID"] || "dummy";
 export const HISTORY_SPREADSHEET_ID = process.env["HISTORY_SPREADSHEET_ID"] || "dummy";
-export const REQUEST_SPREADSHEET_ID = process.env["REQUEST_SPREADSHEET_ID"] || "dummy";
+export const COMMISSION_SPREADSHEET_ID = process.env["COMMISSION_SPREADSHEET_ID"] || "dummy";
 export const QUIZ_SPREADSHEET_ID = process.env["QUIZ_SPREADSHEET_ID"] || "dummy";

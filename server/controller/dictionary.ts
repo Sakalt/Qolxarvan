@@ -80,6 +80,28 @@ export class DictionaryController extends Controller {
     }
   }
 
+  @post("/request")
+  @before(cors())
+  public async [Symbol()](request: Request, response: Response): Promise<void> {
+    let names = (() => {
+      if (Array.isArray(request.body.names)) {
+        let rawNames = request.body.names as Array<any>;
+        if (rawNames.every((name) => typeof name === "string")) {
+          return rawNames as Array<string>;
+        }
+      } else {
+        return undefined;
+      }
+    })();
+    if (names !== undefined) {
+      let dictionary = await ExtendedDictionary.fetch();
+      let count = await dictionary.addCommissions(names);
+      response.sendStatus(count).end();
+    } else {
+      response.sendStatus(400).end();
+    }
+  }
+
   @get("/count")
   @before(cors())
   public async [Symbol()](request: Request, response: Response): Promise<void> {

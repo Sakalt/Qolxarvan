@@ -24,6 +24,7 @@ import {
   GoogleClient
 } from "/server/util/client";
 import {
+  COMMISSION_SPREADSHEET_ID,
   DICTIONARY_ID,
   HISTORY_SPREADSHEET_ID
 } from "/server/variable";
@@ -62,6 +63,13 @@ export class ExtendedDictionary extends Dictionary {
     let [, dictionary] = await Promise.all([GoogleClient.instance.uploadFile(DICTIONARY_ID, stream), loader.asPromise()]);
     Object.setPrototypeOf(dictionary, ExtendedDictionary.prototype);
     return dictionary as any;
+  }
+
+  public async addCommissions(names: Array<string>): Promise<number> {
+    let spreadsheet = await GoogleClient.instance.fetchSpreadsheet(COMMISSION_SPREADSHEET_ID);
+    let sheet = spreadsheet.sheetsByIndex[0];
+    let rows = await sheet.addRows(names.map((name) => ({name})));
+    return rows.length;
   }
 
   // 現在の単語数を Google スプレッドシートに保存します。
