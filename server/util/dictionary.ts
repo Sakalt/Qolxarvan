@@ -194,7 +194,7 @@ export class ExtendedDictionary extends Dictionary {
       let word = result.words[index];
       let equivalentNames = parser.lookupEquivalentNames(word, "ja") ?? [];
       description += `(${index + 1}) `;
-      description += `[**${word.name}**](https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false)`;
+      description += `**[${word.name}](https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false)**`;
       description += ` — ${equivalentNames.join(", ")}`;
       description += "\n";
     };
