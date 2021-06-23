@@ -202,7 +202,7 @@ export class ExtendedDictionary extends Dictionary {
       if (value === "") {
         value += "該当なし";
       }
-      let fieldName = (result === exactResult) ? "完全一致" : "部分一致";
+      let fieldName = (result === exactResult) ? "完全一致" : "前方一致";
       fieldName += ` (最初の ${Math.min(result.words.length, 5)} 件 / ${result.words.length} 件)`;
       embed.addField(fieldName, value);
     }
