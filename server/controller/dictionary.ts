@@ -120,7 +120,8 @@ export class DictionaryController extends Controller {
   @cron("*/15 * * * *")
   public async [Symbol()](): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
-    let text = dictionary.createTwitterText();
+    let word = dictionary.words[Math.floor(Math.random() * dictionary.words.length)];
+    let text = ExtendedDictionary.createTwitterText(word);
     if (text !== undefined) {
       await TwitterClient.instance.tweet(text);
     }
@@ -129,7 +130,8 @@ export class DictionaryController extends Controller {
   @cron("*/30 * * * *")
   public async [Symbol()](): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
-    let embed = dictionary.createDiscordEmbed();
+    let word = dictionary.words[Math.floor(Math.random() * dictionary.words.length)];
+    let embed = ExtendedDictionary.createDiscordEmbed(word);
     if (embed !== undefined) {
       let channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
       if (channel instanceof TextChannel) {

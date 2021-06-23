@@ -56,7 +56,8 @@ export class DiscordController extends Controller {
       }
       let dictionary = await ExtendedDictionary.fetch();
       for (let name of names) {
-        let embed = dictionary.createDiscordEmbed(name);
+        let word = dictionary.words.find((word) => word.name === name);
+        let embed = (word !== undefined) ? ExtendedDictionary.createDiscordEmbed(word) : undefined;
         if (embed !== undefined) {
           await message.channel.send({embed});
         } else {

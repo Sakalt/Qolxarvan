@@ -103,90 +103,31 @@ export class ExtendedDictionary extends Dictionary {
     return result;
   }
 
-  public createTwitterText(name?: string): string | undefined {
-    let rawWord = (name !== undefined) ? this.words.find((word) => word.name === name) : this.words[Math.floor(Math.random() * this.words.length)];
-    if (rawWord !== undefined) {
-      let word = Parser.createSimple().parse(rawWord);
-      let section = word.parts["ja"]?.sections[0];
-      if (section !== undefined) {
-        let text = "";
-        text += word.name;
-        text += ` /${word.pronunciation}/ `;
-        let equivalentStrings = section.getEquivalents(true).map((equivalent) => {
-          let equivalentCategoryString = `〈${equivalent.category}〉`;
-          let equivalentFrameString = (equivalent.frame !== null && equivalent.frame !== "") ? `(${equivalent.frame}) ` : "";
-          let equivalentNameString = equivalent.names.join(", ");
-          let equivalentString = equivalentCategoryString + equivalentFrameString + equivalentNameString;
-          return equivalentString;
-        });
-        text += equivalentStrings?.join(" ") ?? "";
-        let meaningInformation = section.getNormalInformations(true).find((information) => information.kind === "meaning");
-        if (meaningInformation !== undefined) {
-          let meaningText = meaningInformation.text;
-          if (meaningText !== "?") {
-            text += ` ❖ ${meaningText}`;
-          }
+  public static createTwitterText(rawWord: Word): string | undefined {
+    let word = Parser.createSimple().parse(rawWord);
+    let section = word.parts["ja"]?.sections[0];
+    if (section !== undefined) {
+      let text = "";
+      text += word.name;
+      text += ` /${word.pronunciation}/ `;
+      let equivalentStrings = section.getEquivalents(true).map((equivalent) => {
+        let equivalentCategoryString = `〈${equivalent.category}〉`;
+        let equivalentFrameString = (equivalent.frame !== null && equivalent.frame !== "") ? `(${equivalent.frame}) ` : "";
+        let equivalentNameString = equivalent.names.join(", ");
+        let equivalentString = equivalentCategoryString + equivalentFrameString + equivalentNameString;
+        return equivalentString;
+      });
+      text += equivalentStrings?.join(" ") ?? "";
+      let meaningInformation = section.getNormalInformations(true).find((information) => information.kind === "meaning");
+      if (meaningInformation !== undefined) {
+        let meaningText = meaningInformation.text;
+        if (meaningText !== "?") {
+          text += ` ❖ ${meaningText}`;
         }
-        text += " ";
-        text += `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact`;
-        return text;
-      } else {
-        return undefined;
       }
-    } else {
-      return undefined;
-    }
-  }
-
-  public createDiscordEmbed(name?: string): MessageEmbed | undefined {
-    let rawWord = (name !== undefined) ? this.words.find((word) => word.name === name) : this.words[Math.floor(Math.random() * this.words.length)];
-    if (rawWord !== undefined) {
-      let word = Parser.createSimple().parse(rawWord);
-      let section = word.parts["ja"]?.sections[0];
-      if (section !== undefined) {
-        let embed = new MessageEmbed();
-        embed.title = word.name;
-        embed.url = `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact`;
-        embed.color = 0xFFAB33;
-        let equivalentStrings = section.getEquivalents(true).map((equivalent) => {
-          let equivalentString = "";
-          equivalentString += `**❬${equivalent.category}❭** `;
-          if (equivalent.frame) {
-            equivalentString += `(${equivalent.frame}) `;
-          }
-          equivalentString += equivalent.names.join(", ");
-          return equivalentString;
-        });
-        embed.description = equivalentStrings.join("\n");
-        embed.addField("品詞", `❬${section.sort}❭`, true);
-        embed.addField("発音", `/${word.pronunciation}/`, true);
-        embed.addField("造語日", `ᴴ${word.date}`, true);
-        let normalInformationFields = section.getNormalInformations(true).map((information) => {
-          let normalInformationField = {name: information.getKindName("ja")!, value: information.text, inline: false};
-          return normalInformationField;
-        });
-        let phraseInformationFields = section.getPhraseInformations(true).map((information) => {
-          let phraseInformationText = "";
-          phraseInformationText += information.expression;
-          phraseInformationText += ` — ${information.equivalentNames.join(", ")}`;
-          if (information.text) {
-            phraseInformationText += `\n${information.text}`;
-          }
-          let phraseInformationField = {name: information.getKindName("ja")!, value: phraseInformationText, inline: false};
-          return phraseInformationField;
-        });
-        let exampleInformationFields = section.getExampleInformations(true).map((information) => {
-          let exampleInformationText = "";
-          exampleInformationText += information.sentence;
-          exampleInformationText += ` → ${information.translation}`;
-          let phraseInformationField = {name: information.getKindName("ja")!, value: exampleInformationText, inline: false};
-          return phraseInformationField;
-        });
-        embed.addFields(...normalInformationFields, ...phraseInformationFields, ...exampleInformationFields);
-        return embed;
-      } else {
-        return undefined;
-      }
+      text += " ";
+      text += `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact`;
+      return text;
     } else {
       return undefined;
     }
