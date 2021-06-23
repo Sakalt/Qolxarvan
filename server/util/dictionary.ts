@@ -128,7 +128,7 @@ export class ExtendedDictionary extends Dictionary {
         }
       }
       text += " ";
-      text += `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact`;
+      text += `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false`;
       return text;
     } else {
       return undefined;
@@ -141,7 +141,7 @@ export class ExtendedDictionary extends Dictionary {
     if (section !== undefined) {
       let embed = new MessageEmbed();
       embed.title = word.name;
-      embed.url = `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact`;
+      embed.url = `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false`;
       embed.color = 0xFFAB33;
       let equivalentStrings = section.getEquivalents(true).map((equivalent) => {
         let equivalentString = "";
@@ -194,7 +194,7 @@ export class ExtendedDictionary extends Dictionary {
       let word = result.words[index];
       let equivalentNames = parser.lookupEquivalentNames(word, "ja") ?? [];
       description += `(${index + 1}) `;
-      description += `[**${word.name}**](https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact)`;
+      description += `[**${word.name}**](https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false)`;
       description += ` — ${equivalentNames.join(", ")}`;
       description += "\n";
     };
