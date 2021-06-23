@@ -11,12 +11,10 @@ import {
 import fs from "fs";
 import multer from "multer";
 import {
-  DictionaryController,
-  DiscordController,
-  TwitterController
+  DictionaryController
 } from "/server/controller";
 import {
-  MainController as MainDiscordController
+  DiscordController
 } from "/server/discord";
 import {
   DiscordClient
@@ -37,8 +35,7 @@ export class Main {
     this.setupCookie();
     this.setupMulter();
     this.setupDirectories();
-    this.setupRouterControllers();
-    this.setupDiscordControllers();
+    this.setupControllers();
     this.setupStatic();
     this.setupFallbackHandlers();
     this.setupErrorHandler();
@@ -68,14 +65,9 @@ export class Main {
     fs.mkdirSync("./dist/upload", {recursive: true});
   }
 
-  private setupRouterControllers(): void {
+  private setupControllers(): void {
     DictionaryController.use(this.application);
-    DiscordController.use(this.application);
-    TwitterController.use(this.application);
-  }
-
-  private setupDiscordControllers(): void {
-    MainDiscordController.setup(DiscordClient.instance);
+    DiscordController.setup(DiscordClient.instance);
   }
 
   private setupStatic(): void {

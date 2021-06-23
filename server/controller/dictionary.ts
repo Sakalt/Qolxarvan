@@ -2,6 +2,9 @@
 
 import cors from "cors";
 import {
+  TextChannel
+} from "discord.js";
+import {
   Request,
   Response
 } from "express";
@@ -23,7 +26,9 @@ import {
   get,
   post
 } from "/server/controller/decorator";
+import DISCORD_IDS from "/server/discord/id.json";
 import {
+  DiscordClient,
   TwitterClient
 } from "/server/util/client";
 import {
@@ -110,6 +115,30 @@ export class DictionaryController extends Controller {
     let dictionary = await ExtendedDictionary.fetch();
     await dictionary.saveHistory();
     console.log("history saved");
+  }
+
+  @cron("*/15 * * * *")
+  public async [Symbol()](): Promise<void> {
+    let dictionary = await ExtendedDictionary.fetch();
+    let text = dictionary.createTwitterText();
+    if (text !== undefined) {
+      await TwitterClient.instance.tweet(text);
+    }
+  }
+
+  @cron("*/30 * * * *")
+  public async [Symbol()](): Promise<void> {
+    let dictionary = await ExtendedDictionary.fetch();
+    let embed = dictionary.createDiscordEmbed();
+    if (embed !== undefined) {
+      let channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
+      if (channel instanceof TextChannel) {
+        await channel.send({embed});
+        console.log("discord post");
+      } else {
+        throw new Error("cannot happen");
+      }
+    }
   }
 
 }

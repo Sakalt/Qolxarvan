@@ -29,7 +29,7 @@ import {
 
 
 @controller()
-export class MainController extends Controller {
+export class DiscordController extends Controller {
 
   @listener("ready")
   private async [Symbol()](client: DiscordClient): Promise<void> {
