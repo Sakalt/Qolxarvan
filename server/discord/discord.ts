@@ -7,6 +7,9 @@ import {
   Message
 } from "discord.js";
 import {
+  NormalParameter
+} from "soxsot";
+import {
   Controller
 } from "/server/discord/controller";
 import {
@@ -59,6 +62,31 @@ export class DiscordController extends Controller {
         } else {
           await message.channel.send(`kocaqat a sotik adak iva “${name}”.`);
         }
+      }
+    }
+  }
+
+  // 任意のチャンネルの「!palev (単語)」という投稿に反応して、オンライン辞典から検索を行ってその結果を投稿します。
+  // コマンド名部分を「!palev」の代わりに「!palev-detuk」とすると、そのコマンドの投稿が削除されます。
+  // 検索は、見出し語と訳語の両方から前方一致で行われます。
+  @listener("message")
+  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
+    let match = message.content.match(/^!palev(-detuk)?\s+(.+)$/);
+    if (match) {
+      let deleteAfter = match[1];
+      let search = match[2].trim();
+      if (deleteAfter) {
+        await message.delete();
+      }
+      let dictionary = await ExtendedDictionary.fetch();
+      let parameter = new NormalParameter(search, "both", "prefix", "ja");
+      let result = dictionary.search(parameter);
+      if (result.words.length > 0) {
+        let embed = ExtendedDictionary.createDiscordEmbed(result.words[0]);
+        await message.channel.send(`kotikak a'l e sotik al'${result.words.length}. cafosis a'l e met acates.`);
+        await message.channel.send({embed});
+      } else {
+        await message.channel.send("kotikak a'l e sotik adak.");
       }
     }
   }
