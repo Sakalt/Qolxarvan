@@ -19,6 +19,7 @@
   width: 1em;
   height: 1em;
   border: 1rpx input-border-color($white-border-color) solid;
+  border-radius: $small-border-radius;
   background: $background;
   background-attachment: fixed;
   box-shadow: 0rpx 2rpx 6rpx $input-shadow-color inset;
