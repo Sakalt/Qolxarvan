@@ -4,7 +4,6 @@ import {
   formatToTimeZone
 } from "date-fns-timezone";
 import {
-  Client,
   Message
 } from "discord.js";
 import {
@@ -15,6 +14,9 @@ import {
   listener
 } from "/server/discord/decorator";
 import DISCORD_IDS from "/server/discord/id.json";
+import {
+  DiscordClient
+} from "/server/util/client/discord";
 import {
   ExtendedDictionary
 } from "/server/util/dictionary";
@@ -30,7 +32,7 @@ import {
 export class MainController extends Controller {
 
   @listener("ready")
-  private async [Symbol()](client: Client): Promise<void> {
+  private async [Symbol()](client: DiscordClient): Promise<void> {
     let date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
     await client.user?.setPresence({activity: {name: "xalzih", url: "https://github.com/Ziphil/ShaleianOnline"}});
     await this.log(client, `Ready ${date}`);
@@ -41,7 +43,7 @@ export class MainController extends Controller {
   // コマンド名部分を「!sotik」の代わりに「!sotik-detuk」とすると、そのコマンドの投稿が削除されます。
   // 単語はスペース区切りで複数個指定できます。
   @listener("message")
-  private async [Symbol()](client: Client, message: Message): Promise<void> {
+  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     let match = message.content.match(/^!sotik(-detuk)?\s+(.+)$/);
     if (match) {
       let deleteAfter = match[1];
@@ -64,7 +66,7 @@ export class MainController extends Controller {
   // 任意のチャンネルの「!zelad (番号)」という投稿に反応して、検定チャンネルの該当番号の解説投稿を検索し、その内容を整形して投稿します。
   // コマンド名部分を「!zelad」の代わりに「!zelad-detuk」とすると、そのコマンドの投稿が削除されます。
   @listener("message")
-  private async [Symbol()](client: Client, message: Message): Promise<void> {
+  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     let match = message.content.match(/^!zelad(-detuk)?\s+(\d+)$/);
     if (match) {
       let deleteAfter = match[1];
@@ -85,7 +87,7 @@ export class MainController extends Controller {
   // 任意のチャンネルの「!doklet」という投稿に反応して、その投稿をしたユーザーのクイズの成績を整形して投稿します。
   // コマンド名部分を「!doklet」の代わりに「!doklet-detuk」とすると、そのコマンドの投稿が削除されます。
   @listener("message")
-  private async [Symbol()](client: Client, message: Message): Promise<void> {
+  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     let match = message.content.match(/^!doklet(-detuk)?(?:\s+(\d+))?$/);
     if (match) {
       let deleteAfter = match[1];
@@ -101,7 +103,7 @@ export class MainController extends Controller {
   }
 
   @listener("message")
-  private async [Symbol()](client: Client, message: Message): Promise<void> {
+  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     let hasPermission = message.member?.roles.cache.find((role) => role.id === DISCORD_IDS.role.zisvalod) !== undefined;
     if (hasPermission) {
       let match = message.content.match(/^!save\s+(\d+)$/);
@@ -117,7 +119,7 @@ export class MainController extends Controller {
   // 検定チャンネルに問題が投稿されたときに、投稿文中に含まれている選択肢の絵文字のリアクションを自動的に付けます。
   // 選択肢として使える絵文字は、数字もしくはラテン文字の絵文字のみです。
   @listener("message")
-  private async [Symbol()](client: Client, message: Message): Promise<void> {
+  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     let hasPermission = message.member?.roles.cache.find((role) => role.id === DISCORD_IDS.role.zisvalod) !== undefined;
     let correctChannel = message.channel.id === DISCORD_IDS.channel.sokad.zelad || message.channel.id === DISCORD_IDS.channel.test;
     if (hasPermission && correctChannel) {

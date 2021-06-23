@@ -1,18 +1,20 @@
 //
 
 import {
-  Client,
   TextChannel
 } from "discord.js";
 import DISCORD_IDS from "/server/discord/id.json";
+import {
+  DiscordClient
+} from "/server/util/client/discord";
 
 
 export class Controller {
 
-  private setup(client: Client): void {
+  private setup(client: DiscordClient): void {
   }
 
-  protected async log(client: Client, message: string): Promise<void> {
+  protected async log(client: DiscordClient, message: string): Promise<void> {
     try {
       let channel = client.channels.resolve(DISCORD_IDS.channel.bot);
       if (channel instanceof TextChannel) {
@@ -25,7 +27,7 @@ export class Controller {
     }
   }
 
-  protected async error(client: Client, message: string, error: Error): Promise<void> {
+  protected async error(client: DiscordClient, message: string, error: Error): Promise<void> {
     try {
       let channel = client.channels.resolve(DISCORD_IDS.channel.bot);
       if (channel instanceof TextChannel) {
@@ -39,7 +41,7 @@ export class Controller {
     }
   }
 
-  public static setup<C extends Controller>(this: new() => C, client: Client): C {
+  public static setup<C extends Controller>(this: new() => C, client: DiscordClient): C {
     let controller = new this();
     controller.setup(client);
     return controller;

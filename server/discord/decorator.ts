@@ -7,7 +7,7 @@ import {
 import "reflect-metadata";
 import {
   Controller
-} from "./controller";
+} from "/server/discord/controller";
 
 
 const KEY = Symbol("discord");
