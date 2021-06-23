@@ -23,6 +23,7 @@ import Component from "/client/component/component";
 import {
   style
 } from "/client/component/decorator";
+import CommissionPage from "/client/component/page/commission-page";
 import DictionaryPage from "/client/component/page/dictionary-page";
 import {
   GlobalStore
@@ -53,6 +54,7 @@ export class Root extends Component<Props, State> {
             <ScrollTop>
               <Switch>
                 <Route exact sensitive path="/" component={DictionaryPage}/>
+                <Route exact sensitive path="/request" component={CommissionPage}/>
               </Switch>
             </ScrollTop>
           </IntlProvider>
