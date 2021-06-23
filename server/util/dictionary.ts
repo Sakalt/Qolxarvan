@@ -103,7 +103,7 @@ export class ExtendedDictionary extends Dictionary {
     return result;
   }
 
-  public static createTwitterText(rawWord: Word): string | undefined {
+  public static createWordTwitterText(rawWord: Word): string | undefined {
     let word = Parser.createSimple().parse(rawWord);
     let section = word.parts["ja"]?.sections[0];
     if (section !== undefined) {
@@ -133,7 +133,7 @@ export class ExtendedDictionary extends Dictionary {
     }
   }
 
-  public static createDiscordEmbed(rawWord: Word): MessageEmbed | undefined {
+  public static createWordDiscordEmbed(rawWord: Word): MessageEmbed | undefined {
     let word = Parser.createSimple().parse(rawWord);
     let section = word.parts["ja"]?.sections[0];
     if (section !== undefined) {

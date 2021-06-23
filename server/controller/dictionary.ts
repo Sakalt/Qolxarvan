@@ -121,7 +121,7 @@ export class DictionaryController extends Controller {
   public async [Symbol()](): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
     let word = dictionary.words[Math.floor(Math.random() * dictionary.words.length)];
-    let text = ExtendedDictionary.createTwitterText(word);
+    let text = ExtendedDictionary.createWordTwitterText(word);
     if (text !== undefined) {
       await TwitterClient.instance.tweet(text);
     }
@@ -131,7 +131,7 @@ export class DictionaryController extends Controller {
   public async [Symbol()](): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
     let word = dictionary.words[Math.floor(Math.random() * dictionary.words.length)];
-    let embed = ExtendedDictionary.createDiscordEmbed(word);
+    let embed = ExtendedDictionary.createWordDiscordEmbed(word);
     if (embed !== undefined) {
       let channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
       if (channel instanceof TextChannel) {
