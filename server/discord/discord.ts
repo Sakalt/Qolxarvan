@@ -97,9 +97,9 @@ export class DiscordController extends Controller {
     }
   }
 
-  // 任意のチャンネルの「!cipas (訳語)」という投稿に反応して、その訳語の造語依頼をします。
+  // 任意のチャンネルの「!cipas (依頼語)」という投稿に反応して、その訳語の造語依頼をします。
   // コマンド名部分を「!cipas」の代わりに「!cipas-detuk」とすると、そのコマンドの投稿が削除されます。
-  // 訳語はスペース区切りで複数個指定できます。
+  // 依頼語はスペース区切りで複数個指定できます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     let match = message.content.match(/^!cipas(-detuk)?\s+(.+)$/);
