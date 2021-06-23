@@ -18,7 +18,9 @@ import Component from "/client/component/component";
 import {
   style
 } from "/client/component/decorator";
-import { ParameterUtils } from "/client/util/parameter";
+import {
+  ParameterUtils
+} from "/client/util/parameter";
 
 
 @style(require("./search-form.scss"))
