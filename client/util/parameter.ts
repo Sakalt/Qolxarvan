@@ -16,13 +16,15 @@ export class ParameterUtils {
     let search = (typeof query.search === "string") ? query.search : "";
     let mode = (typeof query.mode === "string") ? ParameterUtils.castMode(query.mode) : "both";
     let type = (typeof query.type === "string") ? ParameterUtils.castType(query.type) : "prefix";
-    let parameter = new NormalParameter(search, mode, type, language);
+    let ignoreDiacritic = (query.ignoreDiacritic === "false") ? false : true;
+    let ignoreOptions = {case: false, diacritic: ignoreDiacritic};
+    let parameter = new NormalParameter(search, mode, type, language, ignoreOptions);
     return parameter;
   }
 
   public static serialize(parameter: Parameter): Record<string, unknown> {
     if (parameter instanceof NormalParameter) {
-      let query = {search: parameter.search, mode: parameter.mode, type: parameter.type};
+      let query = {search: parameter.search, mode: parameter.mode, type: parameter.type, ignoreDiacritic: parameter.ignoreOptions.diacritic};
       return query;
     } else {
       return {};

@@ -1,0 +1,52 @@
+@charset "utf-8";
+
+@import "/client/component/mixin.scss";
+
+
+.checkbox {
+  display: none;
+}
+
+.checkbox +.label {
+  padding: 0em 0em 0em calc(1em + #{$blank-margin});
+  position: relative;
+  cursor: pointer;
+}
+
+.checkbox +.label::before {
+  top: 0.1em;
+  left: 0em;
+  width: 1em;
+  height: 1em;
+  border: 1rpx input-border-color($white-border-color) solid;
+  background: $background;
+  background-attachment: fixed;
+  box-shadow: 0rpx 2rpx 6rpx $input-shadow-color inset;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+  content: "";
+  .root:hover & {
+    border: 1rpx input-border-color($hover-border-color) solid;
+  }
+}
+
+.checkbox:checked +.label::before {
+  border: 1rpx input-border-color($head-border-color) solid;
+  .root:hover & {
+    border: 1rpx input-border-color($head-border-color) solid;
+  }
+}
+
+.checkbox:checked +.label::after {
+  @include icon-font;
+  top: 0.1em;
+  left: 0.15em;
+  font-size: 80%;
+  color: $blue-color;
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  content: "\F00C";
+}
