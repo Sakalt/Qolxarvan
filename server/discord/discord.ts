@@ -83,9 +83,11 @@ export class DiscordController extends Controller {
       let parameter = new NormalParameter(search, "both", "prefix", "ja");
       let result = dictionary.search(parameter);
       if (result.words.length > 0) {
-        let embed = ExtendedDictionary.createWordDiscordEmbed(result.words[0]);
+        let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result);
+        let wordEmbed = ExtendedDictionary.createWordDiscordEmbed(result.words[0]);
         await message.channel.send(`kotikak a'l e sotik al'${result.words.length}. cafosis a'l e met acates.`);
-        await message.channel.send({embed});
+        await message.channel.send({embed: resultEmbed});
+        await message.channel.send({embed: wordEmbed});
       } else {
         await message.channel.send("kotikak a'l e sotik adak.");
       }

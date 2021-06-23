@@ -12,7 +12,9 @@ import {
 } from "nanoid";
 import {
   Dictionary,
+  NormalParameter,
   Parser,
+  SearchResult,
   Word
 } from "soxsot";
 import {
@@ -180,6 +182,24 @@ export class ExtendedDictionary extends Dictionary {
     } else {
       return undefined;
     }
+  }
+
+  public static createSearchResultDiscordEmbed(parameter: NormalParameter, result: SearchResult): MessageEmbed {
+    let embed = new MessageEmbed();
+    embed.title = `検索結果 (最初の ${Math.min(result.words.length, 10)} 件 / ${result.words.length} 件)`;
+    embed.url = `https://dic.ziphil.com?search=${encodeURIComponent(parameter.search)}&mode=${parameter.mode}&type=${parameter.type}`;
+    let description = "";
+    for (let index = 0 ; index < Math.min(result.words.length, 10) ; index ++) {
+      let parser = Parser.createSimple();
+      let word = result.words[index];
+      let equivalentNames = parser.lookupEquivalentNames(word, "ja") ?? [];
+      description += `(${index + 1}) `;
+      description += `[**${word.name}**](https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact)`;
+      description += ` — ${equivalentNames.join(", ")}`;
+      description += "\n";
+    };
+    embed.description = description;
+    return embed;
   }
 
 }
