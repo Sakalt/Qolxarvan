@@ -69,7 +69,7 @@ export class DiscordController extends Controller {
 
   // 任意のチャンネルの「!palev (単語)」という投稿に反応して、オンライン辞典から検索を行ってその結果を投稿します。
   // コマンド名部分を「!palev」の代わりに「!palev-detuk」とすると、そのコマンドの投稿が削除されます。
-  // 検索は、見出し語と訳語の両方から前方一致で行われます。
+  // 検索は、見出し語と訳語の両方から完全一致と前方一致で行われ、完全一致したものが優先的に表示されます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     let match = message.content.match(/^!palev(-detuk)?\s+(.+)$/);
@@ -80,12 +80,15 @@ export class DiscordController extends Controller {
         await message.delete();
       }
       let dictionary = await ExtendedDictionary.fetch();
-      let parameter = new NormalParameter(search, "both", "prefix", "ja");
-      let result = dictionary.search(parameter);
-      if (result.words.length > 0) {
-        let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result);
-        let wordEmbed = ExtendedDictionary.createWordDiscordEmbed(result.words[0]);
-        await message.channel.send(`kotikak a'l e sotik al'${result.words.length}. cafosis a'l e met acates.`);
+      let exactParameter = new NormalParameter(search, "both", "exact", "ja", {diacritic: false, case: false});
+      let prefixParameter = new NormalParameter(search, "both", "prefix", "ja");
+      let exactResult = dictionary.search(exactParameter);
+      let prefixResult = dictionary.search(prefixParameter);
+      let displayedWord = (exactResult.words.length > 0) ? exactResult.words[0] : (prefixResult.words.length > 0) ? prefixResult.words[0] : undefined;
+      if (displayedWord !== undefined) {
+        let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, prefixResult);
+        let wordEmbed = ExtendedDictionary.createWordDiscordEmbed(displayedWord);
+        await message.channel.send(`kotikak a'l e sotik al'${prefixResult.words.length}. cafosis a'l e met acates.`);
         await message.channel.send({embed: resultEmbed});
         await message.channel.send({embed: wordEmbed});
       } else {

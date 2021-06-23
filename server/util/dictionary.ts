@@ -184,21 +184,28 @@ export class ExtendedDictionary extends Dictionary {
     }
   }
 
-  public static createSearchResultDiscordEmbed(parameter: NormalParameter, result: SearchResult): MessageEmbed {
+  public static createSearchResultDiscordEmbed(parameter: NormalParameter, exactResult: SearchResult, prefixResult: SearchResult): MessageEmbed {
     let embed = new MessageEmbed();
-    embed.title = `検索結果 (最初の ${Math.min(result.words.length, 10)} 件 / ${result.words.length} 件)`;
+    embed.title = "検索結果";
     embed.url = `https://dic.ziphil.com?search=${encodeURIComponent(parameter.search)}&mode=${parameter.mode}&type=${parameter.type}`;
-    let description = "";
-    for (let index = 0 ; index < Math.min(result.words.length, 10) ; index ++) {
-      let parser = Parser.createSimple();
-      let word = result.words[index];
-      let equivalentNames = parser.lookupEquivalentNames(word, "ja") ?? [];
-      description += `(${index + 1}) `;
-      description += `**[${word.name}](https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false)**`;
-      description += ` — ${equivalentNames.join(", ")}`;
-      description += "\n";
-    };
-    embed.description = description;
+    for (let result of [exactResult, prefixResult]) {
+      let value = "";
+      for (let index = 0 ; index < Math.min(result.words.length, 5) ; index ++) {
+        let parser = Parser.createSimple();
+        let word = result.words[index];
+        let equivalentNames = parser.lookupEquivalentNames(word, "ja") ?? [];
+        value += `(${index + 1}) `;
+        value += `**[${word.name}](https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false)**`;
+        value += ` — ${equivalentNames.join(", ")}`;
+        value += "\n";
+      };
+      if (value === "") {
+        value += "該当なし";
+      }
+      let fieldName = (result === exactResult) ? "完全一致" : "部分一致";
+      fieldName += ` (最初の ${Math.min(result.words.length, 5)} 件 / ${result.words.length} 件)`;
+      embed.addField(fieldName, value);
+    }
     return embed;
   }
 
