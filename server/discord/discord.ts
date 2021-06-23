@@ -35,7 +35,7 @@ export class DiscordController extends Controller {
   private async [Symbol()](client: DiscordClient): Promise<void> {
     let date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
     await client.user?.setPresence({activity: {name: "xalzih", url: "https://github.com/Ziphil/ShaleianOnline"}});
-    await this.log(client, `Ready ${date}`);
+    await this.log(client, `Ready (${date})`);
     console.log("discord ready");
   }
 
