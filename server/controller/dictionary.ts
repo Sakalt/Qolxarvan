@@ -96,7 +96,7 @@ export class DictionaryController extends Controller {
     if (names !== undefined) {
       let dictionary = await ExtendedDictionary.fetch();
       let count = await dictionary.addCommissions(names);
-      response.sendStatus(count).end();
+      response.json(count).end();
     } else {
       response.sendStatus(400).end();
     }
