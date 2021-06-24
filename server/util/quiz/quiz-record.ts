@@ -174,7 +174,7 @@ export class QuizRecord {
     for (let index = 0 ; index < columnCount ; index ++) {
       let cell = sheet.getCell(0, index);
       if (cell.value !== null) {
-        header[index] = cell.value.toString();
+        header[index] = cell.value.toString() as Snowflake;
       } else {
         break;
       }

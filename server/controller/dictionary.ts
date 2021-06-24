@@ -26,7 +26,9 @@ import {
   get,
   post
 } from "/server/controller/decorator";
-import DISCORD_IDS from "/server/discord/id.json";
+import {
+  DISCORD_IDS
+} from "/server/discord/id";
 import {
   DiscordClient,
   TwitterClient
@@ -166,7 +168,7 @@ export class DictionaryController extends Controller {
     if (embed !== undefined) {
       let channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
       if (channel instanceof TextChannel) {
-        await channel.send({embed});
+        await channel.send({embeds: [embed]});
         console.log("discord post");
       } else {
         throw new Error("cannot happen");

@@ -19,7 +19,7 @@
     "command:tsc": "tsc"
   },
   "engines": {
-    "node": "12.x"
+    "node": "14.x"
   },
   "eslintConfig": {
     "extends": "ziphil",
@@ -38,6 +38,7 @@
     ]
   },
   "dependencies": {
+    "@babel/core": "^7.14.6",
     "@formatjs/intl": "^1.4.10",
     "@formatjs/intl-numberformat": "^5.7.6",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
@@ -53,7 +54,7 @@
     "css-loader": "^3.6.0",
     "css-tree": "^1.1.3",
     "date-fns-timezone": "^0.1.4",
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.0.0-dev.e0efcc6ab0e3f060e30438c0d990c9465c6134df",
     "dotenv": "^8.2.0",
     "eslint": "^7.15.0",
     "eslint-config-ziphil": "^1.2.0",

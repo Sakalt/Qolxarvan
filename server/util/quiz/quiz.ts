@@ -7,7 +7,9 @@ import {
   Snowflake,
   TextChannel
 } from "discord.js";
-import DISCORD_IDS from "/server/discord/id.json";
+import {
+  DISCORD_IDS
+} from "/server/discord/id";
 
 
 export class Quiz {

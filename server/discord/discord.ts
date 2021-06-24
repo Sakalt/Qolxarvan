@@ -4,7 +4,8 @@ import {
   formatToTimeZone
 } from "date-fns-timezone";
 import {
-  Message
+  Message,
+  Snowflake
 } from "discord.js";
 import {
   NormalParameter
@@ -16,7 +17,9 @@ import {
   controller,
   listener
 } from "/server/discord/decorator";
-import DISCORD_IDS from "/server/discord/id.json";
+import {
+  DISCORD_IDS
+} from "/server/discord/id";
 import {
   DiscordClient
 } from "/server/util/client/discord";
@@ -37,7 +40,7 @@ export class DiscordController extends Controller {
   @listener("ready")
   private async [Symbol()](client: DiscordClient): Promise<void> {
     let date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
-    await client.user?.setPresence({activity: {name: "xalzih", url: "https://github.com/Ziphil/ShaleianOnline"}});
+    let presence = client.user?.setPresence({activities: [{name: "xalzih", url: "https://github.com/Ziphil/ShaleianOnline"}]});
     await this.log(client, `Ready (${date})`);
     console.log("discord ready");
   }
@@ -47,7 +50,7 @@ export class DiscordController extends Controller {
   // 単語はスペース区切りで複数個指定できます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(sotik|word)(-detuk)?\s+(.+)$/);
+    let match = message.content.match(/^!(?:sotik|word)(-detuk)?\s+(.+)$/);
     if (match) {
       let deleteAfter = match[1];
       let names = match[2].trim().split(/\s+/);
@@ -59,7 +62,7 @@ export class DiscordController extends Controller {
         let word = dictionary.words.find((word) => word.name === name);
         let embed = (word !== undefined) ? ExtendedDictionary.createWordDiscordEmbed(word) : undefined;
         if (embed !== undefined) {
-          await message.channel.send({embed});
+          await message.channel.send({embeds: [embed]});
         } else {
           await message.channel.send(`kocaqat a sotik adak iva “${name}”.`);
         }
@@ -72,7 +75,7 @@ export class DiscordController extends Controller {
   // 検索は、見出し語と訳語の両方から完全一致と前方一致で行われ、完全一致したものが優先的に表示されます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(palev|search)(-detuk)?\s+(.+)$/);
+    let match = message.content.match(/^!(?:palev|search)(-detuk)?\s+(.+)$/);
     if (match) {
       let deleteAfter = match[1];
       let search = match[2].trim();
@@ -89,8 +92,7 @@ export class DiscordController extends Controller {
         let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, prefixResult);
         let wordEmbed = ExtendedDictionary.createWordDiscordEmbed(displayedWord);
         await message.channel.send(`kotikak a'l e sotik al'${prefixResult.words.length}. cafosis a'l e met acates.`);
-        await message.channel.send({embed: resultEmbed});
-        await message.channel.send({embed: wordEmbed});
+        await message.channel.send({embeds: [resultEmbed, wordEmbed!]});
       } else {
         await message.channel.send("kotikak a'l e sotik adak.");
       }
@@ -102,7 +104,7 @@ export class DiscordController extends Controller {
   // 依頼語はスペース区切りで複数個指定できます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(cipas|request)(-detuk)?\s+(.+)$/);
+    let match = message.content.match(/^!(?:cipas|request)(-detuk)?\s+(.+)$/);
     if (match) {
       let deleteAfter = match[1];
       let names = match[2].trim().split(/\s+/);
@@ -119,7 +121,7 @@ export class DiscordController extends Controller {
   // コマンド名部分を「!zelad」の代わりに「!zelad-detuk」とすると、そのコマンドの投稿が削除されます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(zelad|quiz)(-detuk)?\s+(\d+)$/);
+    let match = message.content.match(/^!(?:zelad|quiz)(-detuk)?\s+(\d+)$/);
     if (match) {
       let deleteAfter = match[1];
       let number = +match[2];
@@ -129,7 +131,7 @@ export class DiscordController extends Controller {
       let quiz = await Quiz.findByNumber(client, number);
       if (quiz !== undefined) {
         let embed = quiz.createDiscordEmbed();
-        await message.channel.send({embed});
+        await message.channel.send({embeds: [embed]});
       } else {
         await message.channel.send("kodat e zel atùk.");
       }
@@ -140,17 +142,17 @@ export class DiscordController extends Controller {
   // コマンド名部分を「!doklet」の代わりに「!doklet-detuk」とすると、そのコマンドの投稿が削除されます。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(doklet|grade)(-detuk)?(?:\s+(\d+))?$/);
+    let match = message.content.match(/^!(?:doklet|grade)(-detuk)?(?:\s+(\d+))?$/);
     if (match) {
       let deleteAfter = match[1];
-      let userId = match[2];
+      let userId = match[2] as Snowflake;
       if (deleteAfter) {
         await message.delete();
       }
       let user = (userId) ? await client.users.fetch(userId) : message.author;
       let record = await QuizRecord.fetch(client, user);
       let embed = record.createEmbed();
-      await message.channel.send({embed});
+      await message.channel.send({embeds: [embed]});
     }
   }
 
@@ -158,7 +160,7 @@ export class DiscordController extends Controller {
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     let hasPermission = message.member?.roles.cache.find((role) => role.id === DISCORD_IDS.role.zisvalod) !== undefined;
     if (hasPermission) {
-      let match = message.content.match(/^!save\s+(\d+)$/);
+      let match = message.content.match(/^!(?:save)\s+(\d+)$/);
       if (match) {
         let number = +match[1];
         await message.delete();
