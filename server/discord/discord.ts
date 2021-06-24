@@ -4,7 +4,7 @@ import {
   formatToTimeZone
 } from "date-fns-timezone";
 import {
-  ApplicationCommandOptionType
+  ApplicationCommandOptionType as CommandOptionType
 } from "discord-api-types";
 import {
   CommandInteraction,
@@ -55,7 +55,7 @@ export class DiscordController extends Controller {
   }
 
   @slash("sotik", "オンライン辞典から指定された綴りの単語エントリーを抽出して返信します。", [
-    {name: "name", type: ApplicationCommandOptionType.STRING, required: true, description: "表示する単語の綴り"}
+    {name: "name", type: CommandOptionType.STRING, required: true, description: "表示する単語の綴り"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let name = interaction.options.get("name")!.value! as string;
@@ -70,7 +70,7 @@ export class DiscordController extends Controller {
   }
 
   @slash("palev", "オンライン辞典から検索 (見出し語と訳語の両方から完全一致と前方一致) を行ってその結果を返信します。", [
-    {name: "search", type: ApplicationCommandOptionType.STRING, required: true, description: "検索する内容"}
+    {name: "search", type: CommandOptionType.STRING, required: true, description: "検索する内容"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let search = interaction.options.get("search")!.value! as string;
@@ -91,7 +91,7 @@ export class DiscordController extends Controller {
   }
 
   @slash("cipas", "造語依頼を行います。", [
-    {name: "name", type: ApplicationCommandOptionType.STRING, required: true, description: "造語依頼したい訳語"}
+    {name: "name", type: CommandOptionType.STRING, required: true, description: "造語依頼したい訳語"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let name = interaction.options.get("name")!.value! as string;
@@ -101,7 +101,7 @@ export class DiscordController extends Controller {
   }
 
   @slash("zelad", "検定チャンネルに投稿された過去の問題を返信します。", [
-    {name: "number", type: ApplicationCommandOptionType.INTEGER, required: true, description: "問題番号"}
+    {name: "number", type: CommandOptionType.INTEGER, required: true, description: "問題番号"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let number = interaction.options.get("number")!.value! as number;
@@ -115,7 +115,7 @@ export class DiscordController extends Controller {
   }
 
   @slash("doklet", "検定チャンネルでの検定のこれまでの成績を返信します。", [
-    {name: "user", type: ApplicationCommandOptionType.USER, required: false, description: "ユーザー (省略時はコマンド実行者)"}
+    {name: "user", type: CommandOptionType.USER, required: false, description: "ユーザー (省略時はコマンド実行者)"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let user = interaction.options.get("user")?.user ?? interaction.user;
