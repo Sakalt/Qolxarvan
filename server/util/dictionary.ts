@@ -136,7 +136,7 @@ export class ExtendedDictionary extends Dictionary {
         }
       }
       text += " ";
-      text += `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false`;
+      text += ExtendedDictionary.createWordUrl(rawWord);
       return text;
     } else {
       return undefined;
@@ -149,7 +149,7 @@ export class ExtendedDictionary extends Dictionary {
     if (section !== undefined) {
       let embed = new MessageEmbed();
       embed.title = word.name;
-      embed.url = `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false`;
+      embed.url = ExtendedDictionary.createWordUrl(rawWord);
       embed.color = 0xFFAB33;
       let equivalentStrings = section.getEquivalents(true).map((equivalent) => {
         let equivalentString = "";
@@ -195,7 +195,7 @@ export class ExtendedDictionary extends Dictionary {
   public static createSearchResultDiscordEmbed(parameter: NormalParameter, exactResult: SearchResult, prefixResult: SearchResult): MessageEmbed {
     let embed = new MessageEmbed();
     embed.title = "検索結果";
-    embed.url = `https://dic.ziphil.com?search=${encodeURIComponent(parameter.search)}&mode=${parameter.mode}&type=${parameter.type}`;
+    embed.url = ExtendedDictionary.createParameterUrl(parameter);
     for (let result of [exactResult, prefixResult]) {
       let value = "";
       for (let index = 0 ; index < Math.min(result.words.length, 5) ; index ++) {
@@ -203,7 +203,7 @@ export class ExtendedDictionary extends Dictionary {
         let word = result.words[index];
         let equivalentNames = parser.lookupEquivalentNames(word, "ja", true) ?? [];
         value += `(${index + 1}) `;
-        value += `**[${word.name}](https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false)**`;
+        value += `**[${word.name}](${ExtendedDictionary.createWordUrl(word)})**`;
         value += ` — ${equivalentNames.join(", ")}`;
         value += "\n";
       };
@@ -215,6 +215,14 @@ export class ExtendedDictionary extends Dictionary {
       embed.addField(fieldName, value);
     }
     return embed;
+  }
+
+  public static createWordUrl(word: Word): string {
+    return `https://dic.ziphil.com?search=${encodeURIComponent(word.name)}&mode=name&type=exact&ignoreDiacritic=false`;
+  }
+
+  public static createParameterUrl(parameter: NormalParameter): string {
+    return `https://dic.ziphil.com?search=${encodeURIComponent(parameter.search)}&mode=${parameter.mode}&type=${parameter.type}`;
   }
 
 }
