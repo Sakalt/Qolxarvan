@@ -13,6 +13,9 @@ import "reflect-metadata";
 import {
   Controller
 } from "/server/controller/controller";
+import {
+  ENABLE_CRON
+} from "/server/variable";
 
 
 const KEY = Symbol("controller");
@@ -40,7 +43,9 @@ export function controller(path: string): ClassDecorator {
       let metadata = Reflect.getMetadata(KEY, clazz.prototype) as Metadata;
       for (let spec of metadata) {
         if (spec.method === "cron") {
-          nodeCron.schedule(spec.expression, anyThis[spec.name], {timezone: "Asia/Tokyo"});
+          if (ENABLE_CRON) {
+            nodeCron.schedule(spec.expression, anyThis[spec.name], {timezone: "Asia/Tokyo"});
+          }
         } else {
           let handler = function (request: Request, response: Response, next: NextFunction): void {
             Promise.resolve(anyThis[spec.name](request, response, next)).catch((error) => {

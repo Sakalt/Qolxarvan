@@ -21,6 +21,7 @@ import {
 } from "/server/util/client";
 import {
   COOKIE_SECRET,
+  ENABLE_DISCORD,
   PORT
 } from "/server/variable";
 
@@ -67,7 +68,9 @@ export class Main {
 
   private setupControllers(): void {
     DictionaryController.use(this.application);
-    DiscordController.setup(DiscordClient.instance);
+    if (ENABLE_DISCORD) {
+      DiscordController.setup(DiscordClient.instance);
+    }
   }
 
   private setupStatic(): void {

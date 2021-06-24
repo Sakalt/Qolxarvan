@@ -20,3 +20,5 @@ export const DICTIONARY_ID = process.env["DICTIONARY_ID"] || "dummy";
 export const HISTORY_SPREADSHEET_ID = process.env["HISTORY_SPREADSHEET_ID"] || "dummy";
 export const COMMISSION_SPREADSHEET_ID = process.env["COMMISSION_SPREADSHEET_ID"] || "dummy";
 export const QUIZ_SPREADSHEET_ID = process.env["QUIZ_SPREADSHEET_ID"] || "dummy";
+export const ENABLE_CRON = process.env["ENABLE_CRON"] !== "false";
+export const ENABLE_DISCORD = process.env["ENABLE_DISCORD"] !== "false";
