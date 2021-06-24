@@ -132,6 +132,15 @@ export class DictionaryController extends Controller {
     }
   }
 
+  @get("/badge/count")
+  @before(cors())
+  public async [Symbol()](request: Request, response: Response): Promise<void> {
+    let dictionary = await ExtendedDictionary.fetch();
+    let count = dictionary.words.length;
+    let output = {schemaVersion: 1, color: "informational", label: "words", message: count.toString()};
+    response.json(output).end();
+  }
+
   @cron("*/30 * * * *")
   public async [Symbol()](): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
