@@ -86,7 +86,7 @@
     "reflect-metadata": "^0.1.13",
     "sass-loader": "^9.0.3",
     "source-map-loader": "^1.1.3",
-    "soxsot": "^0.4.0",
+    "soxsot": "^0.5.0",
     "style-loader": "^1.3.0",
     "ts-essentials": "^7.0.1",
     "ts-loader": "^8.0.11",
