@@ -4,6 +4,7 @@ import {
   formatToTimeZone
 } from "date-fns-timezone";
 import {
+  CommandInteraction,
   Message,
   Snowflake
 } from "discord.js";
@@ -15,7 +16,8 @@ import {
 } from "/server/discord/controller";
 import {
   controller,
-  listener
+  listener,
+  slash
 } from "/server/discord/decorator";
 import {
   DISCORD_IDS
@@ -184,6 +186,11 @@ export class DiscordController extends Controller {
         }
       }
     }
+  }
+
+  @slash("sitay", "ボットが動いているかどうか確認します。")
+  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
+    await interaction.reply("sîya!");
   }
 
 }

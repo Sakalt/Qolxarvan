@@ -13,7 +13,7 @@ import {
 
 export class Controller {
 
-  private setup(client: DiscordClient): void {
+  private async setup(client: DiscordClient): Promise<void> {
   }
 
   protected async log(client: DiscordClient, message: string): Promise<void> {
