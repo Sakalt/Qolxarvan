@@ -4,9 +4,11 @@ import {
   formatToTimeZone
 } from "date-fns-timezone";
 import {
+  ApplicationCommandOptionType
+} from "discord-api-types";
+import {
   CommandInteraction,
-  Message,
-  Snowflake
+  Message
 } from "discord.js";
 import {
   NormalParameter
@@ -47,115 +49,79 @@ export class DiscordController extends Controller {
     console.log("discord ready");
   }
 
-  // 任意のチャンネルの「!sotik (単語)」という投稿に反応して、オンライン辞典から該当単語のエントリーを抽出して投稿します。
-  // コマンド名部分を「!sotik」の代わりに「!sotik-detuk」とすると、そのコマンドの投稿が削除されます。
-  // 単語はスペース区切りで複数個指定できます。
-  @listener("message")
-  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(?:sotik|word)(-detuk)?\s+(.+)$/);
-    if (match) {
-      let deleteAfter = match[1];
-      let names = match[2].trim().split(/\s+/);
-      if (deleteAfter) {
-        await message.delete();
-      }
-      let dictionary = await ExtendedDictionary.fetch();
-      for (let name of names) {
-        let word = dictionary.words.find((word) => word.name === name);
-        let embed = (word !== undefined) ? ExtendedDictionary.createWordDiscordEmbed(word) : undefined;
-        if (embed !== undefined) {
-          await message.channel.send({embeds: [embed]});
-        } else {
-          await message.channel.send(`kocaqat a sotik adak iva “${name}”.`);
-        }
-      }
+  @slash("sitay", "ボットが動いているかどうか確認します。")
+  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
+    await interaction.reply("sîya!");
+  }
+
+  @slash("sotik", "オンライン辞典から指定された綴りの単語エントリーを抽出して返信します。", [
+    {name: "name", type: ApplicationCommandOptionType.STRING, required: true, description: "表示する単語の綴り"}
+  ])
+  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
+    let name = interaction.options.get("name")!.value! as string;
+    let dictionary = await ExtendedDictionary.fetch();
+    let word = dictionary.words.find((word) => word.name === name);
+    let embed = (word !== undefined) ? ExtendedDictionary.createWordDiscordEmbed(word) : undefined;
+    if (embed !== undefined) {
+      await interaction.reply({embeds: [embed]});
+    } else {
+      await interaction.reply(`kocaqat a sotik adak iva “${name}”.`);
     }
   }
 
-  // 任意のチャンネルの「!palev (単語)」という投稿に反応して、オンライン辞典から検索を行ってその結果を投稿します。
-  // コマンド名部分を「!palev」の代わりに「!palev-detuk」とすると、そのコマンドの投稿が削除されます。
-  // 検索は、見出し語と訳語の両方から完全一致と前方一致で行われ、完全一致したものが優先的に表示されます。
-  @listener("message")
-  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(?:palev|search)(-detuk)?\s+(.+)$/);
-    if (match) {
-      let deleteAfter = match[1];
-      let search = match[2].trim();
-      if (deleteAfter) {
-        await message.delete();
-      }
-      let dictionary = await ExtendedDictionary.fetch();
-      let exactParameter = new NormalParameter(search, "both", "exact", "ja", {diacritic: false, case: false});
-      let prefixParameter = new NormalParameter(search, "both", "prefix", "ja");
-      let exactResult = dictionary.search(exactParameter);
-      let prefixResult = dictionary.search(prefixParameter);
-      let displayedWord = (exactResult.words.length > 0) ? exactResult.words[0] : (prefixResult.words.length > 0) ? prefixResult.words[0] : undefined;
-      if (displayedWord !== undefined) {
-        let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, prefixResult);
-        let wordEmbed = ExtendedDictionary.createWordDiscordEmbed(displayedWord);
-        await message.channel.send(`kotikak a'l e sotik al'${prefixResult.words.length}. cafosis a'l e met acates.`);
-        await message.channel.send({embeds: [resultEmbed, wordEmbed!]});
-      } else {
-        await message.channel.send("kotikak a'l e sotik adak.");
-      }
+  @slash("palev", "オンライン辞典から検索 (見出し語と訳語の両方から完全一致と前方一致) を行ってその結果を返信します。", [
+    {name: "search", type: ApplicationCommandOptionType.STRING, required: true, description: "検索する内容"}
+  ])
+  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
+    let search = interaction.options.get("search")!.value! as string;
+    let dictionary = await ExtendedDictionary.fetch();
+    let exactParameter = new NormalParameter(search, "both", "exact", "ja", {diacritic: false, case: false});
+    let prefixParameter = new NormalParameter(search, "both", "prefix", "ja");
+    let exactResult = dictionary.search(exactParameter);
+    let prefixResult = dictionary.search(prefixParameter);
+    let displayedWord = (exactResult.words.length > 0) ? exactResult.words[0] : (prefixResult.words.length > 0) ? prefixResult.words[0] : undefined;
+    if (displayedWord !== undefined) {
+      let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, prefixResult);
+      let wordEmbed = ExtendedDictionary.createWordDiscordEmbed(displayedWord);
+      let count = prefixResult.words.length;
+      await interaction.reply({content: `kotikak a'l e sotik al'${count}. cafosis a'l e met acates.`, embeds: [resultEmbed, wordEmbed!]});
+    } else {
+      await interaction.reply("kotikak a'l e sotik adak.");
     }
   }
 
-  // 任意のチャンネルの「!cipas (依頼語)」という投稿に反応して、その訳語の造語依頼をします。
-  // コマンド名部分を「!cipas」の代わりに「!cipas-detuk」とすると、そのコマンドの投稿が削除されます。
-  // 依頼語はスペース区切りで複数個指定できます。
-  @listener("message")
-  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(?:cipas|request)(-detuk)?\s+(.+)$/);
-    if (match) {
-      let deleteAfter = match[1];
-      let names = match[2].trim().split(/\s+/);
-      if (deleteAfter) {
-        await message.delete();
-      }
-      let dictionary = await ExtendedDictionary.fetch();
-      await dictionary.addCommissions(names);
-      await message.channel.send("hafe e'n cipases a'c e xakoc ie sotik.");
+  @slash("cipas", "造語依頼を行います。", [
+    {name: "name", type: ApplicationCommandOptionType.STRING, required: true, description: "造語依頼したい訳語"}
+  ])
+  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
+    let name = interaction.options.get("name")!.value! as string;
+    let dictionary = await ExtendedDictionary.fetch();
+    await dictionary.addCommissions([name]);
+    await interaction.reply("hafe e'n cipases a'c e xakoc ie sotik!");
+  }
+
+  @slash("zelad", "検定チャンネルに投稿された過去の問題を返信します。", [
+    {name: "number", type: ApplicationCommandOptionType.INTEGER, required: true, description: "問題番号"}
+  ])
+  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
+    let number = interaction.options.get("number")!.value! as number;
+    let quiz = await Quiz.findByNumber(client, number);
+    if (quiz !== undefined) {
+      let embed = quiz.createDiscordEmbed();
+      await interaction.reply({embeds: [embed]});
+    } else {
+      await interaction.reply("kotikak a'l e dat.");
     }
   }
 
-  // 任意のチャンネルの「!zelad (番号)」という投稿に反応して、検定チャンネルの該当番号の解説投稿を検索し、その内容を整形して投稿します。
-  // コマンド名部分を「!zelad」の代わりに「!zelad-detuk」とすると、そのコマンドの投稿が削除されます。
-  @listener("message")
-  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(?:zelad|quiz)(-detuk)?\s+(\d+)$/);
-    if (match) {
-      let deleteAfter = match[1];
-      let number = +match[2];
-      if (deleteAfter) {
-        await message.delete();
-      }
-      let quiz = await Quiz.findByNumber(client, number);
-      if (quiz !== undefined) {
-        let embed = quiz.createDiscordEmbed();
-        await message.channel.send({embeds: [embed]});
-      } else {
-        await message.channel.send("kodat e zel atùk.");
-      }
-    }
-  }
-
-  // 任意のチャンネルの「!doklet」という投稿に反応して、その投稿をしたユーザーのクイズの成績を整形して投稿します。
-  // コマンド名部分を「!doklet」の代わりに「!doklet-detuk」とすると、そのコマンドの投稿が削除されます。
-  @listener("message")
-  private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
-    let match = message.content.match(/^!(?:doklet|grade)(-detuk)?(?:\s+(\d+))?$/);
-    if (match) {
-      let deleteAfter = match[1];
-      let userId = match[2] as Snowflake;
-      if (deleteAfter) {
-        await message.delete();
-      }
-      let user = (userId) ? await client.users.fetch(userId) : message.author;
-      let record = await QuizRecord.fetch(client, user);
-      let embed = record.createEmbed();
-      await message.channel.send({embeds: [embed]});
-    }
+  @slash("doklet", "検定チャンネルでの検定のこれまでの成績を返信します。", [
+    {name: "user", type: ApplicationCommandOptionType.USER, required: false, description: "ユーザー (省略時はコマンド実行者)"}
+  ])
+  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
+    let user = interaction.options.get("user")?.user ?? interaction.user;
+    let record = await QuizRecord.fetch(client, user);
+    let embed = record.createEmbed();
+    await interaction.reply({embeds: [embed]});
   }
 
   @listener("message")
@@ -172,8 +138,6 @@ export class DiscordController extends Controller {
     }
   }
 
-  // 検定チャンネルに問題が投稿されたときに、投稿文中に含まれている選択肢の絵文字のリアクションを自動的に付けます。
-  // 選択肢として使える絵文字は、数字もしくはラテン文字の絵文字のみです。
   @listener("message")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     let hasPermission = message.member?.roles.cache.find((role) => role.id === DISCORD_IDS.role.zisvalod) !== undefined;
@@ -186,11 +150,6 @@ export class DiscordController extends Controller {
         }
       }
     }
-  }
-
-  @slash("sitay", "ボットが動いているかどうか確認します。")
-  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
-    await interaction.reply("sîya!");
   }
 
 }
