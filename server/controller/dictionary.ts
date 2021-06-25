@@ -57,7 +57,14 @@ export class DictionaryController extends Controller {
     let path = request.file?.path;
     if (password === PASSWORD && path !== undefined) {
       let dictionary = await ExtendedDictionary.upload(path);
-      await TwitterClient.instance.tweet(`◆ 辞書データが更新されました (${dictionary.words.length} 語)。`);
+      let twitterPromise = TwitterClient.instance.tweet(`◆ 辞書データが更新されました (${dictionary.words.length} 語)。`);
+      let discordPromise = (async () => {
+        let channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
+        if (channel instanceof TextChannel) {
+          await channel.send(`辞書データが更新されました (${dictionary.words.length} 語)。`);
+        }
+      })();
+      await Promise.all([twitterPromise, discordPromise]);
       await fs.promises.unlink(path);
       response.json(null).end();
     } else {
