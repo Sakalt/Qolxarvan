@@ -82,7 +82,8 @@ export class DiscordController extends Controller {
       let count = prefixResult.words.length;
       await interaction.reply({content: `kotikak a'l e sotik al'${count}. cafosis a'l e met acates.`, embeds: [resultEmbed, wordEmbed!]});
     } else {
-      await interaction.reply("kotikak a'l e sotik adak.");
+      let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, prefixResult);
+      await interaction.reply({content: "kotikak a'l e sotik adak.", embeds: [resultEmbed]});
     }
   }
 
