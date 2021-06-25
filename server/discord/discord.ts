@@ -1,9 +1,6 @@
 //
 
 import {
-  formatToTimeZone
-} from "date-fns-timezone";
-import {
   ApplicationCommandOptionType as CommandOptionType
 } from "discord-api-types";
 import {
@@ -43,10 +40,9 @@ export class DiscordController extends Controller {
 
   @listener("ready")
   private async [Symbol()](client: DiscordClient): Promise<void> {
-    let date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
-    let presence = client.user?.setPresence({activities: [{name: "xalzih", url: "https://github.com/Ziphil/ShaleianOnline"}]});
-    await this.log(client, `Ready (${date})`);
-    console.log("discord ready");
+    let url = "https://github.com/Ziphil/ShaleianOnline";
+    let presence = client.user?.setPresence({activities: [{name: "xalzih", url}]});
+    await client.log("Discord ready");
   }
 
   @slash("sitay", "ボットが動いているかどうか確認します。")
@@ -133,7 +129,7 @@ export class DiscordController extends Controller {
         let number = +match[1];
         await message.delete();
         await QuizRecord.save(client, number);
-        await this.log(client, `Successfully saved: ${number}`);
+        await client.log(`Saved quiz record (number: ${number})`);
       }
     }
   }

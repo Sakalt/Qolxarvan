@@ -2,7 +2,6 @@
 
 import {
   ApplicationCommandOptionData,
-  Client,
   ClientApplication,
   ClientEvents,
   CommandInteraction
@@ -14,6 +13,9 @@ import {
 import {
   DISCORD_IDS
 } from "/server/discord/id";
+import {
+  DiscordClient
+} from "/server/util/client/discord";
 
 
 const KEY = Symbol("discord");
@@ -35,13 +37,13 @@ type SlashSpec = {
 type ControllerDecorator = (clazz: new() => Controller) => void;
 type ListenerMethodDecorator<E extends ClientEventKeys> = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ListenerMethod<E>>) => void;
 type SlashMethodDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<SlashMethod>) => void;
-type ListenerMethod<E extends ClientEventKeys> = (client: Client, ...args: ClientEvents[E]) => any;
-type SlashMethod = (client: Client, interaction: CommandInteraction) => any;
+type ListenerMethod<E extends ClientEventKeys> = (client: DiscordClient, ...args: ClientEvents[E]) => any;
+type SlashMethod = (client: DiscordClient, interaction: CommandInteraction) => any;
 
 export function controller(): ControllerDecorator {
   let decorator = function (clazz: new() => Controller): void {
     let originalSetup = clazz.prototype.setup;
-    clazz.prototype.setup = async function (this: Controller, client: Client): Promise<void> {
+    clazz.prototype.setup = async function (this: Controller, client: DiscordClient): Promise<void> {
       let metadata = Reflect.getMetadata(KEY, clazz.prototype) as Metadata;
       setSlash(this, client, metadata);
       registerListener(this, client, metadata);
@@ -68,7 +70,7 @@ export function slash(commandName: string, description: string, options?: Array<
   return decorator;
 }
 
-function registerListener(controller: any, client: Client, metadata: Metadata): void {
+function registerListener(controller: any, client: DiscordClient, metadata: Metadata): void {
   let listenerSpecs = metadata.filter((spec) => spec.event !== "slash") as Array<ListenerSpec>;
   for (let {name, event} of listenerSpecs) {
     client.on(event, async (...args) => {
@@ -82,7 +84,7 @@ function registerListener(controller: any, client: Client, metadata: Metadata): 
   }
 }
 
-function registerSlash(controller: any, client: Client, metadata: Metadata): void {
+function registerSlash(controller: any, client: DiscordClient, metadata: Metadata): void {
   let slashSpecs = metadata.filter((spec) => spec.event === "slash") as Array<SlashSpec>;
   client.on("interaction", async (interaction) => {
     try {
@@ -99,7 +101,7 @@ function registerSlash(controller: any, client: Client, metadata: Metadata): voi
   });
 }
 
-async function setSlash(controller: any, client: Client, metadata: Metadata): Promise<void> {
+async function setSlash(controller: any, client: DiscordClient, metadata: Metadata): Promise<void> {
   client.application = new ClientApplication(client, {});
   await client.application.fetch();
   let slashSpecs = metadata.filter((spec) => spec.event === "slash") as Array<SlashSpec>;
