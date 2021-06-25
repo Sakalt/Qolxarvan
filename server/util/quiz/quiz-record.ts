@@ -24,9 +24,9 @@ import {
 export class QuizRecord {
 
   public readonly user: User;
-  public readonly results: ReadonlyMap<number, Readonly<QuizResult>>;
+  public readonly results: ReadonlyMap<number, QuizResult>;
 
-  private constructor(user: User, results: Map<number, QuizResult>) {
+  private constructor(user: User, results: ReadonlyMap<number, QuizResult>) {
     this.user = user;
     this.results = results;
   }
@@ -243,5 +243,5 @@ export class QuizRecord {
 
 
 export type QuizStatus = "correct" | "wrong" | "invalid";
-export type QuizResult = {status: QuizStatus, urls: QuizUrls};
+export type QuizResult = Readonly<{status: QuizStatus, urls: QuizUrls}>;
 export type QuizResultCounts = {all: number, correct: number, wrong: number, invalid: number};

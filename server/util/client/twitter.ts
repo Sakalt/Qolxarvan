@@ -14,7 +14,7 @@ import {
 
 export class TwitterClient extends OriginalTwitterClient {
 
-  public static instance: TwitterClient = TwitterClient.create();
+  public static readonly instance: TwitterClient = TwitterClient.create();
 
   public static create(): TwitterClient {
     let options = Object.fromEntries([

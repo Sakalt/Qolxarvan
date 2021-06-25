@@ -11,7 +11,7 @@ import {
 
 export class DiscordClient extends OriginalDiscordClient {
 
-  public static instance: DiscordClient = DiscordClient.create();
+  public static readonly instance: DiscordClient = DiscordClient.create();
 
   private static create(): DiscordClient {
     let client = new OriginalDiscordClient({intents: Intents.ALL}) as any;

@@ -16,13 +16,13 @@ export class Quiz {
 
   public readonly number: number;
   public readonly difficulty: string | null;
-  public readonly sentences: Readonly<QuizSentences>;
-  public readonly choices: ReadonlyArray<Readonly<QuizChoice>>;
+  public readonly sentences: QuizSentences;
+  public readonly choices: ReadonlyArray<QuizChoice>;
   public readonly answer: string;
   public readonly commentary: string;
-  public readonly urls: Readonly<QuizUrls>;
+  public readonly urls: QuizUrls;
 
-  private constructor(number: number, difficulty: string | null, sentences: QuizSentences, choices: Array<QuizChoice>, answer: string, commentary: string, urls: QuizUrls) {
+  private constructor(number: number, difficulty: string | null, sentences: QuizSentences, choices: ReadonlyArray<QuizChoice>, answer: string, commentary: string, urls: QuizUrls) {
     this.number = number;
     this.difficulty = difficulty;
     this.sentences = sentences;
@@ -138,9 +138,9 @@ export class Quiz {
 }
 
 
-export type QuizSentences = {shaleian: string, translation: string};
-export type QuizChoice = {mark: string, content: string};
-export type QuizUrls = {problem: string, commentary: string};
+export type QuizSentences = Readonly<{shaleian: string, translation: string}>;
+export type QuizChoice = Readonly<{mark: string, content: string}>;
+export type QuizUrls = Readonly<{problem: string, commentary: string}>;
 
 type QuizSources = {problem: Message, commentary: Message};
 type QuizRawIteration = {number: number, sources: QuizSources};

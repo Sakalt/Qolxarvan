@@ -20,7 +20,7 @@ import {
 
 export class GoogleClient extends OriginalGoogleClient {
 
-  public static instance: GoogleClient = GoogleClient.create();
+  public static readonly instance: GoogleClient = GoogleClient.create();
 
   public static create(): GoogleClient {
     let scopes = [
