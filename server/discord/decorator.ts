@@ -77,8 +77,7 @@ function registerListener(controller: any, client: DiscordClient, metadata: Meta
       try {
         await controller[name](client, ...args);
       } catch (error) {
-        controller.error(client, "Uncaught error", error);
-        console.error(error);
+        client.error("Uncaught error", error);
       }
     });
   }
@@ -95,8 +94,7 @@ function registerSlash(controller: any, client: DiscordClient, metadata: Metadat
         }
       }
     } catch (error) {
-      controller.error(client, "Uncaught error", error);
-      console.error(error);
+      client.error("Uncaught error", error);
     }
   });
 }
