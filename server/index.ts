@@ -109,7 +109,7 @@ export class Main {
 
   private listen(): void {
     this.application.listen(+PORT, () => {
-      console.log(`listening, port: ${PORT}`);
+      console.log(`Listening (port: ${PORT})`);
     });
   }
 

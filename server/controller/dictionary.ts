@@ -154,7 +154,7 @@ export class DictionaryController extends Controller {
   public async [Symbol()](): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
     await dictionary.saveHistory();
-    console.log("history saved");
+    DiscordClient.instance.log("Saved word count history");
   }
 
   @cron("*/15 * * * *")
@@ -176,7 +176,6 @@ export class DictionaryController extends Controller {
       let channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
       if (channel instanceof TextChannel) {
         await channel.send({embeds: [embed]});
-        console.log("discord post");
       } else {
         throw new Error("cannot happen");
       }

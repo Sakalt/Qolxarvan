@@ -108,7 +108,6 @@ async function setSlash(controller: any, client: DiscordClient, metadata: Metada
   let guild = await client.guilds.fetch(DISCORD_IDS.guild);
   let commands = slashSpecs.map((spec) => ({name: spec.commandName, description: spec.description, options: spec.options}));
   await guild.commands.set(commands);
-  console.log("command set");
 }
 
 function getMetadata(target: object): Metadata {
