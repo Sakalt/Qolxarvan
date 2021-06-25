@@ -10,8 +10,7 @@ import {
 } from "express";
 import fs from "fs";
 import {
-  SaverCreator,
-  SaverKind
+  SaverCreator
 } from "soxsot/dist/io";
 import {
   Controller
@@ -36,6 +35,7 @@ import {
 import {
   getTempFilePath
 } from "/server/util/misc";
+import * as val from "/server/util/validator/builtin-validators";
 import {
   PASSWORD
 } from "/server/variable";
@@ -53,61 +53,65 @@ export class DictionaryController extends Controller {
 
   @post("/upload")
   public async [Symbol()](request: Request, response: Response): Promise<void> {
-    let password = request.body.password;
-    let path = request.file?.path;
-    if (password === PASSWORD && path !== undefined) {
-      let dictionary = await ExtendedDictionary.upload(path);
-      let twitterPromise = TwitterClient.instance.tweet(`◆ 辞書データが更新されました (${dictionary.words.length} 語)。`);
-      let discordPromise = (async () => {
-        let channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
-        if (channel instanceof TextChannel) {
-          await channel.send(`辞書データが更新されました (${dictionary.words.length} 語)。`);
-        }
-      })();
-      await Promise.all([twitterPromise, discordPromise]);
-      await fs.promises.unlink(path);
-      response.json(null).end();
+    let validator = val.object({
+      password: val.string
+    });
+    let [body, invalids] = validator.validate(request.body);
+    if (body !== undefined && request.file?.path !== undefined) {
+      if (body.password === PASSWORD) {
+        let path = request.file?.path;
+        let dictionary = await ExtendedDictionary.upload(path);
+        let twitterPromise = TwitterClient.instance.tweet(`◆ 辞書データが更新されました (${dictionary.words.length} 語)。`);
+        let discordPromise = (async () => {
+          let channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
+          if (channel instanceof TextChannel) {
+            await channel.send(`辞書データが更新されました (${dictionary.words.length} 語)。`);
+          }
+        })();
+        await Promise.all([twitterPromise, discordPromise]);
+        await fs.promises.unlink(path);
+        response.json(null).end();
+      } else {
+        response.sendStatus(403).end();
+      }
     } else {
-      response.sendStatus(400).end();
+      response.status(400).json(invalids).end();
     }
   }
 
   @get("/download")
   public async [Symbol()](request: Request, response: Response): Promise<void> {
-    if (request.query.kind === "single" || request.query.kind === "oldShaleian") {
-      let kind = request.query.kind as SaverKind;
+    let validator = val.object({
+      kind: val.enums("single", "oldShaleian")
+    });
+    let [query, invalids] = validator.validate(request.query);
+    if (query !== undefined) {
       let path = getTempFilePath("txt");
-      let fileName = "shaleian" + ((kind === "single") ? ".xdn" : ".xdc");
+      let fileName = "shaleian" + ((query.kind === "single") ? ".xdn" : ".xdc");
       let dictionary = await ExtendedDictionary.fetch();
-      let saver = SaverCreator.createByKind(kind, dictionary, path);
+      let saver = SaverCreator.createByKind(query.kind, dictionary, path);
       await saver.asPromise();
       response.download(path, fileName, (error) => {
         fs.promises.unlink(path);
       });
     } else {
-      response.sendStatus(400).end();
+      response.status(400).json(invalids).end();
     }
   }
 
   @post("/request")
   @before(cors())
   public async [Symbol()](request: Request, response: Response): Promise<void> {
-    let names = (() => {
-      if (Array.isArray(request.body.names)) {
-        let rawNames = request.body.names as Array<any>;
-        if (rawNames.every((name) => typeof name === "string")) {
-          return rawNames as Array<string>;
-        }
-      } else {
-        return undefined;
-      }
-    })();
-    if (names !== undefined) {
+    let validator = val.object({
+      names: val.array(val.string)
+    });
+    let [body, invalids] = validator.validate(request.body);
+    if (body !== undefined) {
       let dictionary = await ExtendedDictionary.fetch();
-      let count = await dictionary.addCommissions(names);
+      let count = await dictionary.addCommissions(body.names);
       response.json(count).end();
     } else {
-      response.sendStatus(400).end();
+      response.status(400).json(invalids).end();
     }
   }
 
@@ -122,22 +126,16 @@ export class DictionaryController extends Controller {
   @get("/difference")
   @before(cors())
   public async [Symbol()](request: Request, response: Response): Promise<void> {
-    let durations = (() => {
-      let rawDurations = request.query.durations as any;
-      if (typeof rawDurations === "string") {
-        return [+rawDurations];
-      } else if (Array.isArray(rawDurations) && rawDurations.every((element) => typeof element === "string")) {
-        return rawDurations.map((element) => +element);
-      } else {
-        return undefined;
-      }
-    })();
-    if (durations !== undefined) {
+    let validator = val.object({
+      durations: val.arrayOrSingle(val.intFromString)
+    });
+    let [query, invalids] = validator.validate(request.query);
+    if (query !== undefined) {
       let dictionary = await ExtendedDictionary.fetch();
-      let difference = await dictionary.fetchWordCountDifferences(durations);
+      let difference = await dictionary.fetchWordCountDifferences(query.durations);
       response.json(difference).end();
     } else {
-      response.sendStatus(400).end();
+      response.status(400).json(invalids).end();
     }
   }
 
