@@ -206,7 +206,7 @@ export class ExtendedDictionary extends Dictionary {
         value += `**[${word.name}](${ExtendedDictionary.createWordUrl(word)})**`;
         value += ` — ${equivalentNames.join(", ")}`;
         value += "\n";
-      };
+      }
       if (value === "") {
         value += "該当なし";
       }
