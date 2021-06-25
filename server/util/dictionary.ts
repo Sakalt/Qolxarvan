@@ -8,9 +8,6 @@ import {
 } from "discord.js";
 import fs from "fs";
 import {
-  nanoid
-} from "nanoid";
-import {
   Dictionary,
   NormalParameter,
   Parser,
@@ -24,6 +21,9 @@ import {
   GoogleClient
 } from "/server/util/client";
 import {
+  getTempFilePath
+} from "/server/util/misc";
+import {
   COMMISSION_SPREADSHEET_ID,
   DICTIONARY_ID,
   HISTORY_SPREADSHEET_ID
@@ -33,7 +33,7 @@ import {
 export class ExtendedDictionary extends Dictionary {
 
   public static async fetch(): Promise<ExtendedDictionary> {
-    let path = `./dist/temp/temp-${nanoid()}.xdn`;
+    let path = getTempFilePath("xdn");
     let stream = await GoogleClient.instance.downloadFile(DICTIONARY_ID);
     let fileStream = fs.createWriteStream(path, {encoding: "utf-8"});
     let promise = new Promise<Dictionary>((resolve, reject) => {

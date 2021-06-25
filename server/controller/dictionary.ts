@@ -10,9 +10,6 @@ import {
 } from "express";
 import fs from "fs";
 import {
-  nanoid
-} from "nanoid";
-import {
   SaverCreator,
   SaverKind
 } from "soxsot/dist/io";
@@ -36,6 +33,9 @@ import {
 import {
   ExtendedDictionary
 } from "/server/util/dictionary";
+import {
+  getTempFilePath
+} from "/server/util/misc";
 import {
   PASSWORD
 } from "/server/variable";
@@ -76,7 +76,7 @@ export class DictionaryController extends Controller {
   public async [Symbol()](request: Request, response: Response): Promise<void> {
     if (request.query.kind === "single" || request.query.kind === "oldShaleian") {
       let kind = request.query.kind as SaverKind;
-      let path = `./dist/temp/temp-${nanoid()}.xdn`;
+      let path = getTempFilePath("txt");
       let fileName = "shaleian" + ((kind === "single") ? ".xdn" : ".xdc");
       let dictionary = await ExtendedDictionary.fetch();
       let saver = SaverCreator.createByKind(kind, dictionary, path);
