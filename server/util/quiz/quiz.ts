@@ -15,14 +15,16 @@ import {
 export class Quiz {
 
   public readonly number: number;
+  public readonly difficulty: string | null;
   public readonly sentences: Readonly<QuizSentences>;
   public readonly choices: ReadonlyArray<Readonly<QuizChoice>>;
   public readonly answer: string;
   public readonly commentary: string;
   public readonly urls: Readonly<QuizUrls>;
 
-  private constructor(number: number, sentences: QuizSentences, choices: Array<QuizChoice>, answer: string, commentary: string, urls: QuizUrls) {
+  private constructor(number: number, difficulty: string | null, sentences: QuizSentences, choices: Array<QuizChoice>, answer: string, commentary: string, urls: QuizUrls) {
     this.number = number;
+    this.difficulty = difficulty;
     this.sentences = sentences;
     this.choices = choices;
     this.answer = answer;
@@ -90,12 +92,14 @@ export class Quiz {
       let mainLines = wholeMatch[1].trim().split(/\n/);
       let commentaryLines = wholeMatch[2].trim().split(/\n/);
       let numberMatch = mainLines[0]?.match(/^\*\*\[\s*(\d+)\s*\]\*\*/);
+      let difficultyMatch = sources.problem.content.match(/^\*\*\[\s*(\d+)\s*\]\*\*(?:\s*((?:☆|★)+))?/m);
       let shaleianMatch = mainLines[1]?.match(/^>\s*(.+)/);
       let translationMatch = mainLines[2]?.match(/^>\s*(.+)/);
       let choiceMatch = mainLines[3]?.matchAll(/(..\u{20E3}|[\u{1F1E6}-\u{1F1FF}])\s*(.+?)\s*(　|$)/gu);
       let answerMatch = commentaryLines[0]?.match(/\*\*\s*正解\s*\*\*\s*:\s*(.+)/);
       if (mainLines.length >= 4 && commentaryLines.length >= 2 && numberMatch && shaleianMatch && translationMatch && answerMatch) {
         let number = +numberMatch[1];
+        let difficulty = (difficultyMatch !== null) ? difficultyMatch[2] ?? null : null;
         let shaleianSentence = shaleianMatch[1].trim();
         let translationSentence = translationMatch[1].trim();
         let sentences = {shaleian: shaleianSentence, translation: translationSentence};
@@ -103,7 +107,7 @@ export class Quiz {
         let answer = answerMatch[1].trim();
         let commentary = commentaryLines.slice(1, -1).join("").trim();
         let urls = {problem: sources.problem.url, commentary: sources.commentary.url};
-        let quiz = new Quiz(number, sentences, choices, answer, commentary, urls);
+        let quiz = new Quiz(number, difficulty, sentences, choices, answer, commentary, urls);
         return quiz;
       } else {
         return undefined;
@@ -117,8 +121,8 @@ export class Quiz {
     embed.description = this.questionMarkup;
     embed.color = 0x33C3FF;
     embed.addField("正解", `||${this.answer}||`, true);
-    embed.addField("問題リンク", `[こちら](${this.urls.problem})`, true);
-    embed.addField("解説リンク", `[こちら](${this.urls.commentary})`, true);
+    embed.addField("難易度", `${this.difficulty ?? "?"}`, true);
+    embed.addField("投稿リンク", `[問題](${this.urls.problem}) · [解説](${this.urls.commentary})`, true);
     embed.addField("解説", `||${this.commentary}||`, false);
     return embed;
   }
