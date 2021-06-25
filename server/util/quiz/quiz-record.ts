@@ -99,23 +99,28 @@ export class QuizRecord {
     let sheet = await QuizRecord.getSheet();
     let header = await QuizRecord.createHeader(sheet);
     let columnIndex = header.findIndex((candidateId) => candidateId === user.id);
-    await QuizRecord.loadCellsForFetch(sheet, columnIndex);
-    let rowCount = sheet.rowCount;
-    let results = new Map<number, QuizResult>();
-    for (let number = 1 ; number < rowCount ; number ++) {
-      let exist = sheet.getCell(number, 0).value !== null;
-      let status = sheet.getCell(number, columnIndex).value as QuizStatus | null;
-      if (exist) {
-        if (status !== null) {
-          let urls = {problem: sheet.getCell(number, 1).value?.toString() ?? "", commentary: sheet.getCell(number, 2).value?.toString() ?? ""};
-          results.set(number, {status, urls});
+    if (columnIndex >= 0) {
+      await QuizRecord.loadCellsForFetch(sheet, columnIndex);
+      let rowCount = sheet.rowCount;
+      let results = new Map<number, QuizResult>();
+      for (let number = 1 ; number < rowCount ; number ++) {
+        let exist = sheet.getCell(number, 0).value !== null;
+        let status = sheet.getCell(number, columnIndex).value as QuizStatus | null;
+        if (exist) {
+          if (status !== null) {
+            let urls = {problem: sheet.getCell(number, 1).value?.toString() ?? "", commentary: sheet.getCell(number, 2).value?.toString() ?? ""};
+            results.set(number, {status, urls});
+          }
+        } else {
+          break;
         }
-      } else {
-        break;
       }
+      let record = new QuizRecord(user, results);
+      return record;
+    } else {
+      let record = new QuizRecord(user, new Map());
+      return record;
     }
-    let record = new QuizRecord(user, results);
-    return record;
   }
 
   // 与えられたユーザーのクイズの成績を取得します。
