@@ -94,7 +94,9 @@ export default class DictionaryPage extends Component<Props, State> {
   private updateWordsByName(name: string): void {
     let language = this.props.store!.locale;
     let parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false});
-    this.setState({parameter}, () => {
+    let page = 0;
+    this.setState({parameter, page}, () => {
+      window.scrollTo(0, 0);
       this.updateWordsImmediately();
     });
   }
