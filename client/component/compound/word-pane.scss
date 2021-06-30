@@ -32,6 +32,18 @@ $relation-marker-width: 15rpx;
   margin: 1rpx 0rpx 0rpx 0rpx;
   padding: 15rpx 0rpx 15rpx 0rpx;
   border-radius: 0rpx 0rpx $border-radius $border-radius;
+  overflow: hidden;
+  position: relative;
+}
+
+.background-name {
+  font-family: $gilit-font-family;
+  font-size: 350%;
+  color: rgba(white, 0.05);
+  bottom: -5rpx;
+  right: 18rpx;
+  position: absolute;
+  z-index: -1;
 }
 
 .section {

@@ -233,6 +233,7 @@ export default class WordPane extends Component<Props, State> {
     let sectionNode = (sectionNodes !== undefined && sectionNodes.length > 0) && (
       <div styleName="sections">
         {sectionNodes}
+        <div styleName="background-name">{WordPane.createGilitString(word.name)}</div>
       </div>
     );
     let node = (
@@ -282,6 +283,20 @@ export default class WordPane extends Component<Props, State> {
       resultNodes.push(nodes[i]);
     }
     return resultNodes;
+  }
+
+  private static createGilitString(string: string): string {
+    let capital = false;
+    let gilitChars = string.split("").reverse().map((char) => {
+      if (char !== "x" && char !== "j" && char !== "n" && char !== "m" && char !== "'") {
+        capital = !capital;
+      }
+      let gilitChar = (char === "'") ? "" : (capital) ? char.toUpperCase() : char.toLowerCase();
+      return gilitChar;
+    });
+    let gilitString = gilitChars.reverse().join("");
+    console.log(gilitChars);
+    return gilitString;
   }
 
 }
