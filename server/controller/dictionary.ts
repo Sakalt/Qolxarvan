@@ -152,7 +152,6 @@ export class DictionaryController extends Controller {
   public async [Symbol()](): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
     await dictionary.saveHistory();
-    DiscordClient.instance.log("Saved word count history");
   }
 
   @cron("*/15 * * * *")
