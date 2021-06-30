@@ -7,7 +7,7 @@
   @include pane;
   margin: 0rpx;
   padding: 25rpx $content-horizontal-padding;
-  line-height: 1.6;
+  line-height: $line-height;
   border-radius: $border-radius;
   @include smartphone {
     padding: 25rpx $content-smartphone-horizontal-padding;

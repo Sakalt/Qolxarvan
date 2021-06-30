@@ -1,0 +1,45 @@
+@charset "utf-8";
+
+@import "/client/component/mixin.scss";
+
+
+$marker-width: 6rpx;
+
+.suggestion {
+  margin: 0px;
+  margin-left: $marker-width + $blank-margin;
+  line-height: $line-height;
+  &::before {
+    @include icon-font;
+    width: $marker-width;
+    margin-right: $blank-margin;
+    margin-left: -$marker-width - $blank-margin;
+    color: $blue-color;
+    content: "\F0DA";
+    display: inline-block;
+  }
+}
+
+.keyword {
+  margin-left: $blank-margin;
+}
+
+.divider {
+  margin: 0rpx $blank-margin;
+  color: $mute-color;
+}
+
+.link {
+  color: $orange-color;
+  text-decoration: underline;
+  cursor: pointer;
+  &:hover {
+    color: tint($orange-color, 30%);
+  }
+}
+
+.sans {
+  font-family: $european-sans-font-family, $japanese-sans-font-family;
+  font-size: 96%;
+  line-height: 96%;
+}

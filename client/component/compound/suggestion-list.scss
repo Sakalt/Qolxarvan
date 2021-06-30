@@ -1,0 +1,20 @@
+@charset "utf-8";
+
+@import "/client/component/mixin.scss";
+
+
+.root {
+  @include pane;
+  margin: 0rpx;
+  padding: 15rpx $content-horizontal-padding;
+  border-radius: $border-radius;
+  @include smartphone {
+    padding: 15rpx $content-smartphone-horizontal-padding;
+  }
+}
+
+.list {
+  margin: 0rpx;
+  padding: 0rpx;
+  list-style: none;
+}

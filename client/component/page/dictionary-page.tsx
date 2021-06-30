@@ -18,6 +18,7 @@ import Loading from "/client/component/compound/loading";
 import Logo from "/client/component/compound/logo";
 import Pagination from "/client/component/compound/pagination";
 import SearchForm from "/client/component/compound/search-form";
+import SuggestionList from "/client/component/compound/suggestion-list";
 import WordList from "/client/component/compound/word-list";
 import {
   style
@@ -142,6 +143,13 @@ export default class DictionaryPage extends Component<Props, State> {
     let maxPage = this.state.searchResult.maxPage;
     let node = (
       <Fragment>
+        <div styleName="suggestion-list">
+          <SuggestionList
+            dictionary={this.state.dictionary!}
+            searchResult={this.state.searchResult}
+            onLinkClick={(name) => this.updateWordsByName(name)}
+          />
+        </div>
         <div styleName="word-list">
           <WordList
             dictionary={this.state.dictionary!}
