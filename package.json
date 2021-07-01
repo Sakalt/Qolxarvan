@@ -64,7 +64,8 @@
     "react-dom": "^16.14.0",
     "react-intl": "^5.10.6",
     "react-router-dom": "^5.2.0",
-    "soxsot": "^0.5.1",
+    "soxsot": "0.6.0",
+    "talqis": "^0.1.0",
     "ts-essentials": "^7.0.1",
     "twitter": "^1.7.1"
   },
