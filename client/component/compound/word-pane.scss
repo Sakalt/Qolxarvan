@@ -80,7 +80,6 @@ $relation-marker-width: 15rpx;
 }
 
 .head-right {
-  width: 30rpx;
   text-align: right;
   flex-grow: 0;
 }
@@ -95,6 +94,10 @@ $relation-marker-width: 15rpx;
 
 .head-date {
   font-size: 80%;
+}
+
+.head-date >*:first-child {
+  margin-bottom: 2rpx;
 }
 
 .section-item {

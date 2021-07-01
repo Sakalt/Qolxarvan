@@ -22,6 +22,9 @@ import {
   Section,
   Word
 } from "soxsot";
+import {
+  GregorianDate
+} from "talqis";
 import Component from "/client/component/component";
 import {
   style
@@ -33,6 +36,8 @@ export default class WordPane extends Component<Props, State> {
 
   private renderHead(word: ParsedWord<ReactNode>): ReactNode {
     let sort = word.parts[this.props.store!.locale]?.sort ?? null;
+    let date = GregorianDate.ofHairia(word.date);
+    let dateString = ("0000" + date.getYear()).slice(-4) + "/" + ("00" + date.getMonth()).slice(-2) + "/" + ("00" + date.getDate()).slice(-2);
     let categoryNode = (sort !== null) && (
       <span styleName="head-sort tag right-margin">{sort}</span>
     );
@@ -47,7 +52,10 @@ export default class WordPane extends Component<Props, State> {
       </span>
     );
     let dateNode = (
-      <span styleName="head-date hairia">{word.date}</span>
+      <div styleName="head-date">
+        <div styleName="hairia">{word.date}</div>
+        <div styleName="gregorian">{dateString}</div>
+      </div>
     );
     let node = (
       <div styleName="head">
