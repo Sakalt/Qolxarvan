@@ -233,3 +233,9 @@ $relation-marker-width: 15rpx;
 .italic {
   font-style: italic;
 }
+
+.hairia::before {
+  font-size: 80%;
+  vertical-align: 0.4em;
+  content: "H";
+}

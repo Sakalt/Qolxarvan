@@ -47,7 +47,7 @@ export default class WordPane extends Component<Props, State> {
       </span>
     );
     let dateNode = (
-      <span styleName="head-date">{word.date}</span>
+      <span styleName="head-date hairia">{word.date}</span>
     );
     let node = (
       <div styleName="head">
@@ -267,10 +267,15 @@ export default class WordPane extends Component<Props, State> {
       let node = <span styleName="italic" key={Math.random()}>{string}</span>;
       return node;
     };
+    let resolveHairia = function (hairia: number): ReactNode {
+      let node = <span styleName="hairia" key={Math.random()}>{hairia}</span>;
+      return node;
+    };
     let join = function (nodes: Array<ReactNode | string>): ReactNode {
       return nodes;
     };
-    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, join});
+    let modifyPunctuations = true;
+    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, resolveHairia, join, modifyPunctuations});
     return resolver;
   }
 
