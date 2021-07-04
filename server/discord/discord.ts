@@ -153,9 +153,10 @@ export class DiscordController extends Controller {
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let name = interaction.options.get("name")!.value! as string;
+    await interaction.defer();
     let dictionary = await ExtendedDictionary.fetch();
     await dictionary.addCommissions([name]);
-    await interaction.reply("hafe e'n cipases a'c e xakoc ie sotik!");
+    await interaction.followUp("hafe e'n cipases a'c e xakoc ie sotik!");
   }
 
   @slash("zelad", "検定チャンネルに投稿された過去の問題を返信します。", [
@@ -163,12 +164,13 @@ export class DiscordController extends Controller {
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let number = interaction.options.get("number")!.value! as number;
+    await interaction.defer();
     let quiz = await Quiz.findByNumber(client, number);
     if (quiz !== undefined) {
       let embed = quiz.createDiscordEmbed();
-      await interaction.reply({embeds: [embed]});
+      await interaction.followUp({embeds: [embed]});
     } else {
-      await interaction.reply("kotikak a'l e dat.");
+      await interaction.followUp("kotikak a'l e dat.");
     }
   }
 
@@ -177,9 +179,10 @@ export class DiscordController extends Controller {
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let user = interaction.options.get("user")?.user ?? interaction.user;
+    await interaction.defer();
     let record = await QuizRecord.fetch(client, user);
     let embed = record.createDiscordEmbed();
-    await interaction.reply({embeds: [embed]});
+    await interaction.followUp({embeds: [embed]});
   }
 
   @listener("message")
