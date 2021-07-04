@@ -4,9 +4,12 @@ import {
   formatToTimeZone
 } from "date-fns-timezone";
 import {
+  MessageActionRow,
+  MessageButton,
   MessageEmbed
 } from "discord.js";
 import fs from "fs";
+import * as queryParser from "query-string";
 import {
   Dictionary,
   NormalParameter,
@@ -17,6 +20,9 @@ import {
 import {
   SingleLoader
 } from "soxsot/dist/io";
+import {
+  ParameterUtils
+} from "/client/util/parameter";
 import {
   GoogleClient
 } from "/server/util/client";
@@ -192,29 +198,51 @@ export class ExtendedDictionary extends Dictionary {
     }
   }
 
-  public static createSearchResultDiscordEmbed(parameter: NormalParameter, exactResult: SearchResult, prefixResult: SearchResult): MessageEmbed {
+  public static createSearchResultDiscordEmbed(parameter: NormalParameter, result: SearchResult, page: number): MessageEmbed {
     let embed = new MessageEmbed();
     embed.title = "検索結果";
     embed.url = ExtendedDictionary.createParameterUrl(parameter);
-    for (let result of [exactResult, prefixResult]) {
-      let value = "";
-      for (let index = 0 ; index < Math.min(result.words.length, 5) ; index ++) {
-        let parser = Parser.createSimple();
-        let word = result.words[index];
-        let equivalentNames = parser.lookupEquivalentNames(word, "ja", true) ?? [];
-        value += `(${index + 1}) `;
-        value += `**[${word.name}](${ExtendedDictionary.createWordUrl(word)})**`;
-        value += ` — ${equivalentNames.join(", ")}`;
-        value += "\n";
-      }
-      if (value === "") {
-        value += "該当なし";
-      }
-      let fieldName = (result === exactResult) ? "完全一致" : "前方一致";
-      fieldName += ` (最初の ${Math.min(result.words.length, 5)} 件 / ${result.words.length} 件)`;
-      embed.addField(fieldName, value);
+    embed.description = "単語名が書かれたボタンをクリックすると、その単語の詳細情報が表示されます。";
+    let value = "";
+    let offset = result.sizePerPage * page;
+    for (let index = 0 ; index < Math.min(result.words.length, offset + result.sizePerPage) ; index ++) {
+      let parser = Parser.createSimple();
+      let word = result.words[index + offset];
+      let equivalentNames = parser.lookupEquivalentNames(word, "ja", true) ?? [];
+      value += `${index + 1}\u{20E3} `;
+      value += `**[${word.name}](${ExtendedDictionary.createWordUrl(word)})**`;
+      value += ` — ${equivalentNames.join(", ")}`;
+      value += "\n";
     }
+    if (value === "") {
+      value += "該当なし";
+    }
+    let fieldName = `${offset + 1} 件目～ ${Math.min(result.words.length, offset + result.sizePerPage)} 件目 / ${result.words.length} 件`;
+    embed.addField(fieldName, value);
     return embed;
+  }
+
+  public static createSearchResultDiscordComponents(parameter: NormalParameter, result: SearchResult, page: number): Array<MessageActionRow> {
+    let offset = result.sizePerPage * page;
+    let buttons = [] as Array<MessageButton>;
+    for (let index = 0 ; index < Math.min(result.words.length, offset + result.sizePerPage) ; index ++) {
+      let word = result.words[index + offset];
+      let id = queryParser.stringify(ParameterUtils.serialize(parameter)) + `&kind=showWord&index=${index + offset}`;
+      let button = new MessageButton();
+      button.setLabel(word.name);
+      button.setEmoji(`${index + 1}\u{20E3}`);
+      button.setStyle("SECONDARY");
+      button.setCustomID(id);
+      buttons.push(button);
+    }
+    let buttonRowCount = Math.ceil(buttons.length / 4);
+    let buttonRows = [...Array(buttonRowCount)].map((value, index) => {
+      let row = new MessageActionRow();
+      row.addComponents(...buttons.slice(index * 4, (index + 1) * 4));
+      return row;
+    });
+    let components = [...buttonRows];
+    return components;
   }
 
   public static createWordUrl(word: Word): string {

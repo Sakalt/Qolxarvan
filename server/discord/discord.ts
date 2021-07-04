@@ -77,13 +77,36 @@ export class DiscordController extends Controller {
     let prefixResult = dictionary.search(prefixParameter);
     let displayedWord = (exactResult.words.length > 0) ? exactResult.words[0] : (prefixResult.words.length > 0) ? prefixResult.words[0] : undefined;
     if (displayedWord !== undefined) {
-      let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, prefixResult);
+      let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, 0);
       let wordEmbed = ExtendedDictionary.createWordDiscordEmbed(displayedWord);
       let count = prefixResult.words.length;
       await interaction.reply({content: `kotikak a'l e sotik al'${count}. cafosis a'l e met acates.`, embeds: [resultEmbed, wordEmbed!]});
     } else {
-      let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, prefixResult);
+      let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, 0);
       await interaction.reply({content: "kotikak a'l e sotik adak.", embeds: [resultEmbed]});
+    }
+  }
+
+  @slash("palev-cac", "オンライン辞典から検索 (見出し語と訳語の両方から) を行ってその結果を返信します。", [
+    {name: "search", type: CommandOptionType.STRING, required: true, description: "検索する内容"},
+    {name: "exact", type: CommandOptionType.BOOLEAN, required: false, description: "完全一致にするかどうか (true: 完全一致, false: 部分一致)"}
+  ])
+  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
+    let search = interaction.options.get("search")?.value! as string;
+    let exact = interaction.options.get("exact")?.value as boolean | undefined;
+    await interaction.defer();
+    let dictionary = await ExtendedDictionary.fetch();
+    let parameter = new NormalParameter(search, "both", (exact) ? "exact" : "part", "ja", {diacritic: false, case: false});
+    let result = dictionary.search(parameter);
+    result.sizePerPage = 8;
+    if (result.words.length > 0) {
+      let embed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result, 0);
+      let components = ExtendedDictionary.createSearchResultDiscordComponents(parameter, result, 0);
+      let count = result.words.length;
+      await interaction.followUp({content: `kotikak a'l e sotik al'${count}. cafosis a'l e met acates.`, embeds: [embed], components});
+    } else {
+      let embed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result, 0);
+      await interaction.followUp({content: "kotikak a'l e sotik adak.", embeds: [embed]});
     }
   }
 
@@ -117,7 +140,7 @@ export class DiscordController extends Controller {
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let user = interaction.options.get("user")?.user ?? interaction.user;
     let record = await QuizRecord.fetch(client, user);
-    let embed = record.createEmbed();
+    let embed = record.createDiscordEmbed();
     await interaction.reply({embeds: [embed]});
   }
 
