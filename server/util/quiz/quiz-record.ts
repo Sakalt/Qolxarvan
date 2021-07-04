@@ -202,18 +202,18 @@ export class QuizRecord {
     ]);
   }
 
-  public createEmbed(): MessageEmbed {
+  public createDiscordEmbed(): MessageEmbed {
     let embed = new MessageEmbed();
     let counts = this.counts;
     embed.title = "シャレイア語検定成績";
     embed.color = 0x33C3FF;
     embed.setAuthor(this.user.username, this.user.avatarURL() ?? undefined);
-    let correctPercentString = (counts.all > 0) ? ` (**${(counts.correct / counts.all * 100).toFixed(1)}** %)` : " (**0.0** %)";
-    let wrongPercentString = (counts.all > 0) ? ` (**${(counts.wrong / counts.all * 100).toFixed(1)}** %)` : " (**0.0** %)";
-    let invalidPercentString = (counts.all > 0) ? ` (**${(counts.invalid / counts.all * 100).toFixed(1)}** %)` : " (**0.0** %)";
-    embed.addField("\u{2705} 正解", `**${counts.correct}** / ${counts.all}${correctPercentString}`, true);
-    embed.addField("\u{274E} 不正解", `**${counts.wrong}** / ${counts.all}${wrongPercentString}`, true);
-    embed.addField("\u{1F6AB} 無効", `**${counts.invalid}** / ${counts.all}${invalidPercentString}`, true);
+    let correctPercentString = (counts.all > 0) ? `(**${(counts.correct / counts.all * 100).toFixed(1)}** %)` : "(**0.0** %)";
+    let wrongPercentString = (counts.all > 0) ? `(**${(counts.wrong / counts.all * 100).toFixed(1)}** %)` : "(**0.0** %)";
+    let invalidPercentString = (counts.all > 0) ? `(**${(counts.invalid / counts.all * 100).toFixed(1)}** %)` : "(**0.0** %)";
+    embed.addField("\u{2705} 正解", `**${counts.correct}** / ${counts.all} ${correctPercentString}`, true);
+    embed.addField("\u{274E} 不正解", `**${counts.wrong}** / ${counts.all} ${wrongPercentString}`, true);
+    embed.addField("\u{1F6AB} 無効", `**${counts.invalid}** / ${counts.all} ${invalidPercentString}`, true);
     if (this.results.size > 0) {
       embed.addField("個別成績", this.resultMarkup, false);
     }
