@@ -21,9 +21,6 @@ import {
   SingleLoader
 } from "soxsot/dist/io";
 import {
-  ParameterUtils
-} from "/client/util/parameter";
-import {
   GoogleClient
 } from "/server/util/client";
 import {
@@ -227,7 +224,7 @@ export class ExtendedDictionary extends Dictionary {
     let buttons = [] as Array<MessageButton>;
     for (let index = 0 ; index < Math.min(result.words.length, offset + result.sizePerPage) ; index ++) {
       let word = result.words[index + offset];
-      let id = queryParser.stringify(ParameterUtils.serialize(parameter)) + `&kind=showWord&index=${index + offset}`;
+      let id = queryParser.stringify({commandName: "showWord", uniqueName: word.uniqueName});
       let button = new MessageButton();
       button.setLabel(word.name);
       button.setEmoji((index >= 9) ? "\u{1F51F}" : `${index + 1}\u{FE0F}\u{20E3}`);

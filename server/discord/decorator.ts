@@ -6,6 +6,10 @@ import {
   ClientEvents,
   CommandInteraction
 } from "discord.js";
+import * as queryParser from "query-string";
+import {
+  ParsedQuery
+} from "query-string";
 import "reflect-metadata";
 import {
   Controller
@@ -20,7 +24,7 @@ import {
 
 const KEY = Symbol("discord");
 
-type Metadata = Array<ListenerSpec | SlashSpec>;
+type Metadata = Array<ListenerSpec | SlashSpec | ButtonSpec>;
 type ClientEventKeys = keyof ClientEvents;
 type ListenerSpec = {
   name: string | symbol,
@@ -33,12 +37,19 @@ type SlashSpec = {
   options?: Array<ApplicationCommandOptionData>,
   event: "slash"
 };
+type ButtonSpec = {
+  name: string | symbol,
+  commandName: string,
+  event: "button"
+};
 
 type ControllerDecorator = (clazz: new() => Controller) => void;
 type ListenerMethodDecorator<E extends ClientEventKeys> = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ListenerMethod<E>>) => void;
 type SlashMethodDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<SlashMethod>) => void;
+type ButtonMethodDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ButtonMethod>) => void;
 type ListenerMethod<E extends ClientEventKeys> = (client: DiscordClient, ...args: ClientEvents[E]) => any;
 type SlashMethod = (client: DiscordClient, interaction: CommandInteraction) => any;
+type ButtonMethod = (client: DiscordClient, query: ParsedQuery, interaction: CommandInteraction) => any;
 
 export function controller(): ControllerDecorator {
   let decorator = function (clazz: new() => Controller): void {
@@ -48,6 +59,7 @@ export function controller(): ControllerDecorator {
       setSlash(this, client, metadata);
       registerListener(this, client, metadata);
       registerSlash(this, client, metadata);
+      registerButton(this, client, metadata);
       originalSetup(client);
     };
   };
@@ -70,8 +82,16 @@ export function slash(commandName: string, description: string, options?: Array<
   return decorator;
 }
 
+export function button(commandName: string): ButtonMethodDecorator {
+  let decorator = function (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ButtonMethod>): void {
+    let metadata = getMetadata(target);
+    metadata.push({name, commandName, event: "button"});
+  };
+  return decorator;
+}
+
 function registerListener(controller: any, client: DiscordClient, metadata: Metadata): void {
-  let listenerSpecs = metadata.filter((spec) => spec.event !== "slash") as Array<ListenerSpec>;
+  let listenerSpecs = metadata.filter((spec) => spec.event !== "slash" && spec.event !== "button") as Array<ListenerSpec>;
   for (let {name, event} of listenerSpecs) {
     client.on(event, async (...args) => {
       try {
@@ -91,6 +111,23 @@ function registerSlash(controller: any, client: DiscordClient, metadata: Metadat
         let spec = slashSpecs.find((spec) => spec.commandName === interaction.commandName);
         if (spec !== undefined) {
           await controller[spec.name](client, interaction);
+        }
+      }
+    } catch (error) {
+      client.error("Uncaught error", error);
+    }
+  });
+}
+
+function registerButton(controller: any, client: DiscordClient, metadata: Metadata): void {
+  let buttonSpecs = metadata.filter((spec) => spec.event === "button") as Array<ButtonSpec>;
+  client.on("interaction", async (interaction) => {
+    try {
+      if (interaction.isButton()) {
+        let query = queryParser.parse(interaction.customID);
+        let spec = buttonSpecs.find((spec) => spec.commandName === query.commandName);
+        if (spec !== undefined) {
+          await controller[spec.name](client, query, interaction);
         }
       }
     } catch (error) {

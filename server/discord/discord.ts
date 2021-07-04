@@ -8,12 +8,16 @@ import {
   Message
 } from "discord.js";
 import {
+  ParsedQuery
+} from "query-string";
+import {
   NormalParameter
 } from "soxsot";
 import {
   Controller
 } from "/server/discord/controller";
 import {
+  button,
   controller,
   listener,
   slash
@@ -107,6 +111,20 @@ export class DiscordController extends Controller {
     } else {
       let embed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result, 0);
       await interaction.followUp({content: "kotikak a'l e sotik adak.", embeds: [embed]});
+    }
+  }
+
+  @button("showWord")
+  private async [Symbol()](client: DiscordClient, query: ParsedQuery, interaction: CommandInteraction): Promise<void> {
+    let uniqueName = query.uniqueName! as string;
+    await interaction.defer();
+    let dictionary = await ExtendedDictionary.fetch();
+    let word = dictionary.findByUniqueName(uniqueName);
+    let embed = (word !== undefined) ? ExtendedDictionary.createWordDiscordEmbed(word) : undefined;
+    if (embed !== undefined) {
+      await interaction.followUp({embeds: [embed]});
+    } else {
+      await interaction.followUp("kodak e zel atùk.");
     }
   }
 
