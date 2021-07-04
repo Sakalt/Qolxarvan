@@ -70,29 +70,7 @@ export class DiscordController extends Controller {
     }
   }
 
-  @slash("palev", "オンライン辞典から検索 (見出し語と訳語の両方から完全一致と前方一致) を行ってその結果を返信します。", [
-    {name: "search", type: CommandOptionType.STRING, required: true, description: "検索する内容"}
-  ])
-  private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
-    let search = interaction.options.get("search")!.value! as string;
-    let dictionary = await ExtendedDictionary.fetch();
-    let exactParameter = new NormalParameter(search, "both", "exact", "ja", {diacritic: false, case: false});
-    let prefixParameter = new NormalParameter(search, "both", "prefix", "ja");
-    let exactResult = dictionary.search(exactParameter);
-    let prefixResult = dictionary.search(prefixParameter);
-    let displayedWord = (exactResult.words.length > 0) ? exactResult.words[0] : (prefixResult.words.length > 0) ? prefixResult.words[0] : undefined;
-    if (displayedWord !== undefined) {
-      let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, 0);
-      let wordEmbed = ExtendedDictionary.createWordDiscordEmbed(displayedWord);
-      let count = prefixResult.words.length;
-      await interaction.reply({content: `kotikak a'l e sotik al'${count}. cafosis a'l e met acates.`, embeds: [resultEmbed, wordEmbed!]});
-    } else {
-      let resultEmbed = ExtendedDictionary.createSearchResultDiscordEmbed(prefixParameter, exactResult, 0);
-      await interaction.reply({content: "kotikak a'l e sotik adak.", embeds: [resultEmbed]});
-    }
-  }
-
-  @slash("palev-cac", "オンライン辞典から検索 (見出し語と訳語の両方から) を行ってその結果を返信します。", [
+  @slash("palev", "オンライン辞典から検索 (見出し語と訳語の両方から) を行ってその結果を返信します。", [
     {name: "search", type: CommandOptionType.STRING, required: true, description: "検索する内容"},
     {name: "part", type: CommandOptionType.BOOLEAN, required: false, description: "部分一致にするかどうか (True: 部分一致, False: 完全一致)"}
   ])
