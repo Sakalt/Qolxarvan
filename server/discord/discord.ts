@@ -94,14 +94,14 @@ export class DiscordController extends Controller {
 
   @slash("palev-cac", "オンライン辞典から検索 (見出し語と訳語の両方から) を行ってその結果を返信します。", [
     {name: "search", type: CommandOptionType.STRING, required: true, description: "検索する内容"},
-    {name: "exact", type: CommandOptionType.BOOLEAN, required: false, description: "完全一致にするかどうか (true: 完全一致, false: 部分一致)"}
+    {name: "part", type: CommandOptionType.BOOLEAN, required: false, description: "部分一致にするかどうか (True: 部分一致, False: 完全一致)"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     let search = interaction.options.get("search")?.value! as string;
-    let exact = interaction.options.get("exact")?.value as boolean | undefined;
+    let part = interaction.options.get("part")?.value as boolean | undefined;
     await interaction.defer();
     let dictionary = await ExtendedDictionary.fetch();
-    let parameter = new NormalParameter(search, "both", (exact) ? "exact" : "part", "ja", {diacritic: true, case: false});
+    let parameter = new NormalParameter(search, "both", (part) ? "part" : "exact", "ja", {diacritic: true, case: false});
     let result = dictionary.search(parameter);
     result.sizePerPage = 10;
     if (result.words.length > 0) {
