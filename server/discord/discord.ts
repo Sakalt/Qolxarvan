@@ -86,7 +86,7 @@ export class DiscordController extends Controller {
       let embed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result, 0);
       let components = ExtendedDictionary.createSearchResultDiscordComponents(parameter, result, 0);
       let count = result.words.length;
-      await interaction.followUp({content: `kotikak a'l e sotik al'${count}. cafosis a'l e met acates.`, embeds: [embed], components});
+      await interaction.followUp({content: `kotikak a'l e sotik al'${count}.`, embeds: [embed], components});
     } else {
       let embed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result, 0);
       await interaction.followUp({content: "kotikak a'l e sotik adak.", embeds: [embed]});
