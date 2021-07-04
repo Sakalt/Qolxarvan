@@ -236,11 +236,11 @@ export class ExtendedDictionary extends Dictionary {
     });
     let previousPageButton = new MessageButton();
     let nextPageButton = new MessageButton();
-    previousPageButton.setEmoji("\u{2B05}");
+    previousPageButton.setEmoji("\u{2B05}\u{FE0F}");
     previousPageButton.setCustomID(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page - 1}));
     previousPageButton.setDisabled(page <= result.minPage);
     previousPageButton.setStyle("SECONDARY");
-    nextPageButton.setEmoji("\u{27A1}");
+    nextPageButton.setEmoji("\u{27A1}\u{FE0F}");
     nextPageButton.setCustomID(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page + 1}));
     nextPageButton.setDisabled(page >= result.maxPage);
     nextPageButton.setStyle("SECONDARY");
