@@ -2,6 +2,7 @@
 
 import {
   ApplicationCommandOptionData,
+  ButtonInteraction,
   ClientApplication,
   ClientEvents,
   CommandInteraction
@@ -49,7 +50,7 @@ type SlashMethodDecorator = (target: object, name: string | symbol, descriptor: 
 type ButtonMethodDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<ButtonMethod>) => void;
 type ListenerMethod<E extends ClientEventKeys> = (client: DiscordClient, ...args: ClientEvents[E]) => any;
 type SlashMethod = (client: DiscordClient, interaction: CommandInteraction) => any;
-type ButtonMethod = (client: DiscordClient, query: ParsedQuery, interaction: CommandInteraction) => any;
+type ButtonMethod = (client: DiscordClient, query: ParsedQuery, interaction: ButtonInteraction) => any;
 
 export function controller(): ControllerDecorator {
   let decorator = function (clazz: new() => Controller): void {

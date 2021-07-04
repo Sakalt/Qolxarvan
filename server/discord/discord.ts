@@ -4,6 +4,7 @@ import {
   ApplicationCommandOptionType as CommandOptionType
 } from "discord-api-types";
 import {
+  ButtonInteraction,
   CommandInteraction,
   Message
 } from "discord.js";
@@ -94,7 +95,7 @@ export class DiscordController extends Controller {
   }
 
   @button("word")
-  private async [Symbol()](client: DiscordClient, query: ParsedQuery, interaction: CommandInteraction): Promise<void> {
+  private async [Symbol()](client: DiscordClient, query: ParsedQuery, interaction: ButtonInteraction): Promise<void> {
     let uniqueName = query.uniqueName! as string;
     await interaction.defer();
     let dictionary = await ExtendedDictionary.fetch();
@@ -108,7 +109,7 @@ export class DiscordController extends Controller {
   }
 
   @button("page")
-  private async [Symbol()](client: DiscordClient, query: ParsedQuery, interaction: CommandInteraction): Promise<void> {
+  private async [Symbol()](client: DiscordClient, query: ParsedQuery, interaction: ButtonInteraction): Promise<void> {
     let search = query.search! as string;
     let type = query.type! as WordType;
     let page = +query.page!;
