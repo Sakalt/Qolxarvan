@@ -125,7 +125,7 @@ function registerButton(controller: any, client: DiscordClient, metadata: Metada
     try {
       if (interaction.isButton()) {
         let query = queryParser.parse(interaction.customID);
-        let spec = buttonSpecs.find((spec) => spec.commandName === query.commandName);
+        let spec = buttonSpecs.find((spec) => spec.commandName === query.name);
         if (spec !== undefined) {
           await controller[spec.name](client, query, interaction);
         }

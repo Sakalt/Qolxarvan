@@ -199,46 +199,54 @@ export class ExtendedDictionary extends Dictionary {
     let embed = new MessageEmbed();
     embed.title = "検索結果";
     embed.url = ExtendedDictionary.createParameterUrl(parameter);
-    embed.description = "単語名が書かれたボタンをクリックすると、その単語の詳細情報が表示されます。";
+    embed.description = "単語名が書かれたボタンを押すと、その単語の詳細情報が表示されます。矢印ボタンを押すと、前もしくは次のページの検索結果が表示されます。";
     let value = "";
-    let offset = result.sizePerPage * page;
-    for (let index = 0 ; index < Math.min(result.words.length, offset + result.sizePerPage) ; index ++) {
+    result.sliceWords(page).forEach((word, index) => {
       let parser = Parser.createSimple();
-      let word = result.words[index + offset];
       let equivalentNames = parser.lookupEquivalentNames(word, "ja", true) ?? [];
       value += (index >= 9) ? "\u{1F51F}" : `${index + 1}\u{FE0F}\u{20E3}`;
       value += ` **${word.name}**`;
       value += ` — ${equivalentNames.join(", ")}`;
       value += "\n";
-    }
+    });
     if (value === "") {
       value += "該当なし";
     }
-    let fieldName = `${offset + 1} 件目～ ${Math.min(result.words.length, offset + result.sizePerPage)} 件目 / ${result.words.length} 件`;
+    let firstIndex = result.sizePerPage * page + 1;
+    let lastIndex = Math.min(result.words.length, result.sizePerPage * page + result.sizePerPage);
+    let fieldName = `${firstIndex} 件目～ ${lastIndex} 件目 / ${result.words.length} 件`;
     embed.addField(fieldName, value);
     return embed;
   }
 
   public static createSearchResultDiscordComponents(parameter: NormalParameter, result: SearchResult, page: number): Array<MessageActionRow> {
-    let offset = result.sizePerPage * page;
-    let buttons = [] as Array<MessageButton>;
-    for (let index = 0 ; index < Math.min(result.words.length, offset + result.sizePerPage) ; index ++) {
-      let word = result.words[index + offset];
-      let id = queryParser.stringify({commandName: "showWord", uniqueName: word.uniqueName});
-      let button = new MessageButton();
-      button.setLabel(word.name);
-      button.setEmoji((index >= 9) ? "\u{1F51F}" : `${index + 1}\u{FE0F}\u{20E3}`);
-      button.setStyle("SECONDARY");
-      button.setCustomID(id);
-      buttons.push(button);
-    }
-    let buttonRowCount = Math.ceil(buttons.length / 5);
-    let buttonRows = [...Array(buttonRowCount)].map((value, index) => {
-      let row = new MessageActionRow();
-      row.addComponents(...buttons.slice(index * 5, (index + 1) * 5));
-      return row;
+    let wordButtons = result.sliceWords(page).map((word, index) => {
+      let wordButton = new MessageButton();
+      wordButton.setLabel(word.name);
+      wordButton.setEmoji((index >= 9) ? "\u{1F51F}" : `${index + 1}\u{FE0F}\u{20E3}`);
+      wordButton.setCustomID(queryParser.stringify({name: "word", uniqueName: word.uniqueName}));
+      wordButton.setStyle("SECONDARY");
+      return wordButton;
     });
-    let components = [...buttonRows];
+    let wordRowCount = Math.ceil(wordButtons.length / 5);
+    let wordRows = [...Array(wordRowCount)].map((value, index) => {
+      let wordRow = new MessageActionRow();
+      wordRow.addComponents(...wordButtons.slice(index * 5, (index + 1) * 5));
+      return wordRow;
+    });
+    let previousPageButton = new MessageButton();
+    let nextPageButton = new MessageButton();
+    previousPageButton.setEmoji("\u{2B05}");
+    previousPageButton.setCustomID(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page - 1}));
+    previousPageButton.setDisabled(page <= result.minPage);
+    previousPageButton.setStyle("SECONDARY");
+    nextPageButton.setEmoji("\u{27A1}");
+    nextPageButton.setCustomID(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page + 1}));
+    nextPageButton.setDisabled(page >= result.maxPage);
+    nextPageButton.setStyle("SECONDARY");
+    let pageRow = new MessageActionRow();
+    pageRow.addComponents(previousPageButton, nextPageButton);
+    let components = [...wordRows, pageRow];
     return components;
   }
 

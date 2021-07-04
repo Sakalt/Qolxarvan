@@ -11,7 +11,8 @@ import {
   ParsedQuery
 } from "query-string";
 import {
-  NormalParameter
+  NormalParameter,
+  WordType
 } from "soxsot";
 import {
   Controller
@@ -100,7 +101,7 @@ export class DiscordController extends Controller {
     let exact = interaction.options.get("exact")?.value as boolean | undefined;
     await interaction.defer();
     let dictionary = await ExtendedDictionary.fetch();
-    let parameter = new NormalParameter(search, "both", (exact) ? "exact" : "part", "ja", {diacritic: false, case: false});
+    let parameter = new NormalParameter(search, "both", (exact) ? "exact" : "part", "ja", {diacritic: true, case: false});
     let result = dictionary.search(parameter);
     result.sizePerPage = 10;
     if (result.words.length > 0) {
@@ -114,7 +115,7 @@ export class DiscordController extends Controller {
     }
   }
 
-  @button("showWord")
+  @button("word")
   private async [Symbol()](client: DiscordClient, query: ParsedQuery, interaction: CommandInteraction): Promise<void> {
     let uniqueName = query.uniqueName! as string;
     await interaction.defer();
@@ -123,6 +124,25 @@ export class DiscordController extends Controller {
     let embed = (word !== undefined) ? ExtendedDictionary.createWordDiscordEmbed(word) : undefined;
     if (embed !== undefined) {
       await interaction.followUp({embeds: [embed]});
+    } else {
+      await interaction.followUp("kodak e zel atùk.");
+    }
+  }
+
+  @button("page")
+  private async [Symbol()](client: DiscordClient, query: ParsedQuery, interaction: CommandInteraction): Promise<void> {
+    let search = query.search! as string;
+    let type = query.type! as WordType;
+    let page = +query.page!;
+    await interaction.defer();
+    let dictionary = await ExtendedDictionary.fetch();
+    let parameter = new NormalParameter(search, "both", type, "ja", {diacritic: true, case: false});
+    let result = dictionary.search(parameter);
+    result.sizePerPage = 10;
+    if (page >= result.minPage && page <= result.maxPage) {
+      let embed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result, page);
+      let components = ExtendedDictionary.createSearchResultDiscordComponents(parameter, result, page);
+      await interaction.followUp({embeds: [embed], components});
     } else {
       await interaction.followUp("kodak e zel atùk.");
     }
