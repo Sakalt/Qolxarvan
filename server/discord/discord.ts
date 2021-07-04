@@ -98,7 +98,7 @@ export class DiscordController extends Controller {
     let dictionary = await ExtendedDictionary.fetch();
     let parameter = new NormalParameter(search, "both", (exact) ? "exact" : "part", "ja", {diacritic: false, case: false});
     let result = dictionary.search(parameter);
-    result.sizePerPage = 8;
+    result.sizePerPage = 10;
     if (result.words.length > 0) {
       let embed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result, 0);
       let components = ExtendedDictionary.createSearchResultDiscordComponents(parameter, result, 0);

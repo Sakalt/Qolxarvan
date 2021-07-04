@@ -209,8 +209,8 @@ export class ExtendedDictionary extends Dictionary {
       let parser = Parser.createSimple();
       let word = result.words[index + offset];
       let equivalentNames = parser.lookupEquivalentNames(word, "ja", true) ?? [];
-      value += `${index + 1}\u{20E3} `;
-      value += `**[${word.name}](${ExtendedDictionary.createWordUrl(word)})**`;
+      value += (index >= 9) ? "\u{1F51F}" : `${index + 1}\u{FE0F}\u{20E3}`;
+      value += ` **${word.name}**`;
       value += ` — ${equivalentNames.join(", ")}`;
       value += "\n";
     }
@@ -230,15 +230,15 @@ export class ExtendedDictionary extends Dictionary {
       let id = queryParser.stringify(ParameterUtils.serialize(parameter)) + `&kind=showWord&index=${index + offset}`;
       let button = new MessageButton();
       button.setLabel(word.name);
-      button.setEmoji(`${index + 1}\u{20E3}`);
+      button.setEmoji((index >= 9) ? "\u{1F51F}" : `${index + 1}\u{FE0F}\u{20E3}`);
       button.setStyle("SECONDARY");
       button.setCustomID(id);
       buttons.push(button);
     }
-    let buttonRowCount = Math.ceil(buttons.length / 4);
+    let buttonRowCount = Math.ceil(buttons.length / 5);
     let buttonRows = [...Array(buttonRowCount)].map((value, index) => {
       let row = new MessageActionRow();
-      row.addComponents(...buttons.slice(index * 4, (index + 1) * 4));
+      row.addComponents(...buttons.slice(index * 5, (index + 1) * 5));
       return row;
     });
     let components = [...buttonRows];
