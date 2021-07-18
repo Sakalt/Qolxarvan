@@ -167,7 +167,7 @@ export class ExtendedDictionary extends Dictionary {
       embed.addField("品詞", `❬${section.sort}❭`, true);
       embed.addField("発音", `/${word.pronunciation}/`, true);
       embed.addField("造語日", `ᴴ${word.date}`, true);
-      let normalInformationFields = section.getNormalInformations(true).map((information) => {
+      let normalInformationFields = section.getNormalInformations(true).filter((information) => information.kind !== "task" && information.kind !== "history").map((information) => {
         let normalInformationField = {name: information.getKindName("ja")!, value: information.text, inline: false};
         return normalInformationField;
       });

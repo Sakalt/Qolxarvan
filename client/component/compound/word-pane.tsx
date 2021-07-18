@@ -74,7 +74,7 @@ export default class WordPane extends Component<Props, State> {
 
   private renderSection(section: Section<ReactNode>, index: number): ReactNode {
     let equivalents = section.getEquivalents(true);
-    let normalInformations = section.getNormalInformations(true);
+    let normalInformations = section.getNormalInformations(true).filter((information) => information.kind !== "task" && information.kind !== "history");
     let phraseInformations = section.getPhraseInformations(true);
     let exampleInformations = section.getExampleInformations(true);
     let relations = section.relations;
