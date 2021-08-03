@@ -45,6 +45,7 @@ import {
 export class DictionaryController extends Controller {
 
   @get("/fetch")
+  @before(cors())
   public async [Symbol()](request: Request, response: Response): Promise<void> {
     let dictionary = await ExtendedDictionary.fetch();
     let plainDictionary = dictionary.toPlain();
@@ -80,6 +81,7 @@ export class DictionaryController extends Controller {
   }
 
   @get("/download")
+  @before(cors())
   public async [Symbol()](request: Request, response: Response): Promise<void> {
     let validator = val.object({
       kind: val.enums("single", "oldShaleian")
