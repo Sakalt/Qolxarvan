@@ -10,7 +10,7 @@ $relation-marker-width: 15rpx;
 .head {
   @include pane($head-background-color, $head-border-color);
   margin: 0rpx;
-  padding: 10rpx $content-horizontal-padding 10rpx $content-horizontal-padding;
+  padding: 7rpx $content-horizontal-padding 7rpx $content-horizontal-padding;
   color: $blue-color;
   border-radius: $border-radius $border-radius 0rpx 0rpx;
   position: relative;
