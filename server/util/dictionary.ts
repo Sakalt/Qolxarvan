@@ -21,13 +21,15 @@ import {
   SingleLoader
 } from "soxsot/dist/io";
 import {
-  GoogleClient
+  GoogleClient,
+  NotionClient,
+  NotionData
 } from "/server/util/client";
 import {
   getTempFilePath
 } from "/server/util/misc";
 import {
-  COMMISSION_SPREADSHEET_ID,
+  COMMISSION_NOTION_ID,
   DICTIONARY_ID,
   HISTORY_SPREADSHEET_ID
 } from "/server/variable";
@@ -69,10 +71,14 @@ export class ExtendedDictionary extends Dictionary {
   }
 
   public async addCommissions(names: Array<string>): Promise<number> {
-    let spreadsheet = await GoogleClient.instance.fetchSpreadsheet(COMMISSION_SPREADSHEET_ID);
-    let sheet = spreadsheet.sheetsByIndex[0];
-    let rows = await sheet.addRows(names.map((name) => ({name})));
-    return rows.length;
+    let promises = names.map(async (name) => {
+      await NotionClient.instance.addPage(COMMISSION_NOTION_ID, [
+        {name: "title", data: NotionData.createTitle([NotionData.createRichTextItem(name)])},
+        {name: "依頼日", data: NotionData.createDate(new Date())}
+      ]);
+    });
+    await Promise.all(promises);
+    return names.length;
   }
 
   // 現在の単語数を Google スプレッドシートに保存します。
