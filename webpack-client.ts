@@ -107,7 +107,9 @@ let config = {
   devServer: {
     port: 3000,
     historyApiFallback: true,
-    contentBase: path.join(__dirname, "dist", "client"),
+    static: {
+      directory: path.join(__dirname, "dist", "client")
+    },
     proxy: {
       "/api": "http://localhost:8050",
       "/static": "http://localhost:8050"
