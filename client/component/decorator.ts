@@ -24,8 +24,8 @@ import {
 
 
 export function style(style: any, options: DecoratorOptions = {}): ClassDecorator {
-  let nextOptions = Object.assign({}, DEFAULT_DECORATOR_OPTIONS, options);
-  let decorator = function <P, C extends ComponentClass<P>>(component: ComponentClass<P> & C): ComponentClass<P> & C {
+  const nextOptions = Object.assign({}, DEFAULT_DECORATOR_OPTIONS, options);
+  const decorator = function <P, C extends ComponentClass<P>>(component: ComponentClass<P> & C): ComponentClass<P> & C {
     if (style !== null && style !== undefined) {
       component = css(style, {allowMultiple: true, handleNotFoundStyleName: "ignore"})(component);
     }
@@ -47,8 +47,8 @@ export function style(style: any, options: DecoratorOptions = {}): ClassDecorato
 }
 
 function wrappedWithRouter<P extends Partial<RouteComponentProps<any>>, C extends ComponentClass<P>>(component: ComponentClass<P> & C): ComponentClass<P> & C {
-  let anyComponent = component as any;
-  let resultComponent = withRouter(anyComponent) as any;
+  const anyComponent = component as any;
+  const resultComponent = withRouter(anyComponent) as any;
   return resultComponent;
 }
 
@@ -57,8 +57,8 @@ function wrappedInject<P extends {store?: GlobalStore}, C extends ComponentClass
 }
 
 function wrappedInjectIntl<P extends {intl?: IntlShape}, C extends ComponentClass<P>>(component: ComponentClass<P> & C): ComponentClass<P> & C {
-  let anyComponent = component as any;
-  let resultComponent = injectIntl(anyComponent) as any;
+  const anyComponent = component as any;
+  const resultComponent = injectIntl(anyComponent) as any;
   return resultComponent;
 }
 

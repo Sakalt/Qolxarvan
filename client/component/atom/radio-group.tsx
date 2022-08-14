@@ -16,7 +16,7 @@ import {
 export default class RadioGroup<V extends string> extends Component<Props<V>, State<V>> {
 
   private handleChange(event: ChangeEvent<HTMLInputElement>): void {
-    let value = event.target.value as V;
+    const value = event.target.value as V;
     if (this.props.onChange) {
       this.props.onChange(event);
     }
@@ -26,11 +26,11 @@ export default class RadioGroup<V extends string> extends Component<Props<V>, St
   }
 
   public render(): ReactNode {
-    let radioNodes = Array.from(this.props.specs).map((spec, index) => {
-      let checked = spec.value === this.props.value;
+    const radioNodes = Array.from(this.props.specs).map((spec, index) => {
+      const checked = spec.value === this.props.value;
       return <Radio name={this.props.name} value={spec.value} label={spec.label} checked={checked} onChange={this.handleChange.bind(this)} key={index}/>;
     });
-    let node = (
+    const node = (
       <div styleName="root" className={this.props.className}>
         {radioNodes}
       </div>

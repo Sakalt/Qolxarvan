@@ -24,7 +24,7 @@ export default class Checkbox extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <label styleName="root" className={this.props.className}>
         <input styleName="checkbox" type="checkbox" name={this.props.name} value={this.props.value} checked={this.props.checked} onChange={this.handleChange.bind(this)}/>
         <span styleName="label">{this.props.label}</span>

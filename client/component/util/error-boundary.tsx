@@ -1,6 +1,5 @@
 //
 
-import * as react from "react";
 import {
   ComponentType,
   ErrorInfo,
@@ -33,7 +32,7 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   public render(): ReactNode {
     if (this.state.error !== null) {
-      let node = createElement(this.props.component, this.state);
+      const node = createElement(this.props.component, this.state);
       return node;
     } else {
       return this.props.children;

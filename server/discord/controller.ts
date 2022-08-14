@@ -11,7 +11,7 @@ export class Controller {
   }
 
   public static setup<C extends Controller>(this: new() => C, client: DiscordClient): C {
-    let controller = new this();
+    const controller = new this();
     controller.setup(client);
     return controller;
   }

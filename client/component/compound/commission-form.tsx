@@ -19,7 +19,7 @@ export default class CommissionForm extends Component<Props, State> {
   };
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <form styleName="root" onSubmit={(event) => event.preventDefault()}>
         <div styleName="textarea-wrapper">
           <Input value={this.state.nameString} onSet={(nameString) => this.setState({nameString})}/>

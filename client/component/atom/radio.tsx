@@ -21,7 +21,7 @@ export default class Radio extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <label styleName="root" className={this.props.className}>
         <input styleName="radio" type="radio" name={this.props.name} value={this.props.value} checked={this.props.checked} onChange={this.handleChange.bind(this)}/>
         <span styleName="label">{this.props.label}</span>

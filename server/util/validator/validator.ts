@@ -14,7 +14,7 @@ export class Validator<A, O> {
   }
 
   public validate(input: unknown): [O, undefined] | [undefined, Array<ValidationFailInvalid>] {
-    let result = this.go(input, "");
+    const result = this.go(input, "");
     if (Validator.isSuccess(result)) {
       return [result.output, undefined];
     } else {
@@ -23,7 +23,7 @@ export class Validator<A, O> {
   }
 
   public coerce(input: unknown): O {
-    let result = this.go(input, "");
+    const result = this.go(input, "");
     if (Validator.isSuccess(result)) {
       return result.output;
     } else {
@@ -32,13 +32,13 @@ export class Validator<A, O> {
   }
 
   public check(input: unknown): input is A {
-    let result = this.go(input, "");
-    let predicate = Validator.isSuccess(result);
+    const result = this.go(input, "");
+    const predicate = Validator.isSuccess(result);
     return predicate;
   }
 
   public assert(input: unknown): asserts input is A {
-    let result = this.go(input, "");
+    const result = this.go(input, "");
     if (Validator.isFail(result)) {
       throw new ValidationError(result.invalids);
     }

@@ -31,12 +31,12 @@ export default class BaseComponent<P = {}, S = {}, Q = {}, H = any> extends Comp
   protected trans(id: string | number, values?: Record<string, Primitive | FormatFunction<string, string>>): string;
   protected trans(id: string | number, values?: Record<string, Primitive | ReactNode | FormatFunction<ReactNode, ReactNode>>): ReactNode;
   protected trans(id: string | number, values?: Record<string, any>): ReactNode {
-    let defaultMessage = "[?]";
+    const defaultMessage = "[?]";
     return this.props.intl!.formatMessage({id, defaultMessage}, values);
   }
 
   protected transNumber(number: number | null | undefined, digit?: number): string {
-    let options = {minimumFractionDigits: digit, maximumFractionDigits: digit};
+    const options = {minimumFractionDigits: digit, maximumFractionDigits: digit};
     if (number !== null && number !== undefined) {
       return this.props.intl!.formatNumber(number, options);
     } else {

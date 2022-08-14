@@ -65,8 +65,8 @@ export default class DictionaryPage extends Component<Props, State> {
   private async fetchDictionary(): Promise<void> {
     this.setState({dictionary: null});
     try {
-      let response = await axios.get("/api/dictionary/fetch");
-      let dictionary = Dictionary.fromPlain(response.data);
+      const response = await axios.get("/api/dictionary/fetch");
+      const dictionary = Dictionary.fromPlain(response.data);
       this.setState({dictionary}, () => {
         this.updateWordsImmediately(false);
       });
@@ -76,10 +76,10 @@ export default class DictionaryPage extends Component<Props, State> {
   }
 
   private async updateWordsImmediately(serialize: boolean = true): Promise<void> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let parameter = this.state.parameter;
-      let searchResult = dictionary.search(parameter);
+      const parameter = this.state.parameter;
+      const searchResult = dictionary.search(parameter);
       this.setState({searchResult, showExplanation: false});
       if (serialize) {
         this.serializeQuery();
@@ -93,9 +93,9 @@ export default class DictionaryPage extends Component<Props, State> {
   }
 
   private updateWordsByName(name: string): void {
-    let language = this.props.store!.locale;
-    let parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false});
-    let page = 0;
+    const language = this.props.store!.locale;
+    const parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false});
+    const page = 0;
     this.setState({parameter, page}, () => {
       window.scrollTo(0, 0);
       this.updateWordsImmediately();
@@ -103,12 +103,12 @@ export default class DictionaryPage extends Component<Props, State> {
   }
 
   private deserializeQuery(first: boolean, callback?: () => void): void {
-    let queryString = this.props.location!.search;
-    let query = queryParser.parse(queryString);
-    let language = this.props.store!.locale;
-    let parameter = ParameterUtils.deserialize(query, language);
-    let page = (typeof query.page === "string") ? +query.page : 0;
-    let showExplanation = Object.keys(query).length <= 0;
+    const queryString = this.props.location!.search;
+    const query = queryParser.parse(queryString);
+    const language = this.props.store!.locale;
+    const parameter = ParameterUtils.deserialize(query, language);
+    const page = (typeof query.page === "string") ? +query.page : 0;
+    const showExplanation = Object.keys(query).length <= 0;
     if (first) {
       this.state = Object.assign(this.state, {parameter, page, showExplanation});
       if (callback) {
@@ -120,12 +120,12 @@ export default class DictionaryPage extends Component<Props, State> {
   }
 
   private serializeQuery(): void {
-    let queryString = queryParser.stringify(ParameterUtils.serialize(this.state.parameter)) + `&page=${this.state.page}`;
+    const queryString = queryParser.stringify(ParameterUtils.serialize(this.state.parameter)) + `&page=${this.state.page}`;
     this.props.history!.push({search: queryString});
   }
 
   private async handleParameterSet(parameter: Parameter): Promise<void> {
-    let page = 0;
+    const page = 0;
     this.setState({parameter, page}, async () => {
       await this.updateWords();
     });
@@ -139,9 +139,9 @@ export default class DictionaryPage extends Component<Props, State> {
   }
 
   private renderWordList(): ReactNode {
-    let minPage = this.state.searchResult.minPage;
-    let maxPage = this.state.searchResult.maxPage;
-    let node = (
+    const minPage = this.state.searchResult.minPage;
+    const maxPage = this.state.searchResult.maxPage;
+    const node = (
       <Fragment>
         <div styleName="suggestion-list">
           <SuggestionList
@@ -167,10 +167,10 @@ export default class DictionaryPage extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let innerNode = (this.state.dictionary !== null) && (
+    const innerNode = (this.state.dictionary !== null) && (
       (this.state.showExplanation) ? this.renderWordList() : this.renderWordList()
     );
-    let node = (
+    const node = (
       <Page>
         <div styleName="header">
           <Logo/>

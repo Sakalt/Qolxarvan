@@ -28,26 +28,26 @@ export default class SearchForm extends Component<Props, State> {
 
   private handleParameterSet(nextParameter: {search?: string, mode?: WordMode, type?: WordType, ignoreDiacritic?: boolean}): void {
     if (this.props.onParameterSet) {
-      let oldParameter = ParameterUtils.getNormal(this.props.parameter);
-      let search = nextParameter.search ?? oldParameter.search;
-      let mode = nextParameter.mode ?? oldParameter.mode;
-      let type = nextParameter.type ?? oldParameter.type;
-      let language = this.props.store!.locale;
-      let ignoreCase = oldParameter.ignoreOptions.case;
-      let ignoreDiacritic = nextParameter.ignoreDiacritic ?? oldParameter.ignoreOptions.diacritic;
-      let ignoreOptions = {case: ignoreCase, diacritic: ignoreDiacritic};
-      let parameter = new NormalParameter(search, mode, type, language, ignoreOptions);
+      const oldParameter = ParameterUtils.getNormal(this.props.parameter);
+      const search = nextParameter.search ?? oldParameter.search;
+      const mode = nextParameter.mode ?? oldParameter.mode;
+      const type = nextParameter.type ?? oldParameter.type;
+      const language = this.props.store!.locale;
+      const ignoreCase = oldParameter.ignoreOptions.case;
+      const ignoreDiacritic = nextParameter.ignoreDiacritic ?? oldParameter.ignoreOptions.diacritic;
+      const ignoreOptions = {case: ignoreCase, diacritic: ignoreDiacritic};
+      const parameter = new NormalParameter(search, mode, type, language, ignoreOptions);
       this.props.onParameterSet(parameter);
     }
   }
 
   public render(): ReactNode {
-    let modes = ["both", "name", "equivalent", "content"] as const;
-    let types = ["prefix", "part", "exact", "regular", "pair"] as const;
-    let modeSpecs = modes.map((mode) => ({value: mode, label: this.trans(`searchForm.${mode}`)}));
-    let typeSpecs = types.map((type) => ({value: type, label: this.trans(`searchForm.${type}`)}));
-    let parameter = ParameterUtils.getNormal(this.props.parameter);
-    let node = (
+    const modes = ["both", "name", "equivalent", "content"] as const;
+    const types = ["prefix", "part", "exact", "regular", "pair"] as const;
+    const modeSpecs = modes.map((mode) => ({value: mode, label: this.trans(`searchForm.${mode}`)}));
+    const typeSpecs = types.map((type) => ({value: type, label: this.trans(`searchForm.${type}`)}));
+    const parameter = ParameterUtils.getNormal(this.props.parameter);
+    const node = (
       <form styleName="root" onSubmit={(event) => event.preventDefault()}>
         <div styleName="input-wrapper">
           <Input value={parameter.search} onSet={(search) => this.handleParameterSet({search})}/>
@@ -74,7 +74,7 @@ export default class SearchForm extends Component<Props, State> {
 type Props = {
   dictionary: Dictionary,
   parameter: Parameter,
-  onParameterSet?: (parameter: Parameter) => void;
+  onParameterSet?: (parameter: Parameter) => void
 };
 type State = {
 };

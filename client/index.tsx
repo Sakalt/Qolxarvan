@@ -21,7 +21,7 @@ export class Main {
   }
 
   private appendIconElement(): void {
-    let element = document.createElement("link");
+    const element = document.createElement("link");
     element.href = "https://kit-free.fontawesome.com/releases/latest/css/free.min.css";
     element.rel = "stylesheet";
     element.media = "all";
@@ -31,5 +31,5 @@ export class Main {
 }
 
 
-let main = new Main();
+const main = new Main();
 main.main();

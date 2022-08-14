@@ -33,8 +33,8 @@ export class Quiz {
   }
 
   public static async *iterate(client: Client): AsyncGenerator<QuizIteration> {
-    for await (let {number, sources} of Quiz.iterateRaw(client)) {
-      let quiz = Quiz.parse(sources);
+    for await (const {number, sources} of Quiz.iterateRaw(client)) {
+      const quiz = Quiz.parse(sources);
       if (quiz !== undefined) {
         yield {number, sources, quiz};
       }
@@ -42,18 +42,18 @@ export class Quiz {
   }
 
   public static async *iterateRaw(client: Client): AsyncGenerator<QuizRawIteration> {
-    let channel = client.channels.cache.get(DISCORD_IDS.channel.sokad.zelad);
+    const channel = client.channels.cache.get(DISCORD_IDS.channel.sokad.zelad);
     if (channel instanceof TextChannel) {
       let before = undefined as Snowflake | undefined;
-      let sourceMap = new Map<number, Partial<QuizSources>>();
+      const sourceMap = new Map<number, Partial<QuizSources>>();
       while (true) {
-        let messages = await channel.messages.fetch({limit: 100, before});
-        for (let [, message] of messages) {
-          let problemMatch = message.content.match(/^\*\*\[\s*(\d+)\s*\]\*\*\s*(☆|★)*\s*\n/);
-          let commentaryMatch = message.content.match(/^\*\*\[\s*(\d+)\s*\]\*\*\s*解説\s*\n/);
+        const messages = await channel.messages.fetch({limit: 100, before});
+        for (const [, message] of messages) {
+          const problemMatch = message.content.match(/^\*\*\[\s*(\d+)\s*\]\*\*\s*(☆|★)*\s*\n/);
+          const commentaryMatch = message.content.match(/^\*\*\[\s*(\d+)\s*\]\*\*\s*解説\s*\n/);
           if (problemMatch !== null || commentaryMatch !== null) {
-            let number = +(problemMatch ?? commentaryMatch)![1];
-            let partialSources = sourceMap.get(number) ?? {};
+            const number = +(problemMatch ?? commentaryMatch)![1];
+            const partialSources = sourceMap.get(number) ?? {};
             if (problemMatch !== null) {
               partialSources.problem = message;
             } else {
@@ -61,7 +61,7 @@ export class Quiz {
             }
             if (partialSources.problem !== undefined && partialSources.commentary !== undefined) {
               sourceMap.delete(number);
-              let sources = partialSources as QuizSources;
+              const sources = partialSources as QuizSources;
               yield {number, sources};
             } else {
               sourceMap.set(number, partialSources);
@@ -77,9 +77,9 @@ export class Quiz {
   }
 
   public static async findByNumber(client: Client, number: number): Promise<Quiz | undefined> {
-    for await (let iteration of Quiz.iterateRaw(client)) {
+    for await (const iteration of Quiz.iterateRaw(client)) {
       if (iteration.number === number) {
-        let quiz = Quiz.parse(iteration.sources);
+        const quiz = Quiz.parse(iteration.sources);
         return quiz;
       }
     }
@@ -87,27 +87,27 @@ export class Quiz {
   }
 
   public static parse(sources: QuizSources): Quiz | undefined {
-    let wholeMatch = sources.commentary.content.match(/^(.+?)―{2,}\s*\n\s*\|\|(.+?)\|\|/s);
+    const wholeMatch = sources.commentary.content.match(/^(.+?)―{2,}\s*\n\s*\|\|(.+?)\|\|/s);
     if (wholeMatch) {
-      let mainLines = wholeMatch[1].trim().split(/\n/);
-      let commentaryLines = wholeMatch[2].trim().split(/\n/);
-      let numberMatch = mainLines[0]?.match(/^\*\*\[\s*(\d+)\s*\]\*\*/);
-      let difficultyMatch = sources.problem.content.match(/^\*\*\[\s*(\d+)\s*\]\*\*(?:\s*((?:☆|★)+))?/m);
-      let shaleianMatch = mainLines[1]?.match(/^>\s*(.+)/);
-      let translationMatch = mainLines[2]?.match(/^>\s*(.+)/);
-      let choiceMatch = mainLines[3]?.matchAll(/(..\u{20E3}|[\u{1F1E6}-\u{1F1FF}])\s*(.+?)\s*(　|$)/gu);
-      let answerMatch = commentaryLines[0]?.match(/\*\*\s*正解\s*\*\*\s*:\s*(.+)/);
+      const mainLines = wholeMatch[1].trim().split(/\n/);
+      const commentaryLines = wholeMatch[2].trim().split(/\n/);
+      const numberMatch = mainLines[0]?.match(/^\*\*\[\s*(\d+)\s*\]\*\*/);
+      const difficultyMatch = sources.problem.content.match(/^\*\*\[\s*(\d+)\s*\]\*\*(?:\s*((?:☆|★)+))?/m);
+      const shaleianMatch = mainLines[1]?.match(/^>\s*(.+)/);
+      const translationMatch = mainLines[2]?.match(/^>\s*(.+)/);
+      const choiceMatch = mainLines[3]?.matchAll(/(..\u{20E3}|[\u{1F1E6}-\u{1F1FF}])\s*(.+?)\s*(　|$)/gu);
+      const answerMatch = commentaryLines[0]?.match(/\*\*\s*正解\s*\*\*\s*:\s*(.+)/);
       if (mainLines.length >= 4 && commentaryLines.length >= 2 && numberMatch && shaleianMatch && translationMatch && answerMatch) {
-        let number = +numberMatch[1];
-        let difficulty = (difficultyMatch !== null) ? difficultyMatch[2] ?? null : null;
-        let shaleianSentence = shaleianMatch[1].trim();
-        let translationSentence = translationMatch[1].trim();
-        let sentences = {shaleian: shaleianSentence, translation: translationSentence};
-        let choices = Array.from(choiceMatch).map((match) => ({mark: match[1], content: match[2]}));
-        let answer = answerMatch[1].trim();
-        let commentary = commentaryLines.slice(1, -1).join("").trim();
-        let urls = {problem: sources.problem.url, commentary: sources.commentary.url};
-        let quiz = new Quiz(number, difficulty, sentences, choices, answer, commentary, urls);
+        const number = +numberMatch[1];
+        const difficulty = (difficultyMatch !== null) ? difficultyMatch[2] ?? null : null;
+        const shaleianSentence = shaleianMatch[1].trim();
+        const translationSentence = translationMatch[1].trim();
+        const sentences = {shaleian: shaleianSentence, translation: translationSentence};
+        const choices = Array.from(choiceMatch).map((match) => ({mark: match[1], content: match[2]}));
+        const answer = answerMatch[1].trim();
+        const commentary = commentaryLines.slice(1, -1).join("").trim();
+        const urls = {problem: sources.problem.url, commentary: sources.commentary.url};
+        const quiz = new Quiz(number, difficulty, sentences, choices, answer, commentary, urls);
         return quiz;
       } else {
         return undefined;
@@ -116,7 +116,7 @@ export class Quiz {
   }
 
   public createDiscordEmbed(): MessageEmbed {
-    let embed = new MessageEmbed();
+    const embed = new MessageEmbed();
     embed.title = `第 ${this.number} 問`;
     embed.description = this.questionMarkup;
     embed.color = 0x33C3FF;

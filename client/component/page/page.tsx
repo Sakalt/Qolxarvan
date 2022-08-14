@@ -14,7 +14,7 @@ import {
 export default class Page extends Component<Props, State> {
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <div styleName="root" id="page">
         <div styleName="spacer">
           <div styleName="content">

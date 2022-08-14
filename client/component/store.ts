@@ -19,7 +19,7 @@ export class GlobalStore {
 
   @action
   public async changeLocale(locale: string): Promise<void> {
-    let language = LANGUAGES.find((language) => language.locale === locale) ?? LANGUAGES[0];
+    const language = LANGUAGES.find((language) => language.locale === locale) ?? LANGUAGES[0];
     this.locale = locale;
     this.messages = language.messages;
     localStorage.setItem("locale", locale);
@@ -27,7 +27,7 @@ export class GlobalStore {
 
   @action
   public async defaultLocale(): Promise<void> {
-    let locale = localStorage.getItem("locale") ?? "ja";
+    const locale = localStorage.getItem("locale") ?? "ja";
     this.changeLocale(locale);
   }
 

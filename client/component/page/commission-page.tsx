@@ -2,7 +2,6 @@
 
 import * as react from "react";
 import {
-  Fragment,
   ReactNode
 } from "react";
 import Component from "/client/component/component";
@@ -24,7 +23,7 @@ export default class CommissionPage extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <Page>
         <div styleName="header">
           <Logo/>

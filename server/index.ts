@@ -45,19 +45,19 @@ export class Main {
 
   // リクエストボディをパースするミドルウェアの設定をします。
   private setupBodyParsers(): void {
-    let urlencodedParser = express.urlencoded({extended: false});
-    let jsonParser = express.json();
+    const urlencodedParser = express.urlencoded({extended: false});
+    const jsonParser = express.json();
     this.application.use(urlencodedParser);
     this.application.use(jsonParser);
   }
 
   private setupCookie(): void {
-    let middleware = cookieParser(COOKIE_SECRET);
+    const middleware = cookieParser(COOKIE_SECRET);
     this.application.use(middleware);
   }
 
   private setupMulter(): void {
-    let middleware = multer({dest: "./dist/upload/"}).single("file");
+    const middleware = multer({dest: "./dist/upload/"}).single("file");
     this.application.use("/api*", middleware);
   }
 
@@ -79,12 +79,12 @@ export class Main {
   }
 
   private setupFallbackHandlers(): void {
-    let internalHandler = function (request: Request, response: Response, next: NextFunction): void {
-      let fullUrl = request.protocol + "://" + request.get("host") + request.originalUrl;
+    const internalHandler = function (request: Request, response: Response, next: NextFunction): void {
+      const fullUrl = request.protocol + "://" + request.get("host") + request.originalUrl;
       response.status(404).end();
     };
-    let otherHandler = function (request: Request, response: Response, next: NextFunction): void {
-      let method = request.method;
+    const otherHandler = function (request: Request, response: Response, next: NextFunction): void {
+      const method = request.method;
       if ((method === "GET" || method === "HEAD") && request.accepts("html")) {
         response.sendFile(process.cwd() + "/dist/client/index.html", (error) => {
           if (error) {
@@ -100,7 +100,7 @@ export class Main {
   }
 
   private setupErrorHandler(): void {
-    let handler = function (error: any, request: Request, response: Response, next: NextFunction): void {
+    const handler = function (error: any, request: Request, response: Response, next: NextFunction): void {
       console.error(error);
       response.status(500).end();
     };
@@ -116,5 +116,5 @@ export class Main {
 }
 
 
-let main = new Main();
+const main = new Main();
 main.main();

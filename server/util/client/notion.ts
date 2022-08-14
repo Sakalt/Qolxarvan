@@ -16,15 +16,15 @@ export class NotionClient extends OriginalNotionClient {
   public static readonly instance: NotionClient = NotionClient.create();
 
   public static create(): NotionClient {
-    let client = new OriginalNotionClient({auth: NOTION_KEY}) as any;
+    const client = new OriginalNotionClient({auth: NOTION_KEY}) as any;
     Object.setPrototypeOf(client, NotionClient.prototype);
     return client;
   }
 
   public async addPage(databaseId: string, properties: Array<{name: string, data: any}>): Promise<void> {
-    let parentJson = {"database_id": databaseId};
-    let propertiesJson = Object.fromEntries(properties.map((property) => [property.name, property.data]));
-    let json = {"parent": parentJson, "properties": propertiesJson};
+    const parentJson = {"database_id": databaseId};
+    const propertiesJson = Object.fromEntries(properties.map((property) => [property.name, property.data]));
+    const json = {"parent": parentJson, "properties": propertiesJson};
     await NotionClient.instance.pages.create(json);
   }
 
@@ -34,7 +34,7 @@ export class NotionClient extends OriginalNotionClient {
 export class NotionData {
 
   public static createTitle(richTextItems: Array<any>): any {
-    let json = {
+    const json = {
       "type": "title",
       "title": richTextItems
     };
@@ -42,7 +42,7 @@ export class NotionData {
   }
 
   public static createRichText(richTextItems: Array<any>): any {
-    let json = {
+    const json = {
       "type": "rich_text",
       "rich_text": richTextItems
     };
@@ -50,10 +50,10 @@ export class NotionData {
   }
 
   public static createDate(start: Date, end?: Date | null): any {
-    let timeZone = "Asia/Tokyo";
-    let startString = formatToTimeZone(start, "YYYY-MM-DD[T]HH:mm:ssZ", {timeZone});
-    let endString = (end) ? formatToTimeZone(end, "YYYY-MM-DD[T]HH:mm:ssZ", {timeZone}) : null;
-    let json = {
+    const timeZone = "Asia/Tokyo";
+    const startString = formatToTimeZone(start, "YYYY-MM-DD[T]HH:mm:ssZ", {timeZone});
+    const endString = (end) ? formatToTimeZone(end, "YYYY-MM-DD[T]HH:mm:ssZ", {timeZone}) : null;
+    const json = {
       "type": "date",
       "date": {"start": startString, "end": endString}
     };
@@ -61,7 +61,7 @@ export class NotionData {
   }
 
   public static createCheckbox(checked: boolean): any {
-    let json = {
+    const json = {
       "type": "checkbox",
       "checkbox": checked
     };
@@ -69,7 +69,7 @@ export class NotionData {
   }
 
   public static createRichTextItem(content: string, annotations?: RichTextItemAnnotations): any {
-    let json = {
+    const json = {
       "type": "text",
       "text": {"content": content},
       "annotations": annotations ?? {}

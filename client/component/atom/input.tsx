@@ -20,7 +20,7 @@ export default class Input extends Component<Props, State> {
   };
 
   private handleChange(event: ChangeEvent<HTMLInputElement>): void {
-    let value = event.target.value;
+    const value = event.target.value;
     if (this.props.onSet) {
       this.props.onSet(value);
     }
@@ -30,7 +30,7 @@ export default class Input extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <div styleName="root" className={this.props.className}>
         <input
           styleName="input-inner"

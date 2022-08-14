@@ -23,7 +23,7 @@ export class GoogleClient extends OriginalGoogleClient {
   public static readonly instance: GoogleClient = GoogleClient.create();
 
   public static create(): GoogleClient {
-    let scopes = [
+    const scopes = [
       "https://www.googleapis.com/auth/drive",
       "https://www.googleapis.com/auth/drive.file",
       "https://www.googleapis.com/auth/drive.readonly",
@@ -32,26 +32,26 @@ export class GoogleClient extends OriginalGoogleClient {
       "https://www.googleapis.com/auth/drive.metadata",
       "https://www.googleapis.com/auth/drive.photos.readonly"
     ];
-    let client = new OriginalGoogleClient(GOOGLE_EMAIL, undefined, GOOGLE_KEY, scopes, undefined) as any;
+    const client = new OriginalGoogleClient(GOOGLE_EMAIL, undefined, GOOGLE_KEY, scopes, undefined) as any;
     Object.setPrototypeOf(client, GoogleClient.prototype);
     return client;
   }
 
   public async downloadFile(fileId: string): Promise<Readable> {
-    let drive = google.drive({version: "v3", auth: this});
-    let response = await drive.files.get({fileId, alt: "media"}, {responseType: "stream"});
-    let stream = response.data;
+    const drive = google.drive({version: "v3", auth: this});
+    const response = await drive.files.get({fileId, alt: "media"}, {responseType: "stream"});
+    const stream = response.data;
     return stream;
   }
 
   public async uploadFile(fileId: string, stream: Readable): Promise<void> {
-    let drive = google.drive({version: "v3", auth: this});
+    const drive = google.drive({version: "v3", auth: this});
     await drive.files.update({fileId, media: {body: stream}});
   }
 
   public async fetchSpreadsheet(fileId: string): Promise<GoogleSpreadsheet> {
-    let spreadsheet = new GoogleSpreadsheet(fileId);
-    let credentials = Object.fromEntries([["client_email", this.email!], ["private_key", this.key!]]) as any;
+    const spreadsheet = new GoogleSpreadsheet(fileId);
+    const credentials = Object.fromEntries([["client_email", this.email!], ["private_key", this.key!]]) as any;
     await spreadsheet.useServiceAccountAuth(credentials);
     await spreadsheet.loadInfo();
     return spreadsheet;

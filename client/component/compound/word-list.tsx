@@ -20,9 +20,9 @@ import {
 export default class WordList extends Component<Props, State> {
 
   public render(): ReactNode {
-    let displayedWords = this.props.searchResult.sliceWords(this.props.page);
-    let wordPanes = displayedWords.map((word) => {
-      let wordPane = (
+    const displayedWords = this.props.searchResult.sliceWords(this.props.page);
+    const wordPanes = displayedWords.map((word) => {
+      const wordPane = (
         <WordPane
           dictionary={this.props.dictionary}
           word={word}
@@ -32,7 +32,7 @@ export default class WordList extends Component<Props, State> {
       );
       return wordPane;
     });
-    let node = (
+    const node = (
       <div styleName="root">
         {wordPanes}
       </div>

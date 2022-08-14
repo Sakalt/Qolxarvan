@@ -20,9 +20,9 @@ import {
 export default class SuggestionList extends Component<Props, State> {
 
   public render(): ReactNode {
-    let displayedSuggestions = this.props.searchResult.suggestions;
-    let suggestionPanes = displayedSuggestions.map((suggestion, index) => {
-      let suggestionPane = (
+    const displayedSuggestions = this.props.searchResult.suggestions;
+    const suggestionPanes = displayedSuggestions.map((suggestion, index) => {
+      const suggestionPane = (
         <SuggestionPane
           dictionary={this.props.dictionary}
           suggestion={suggestion}
@@ -32,7 +32,7 @@ export default class SuggestionList extends Component<Props, State> {
       );
       return suggestionPane;
     });
-    let node = (suggestionPanes.length > 0) && (
+    const node = (suggestionPanes.length > 0) && (
       <div styleName="root">
         <ul styleName="list">
           {suggestionPanes}

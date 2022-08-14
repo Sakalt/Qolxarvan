@@ -21,7 +21,7 @@ export class DiscordClient extends OriginalDiscordClient {
   public static readonly instance: DiscordClient = DiscordClient.create();
 
   private static create(): DiscordClient {
-    let client = new OriginalDiscordClient({intents: Intents.ALL}) as any;
+    const client = new OriginalDiscordClient({intents: Intents.ALL}) as any;
     Object.setPrototypeOf(client, DiscordClient.prototype);
     client.login(DISCORD_KEY);
     return client;
@@ -29,10 +29,10 @@ export class DiscordClient extends OriginalDiscordClient {
 
   public async log(message: string): Promise<void> {
     try {
-      let channel = this.channels.resolve(DISCORD_IDS.channel.bot);
+      const channel = this.channels.resolve(DISCORD_IDS.channel.bot);
       if (channel instanceof TextChannel) {
-        let date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
-        let nextMessage = `__${date}__\n${message}`;
+        const date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
+        const nextMessage = `__${date}__\n${message}`;
         await channel.send(nextMessage);
       } else {
         throw new Error("cannot happen");
@@ -44,10 +44,10 @@ export class DiscordClient extends OriginalDiscordClient {
 
   public async error(message: string, error: Error): Promise<void> {
     try {
-      let channel = this.channels.resolve(DISCORD_IDS.channel.bot);
+      const channel = this.channels.resolve(DISCORD_IDS.channel.bot);
       if (channel instanceof TextChannel) {
-        let date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
-        let nextMessage = `__${date}__\n${message}\n\`\`\`\n${error.stack}\`\`\``;
+        const date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
+        const nextMessage = `__${date}__\n${message}\n\`\`\`\n${error.stack}\`\`\``;
         await channel.send(nextMessage);
       } else {
         throw new Error("cannot happen");

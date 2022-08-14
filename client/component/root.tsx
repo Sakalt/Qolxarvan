@@ -47,14 +47,14 @@ export class Root extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (this.state.ready) && (
+    const node = (this.state.ready) && (
       <Router history={this.history}>
         <Provider store={this.store}>
           <IntlProvider defaultLocale="ja" locale={this.store.locale} messages={this.store.messages}>
             <ScrollTop>
               <Switch>
-                <Route exact sensitive path="/" component={DictionaryPage}/>
-                <Route exact sensitive path="/request" component={CommissionPage}/>
+                <Route exact={true} sensitive={true} path="/" component={DictionaryPage}/>
+                <Route exact={true} sensitive={true} path="/request" component={CommissionPage}/>
               </Switch>
             </ScrollTop>
           </IntlProvider>

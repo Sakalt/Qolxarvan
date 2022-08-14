@@ -16,14 +16,14 @@ export default class Loading extends Component<Props, State> {
 
   public render(): ReactNode {
     if (this.props.loading) {
-      let node = (
+      const node = (
         <div styleName="root">
           <span styleName="spinner"/>
         </div>
       );
       return node;
     } else {
-      let node = (
+      const node = (
         <Fragment>
           {this.props.children}
         </Fragment>

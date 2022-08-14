@@ -20,7 +20,7 @@ export class Controller {
   }
 
   public static use<C extends Controller>(this: new() => C, application: Express): C {
-    let controller = new this();
+    const controller = new this();
     controller.setup();
     application.use(controller.path, controller.router);
     return controller;

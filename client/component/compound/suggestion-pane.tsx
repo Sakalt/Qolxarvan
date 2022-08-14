@@ -21,20 +21,20 @@ import {
 export default class SuggestionPane extends Component<Props, State> {
 
   public render(): ReactNode {
-    let suggestion = this.props.suggestion;
-    let language = this.props.store!.locale;
-    let descriptionNames = suggestion.getDescriptionNames(language).filter((name) => name !== undefined);
-    let keywordNode = (descriptionNames.length > 0) && (
+    const suggestion = this.props.suggestion;
+    const language = this.props.store!.locale;
+    const descriptionNames = suggestion.getDescriptionNames(language).filter((name) => name !== undefined);
+    const keywordNode = (descriptionNames.length > 0) && (
       <span styleName="keyword">
         ({descriptionNames.join(", ").toLowerCase()})
       </span>
     );
-    let nameNodes = suggestion.names.map((name) => {
-      let nameNode = <span styleName="link sans" key={Math.random()} onClick={this.props.onLinkClick && partial(this.props.onLinkClick, name)}>{name}</span>;
+    const nameNodes = suggestion.names.map((name) => {
+      const nameNode = <span styleName="link sans" key={Math.random()} onClick={this.props.onLinkClick && partial(this.props.onLinkClick, name)}>{name}</span>;
       return nameNode;
     });
-    let nameNode = WordPane.intersperse(nameNodes, ", ");
-    let node = (
+    const nameNode = WordPane.intersperse(nameNodes, ", ");
+    const node = (
       <li styleName="suggestion">
         {suggestion.getKindName(language)?.toLowerCase()}
         {keywordNode}

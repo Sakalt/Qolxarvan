@@ -35,29 +35,29 @@ import {
 export default class WordPane extends Component<Props, State> {
 
   private renderHead(word: ParsedWord<ReactNode>): ReactNode {
-    let sort = word.parts[this.props.store!.locale]?.sort ?? null;
-    let date = GregorianDate.ofHairia(word.date);
-    let dateString = ("0000" + date.getYear()).slice(-4) + "/" + ("00" + date.getMonth()).slice(-2) + "/" + ("00" + date.getDate()).slice(-2);
-    let categoryNode = (sort !== null) && (
+    const sort = word.parts[this.props.store!.locale]?.sort ?? null;
+    const date = GregorianDate.ofHairia(word.date);
+    const dateString = ("0000" + date.getYear()).slice(-4) + "/" + ("00" + date.getMonth()).slice(-2) + "/" + ("00" + date.getDate()).slice(-2);
+    const categoryNode = (sort !== null) && (
       <span styleName="head-sort tag right-margin">{sort}</span>
     );
-    let nameNode = (
+    const nameNode = (
       <span styleName="head-name right-margin">
         <span styleName="sans">{word.name}</span>
       </span>
     );
-    let pronunciationNode = (word.pronunciation !== null) && (
+    const pronunciationNode = (word.pronunciation !== null) && (
       <span styleName="head-pronunciation right-margin">
         /{word.pronunciation}/
       </span>
     );
-    let dateNode = (
+    const dateNode = (
       <div styleName="head-date">
         <div styleName="hairia">{word.date}</div>
         <div styleName="gregorian">{dateString}</div>
       </div>
     );
-    let node = (
+    const node = (
       <div styleName="head">
         <div styleName="head-left">
           {categoryNode}
@@ -73,27 +73,27 @@ export default class WordPane extends Component<Props, State> {
   }
 
   private renderSection(section: Section<ReactNode>, index: number): ReactNode {
-    let equivalents = section.getEquivalents(true);
-    let normalInformations = section.getNormalInformations(true).filter((information) => information.kind !== "task" && information.kind !== "history");
-    let phraseInformations = section.getPhraseInformations(true);
-    let exampleInformations = section.getExampleInformations(true);
-    let relations = section.relations;
-    let equivalentNodes = equivalents.map((equivalent, index) => this.renderEquivalent(equivalent, index));
-    let normalInformationNodes = normalInformations.map((information, index) => this.renderNormalInformation(information, index));
-    let phraseInformationNode = this.renderPhraseInformations(phraseInformations);
-    let exampleInformationNode = this.renderExampleInformations(exampleInformations);
-    let relationNodes = relations.map((relation, index) => this.renderRelation(relation, index));
-    let equivalentNode = (equivalents.length > 0) && (
+    const equivalents = section.getEquivalents(true);
+    const normalInformations = section.getNormalInformations(true).filter((information) => information.kind !== "task" && information.kind !== "history");
+    const phraseInformations = section.getPhraseInformations(true);
+    const exampleInformations = section.getExampleInformations(true);
+    const relations = section.relations;
+    const equivalentNodes = equivalents.map((equivalent, index) => this.renderEquivalent(equivalent, index));
+    const normalInformationNodes = normalInformations.map((information, index) => this.renderNormalInformation(information, index));
+    const phraseInformationNode = this.renderPhraseInformations(phraseInformations);
+    const exampleInformationNode = this.renderExampleInformations(exampleInformations);
+    const relationNodes = relations.map((relation, index) => this.renderRelation(relation, index));
+    const equivalentNode = (equivalents.length > 0) && (
       <ul styleName="equivalents section-item list">
         {equivalentNodes}
       </ul>
     );
-    let relationNode = (section.relations.length > 0) && (
+    const relationNode = (section.relations.length > 0) && (
       <ul styleName="relations section-item list">
         {relationNodes}
       </ul>
     );
-    let node = (
+    const node = (
       <div styleName="section" key={`section-${index}`}>
         {equivalentNode}
         {normalInformationNodes}
@@ -106,21 +106,21 @@ export default class WordPane extends Component<Props, State> {
   }
 
   private renderEquivalent(equivalent: Equivalent<ReactNode>, index: number): ReactNode {
-    let categoryNode = (equivalent.category !== null) && (
+    const categoryNode = (equivalent.category !== null) && (
       <span styleName="equivalent-category tag right-margin">{equivalent.category}</span>
     );
-    let frameNode = (equivalent.frame !== null) && (
+    const frameNode = (equivalent.frame !== null) && (
       <span styleName="equivalent-frame small right-margin">({equivalent.frame})</span>
     );
-    let nameNodes = equivalent.names.map((name, index) => {
-      let nameNode = (
+    const nameNodes = equivalent.names.map((name, index) => {
+      const nameNode = (
         <Fragment key={`equivalent-inner-${index}`}>
           {name}
         </Fragment>
       );
       return nameNode;
     });
-    let node = (
+    const node = (
       <li styleName="equivalent text list-item" key={`equivalent-${index}`}>
         {categoryNode}
         {frameNode}
@@ -131,7 +131,7 @@ export default class WordPane extends Component<Props, State> {
   }
 
   private renderNormalInformation(information: NormalInformation<ReactNode>, index: number): ReactNode {
-    let node = (
+    const node = (
       <div styleName="information section-item" key={`information-${index}`}>
         <div styleName="information-kind small-head">
           <span styleName="information-kind-inner small-head-inner">{InformationKindUtil.getName(information.kind, this.props.store!.locale)}</span>
@@ -145,20 +145,20 @@ export default class WordPane extends Component<Props, State> {
   }
 
   private renderPhraseInformations(informations: ReadonlyArray<PhraseInformation<ReactNode>>): ReactNode {
-    let innerNodes = informations.map((information, index) => {
-      let expressionNode = (
+    const innerNodes = informations.map((information, index) => {
+      const expressionNode = (
         <dt styleName="phrase-expression">
           {information.expression}
           <span styleName="phrease-divider">—</span>
           {information.equivalentNames.join(", ")}
         </dt>
       );
-      let textNode = (information.text !== null) && (
+      const textNode = (information.text !== null) && (
         <dd styleName="phrase-inner-text">
           {information.text}
         </dd>
       );
-      let innerNode = (
+      const innerNode = (
         <Fragment key={`phrase-inner-${index}`}>
           {expressionNode}
           {textNode}
@@ -166,7 +166,7 @@ export default class WordPane extends Component<Props, State> {
       );
       return innerNode;
     });
-    let node = (informations.length > 0) && (
+    const node = (informations.length > 0) && (
       <div styleName="information section-item" key="information-phrase">
         <div styleName="information-kind small-head">
           <span styleName="information-kind-inner small-head-inner">{InformationKindUtil.getName("phrase", this.props.store!.locale)}</span>
@@ -180,18 +180,18 @@ export default class WordPane extends Component<Props, State> {
   }
 
   private renderExampleInformations(informations: ReadonlyArray<ExampleInformation<ReactNode>>): ReactNode {
-    let innerNodes = informations.map((information, index) => {
-      let sentenceNode = (
+    const innerNodes = informations.map((information, index) => {
+      const sentenceNode = (
         <dt styleName="example-sentence">
           {information.sentence}
         </dt>
       );
-      let translationNode = (
+      const translationNode = (
         <dd styleName="example-translation">
           {information.translation}
         </dd>
       );
-      let innerNode = (
+      const innerNode = (
         <Fragment key={`example-inner-${index}`}>
           {sentenceNode}
           {translationNode}
@@ -199,7 +199,7 @@ export default class WordPane extends Component<Props, State> {
       );
       return innerNode;
     });
-    let node = (informations.length > 0) && (
+    const node = (informations.length > 0) && (
       <div styleName="information section-item" key="information-example">
         <div styleName="information-kind small-head">
           <span styleName="information-kind-inner small-head-inner">{InformationKindUtil.getName("example", this.props.store!.locale)}</span>
@@ -213,12 +213,12 @@ export default class WordPane extends Component<Props, State> {
   }
 
   private renderRelation(relation: Relation<ReactNode>, index: number): ReactNode {
-    let titleNode = (relation.title !== null) && (
+    const titleNode = (relation.title !== null) && (
       <span styleName="relation-title tag right-margin">{relation.title}</span>
     );
-    let entryNodes = relation.entries.map((entry, index) => {
-      let referNode = entry.refer && <span styleName="refer">*</span>;
-      let entryNode = (
+    const entryNodes = relation.entries.map((entry, index) => {
+      const referNode = entry.refer && <span styleName="refer">*</span>;
+      const entryNode = (
         <Fragment key={`relation-inner-${index}`}>
           {entry.name}
           {referNode}
@@ -226,7 +226,7 @@ export default class WordPane extends Component<Props, State> {
       );
       return entryNode;
     });
-    let node = (
+    const node = (
       <li styleName="relation text list-item" key={`relation-${index}`}>
         {titleNode}
         {WordPane.intersperse(entryNodes, ", ")}
@@ -236,15 +236,15 @@ export default class WordPane extends Component<Props, State> {
   }
 
   private renderWord(word: ParsedWord<ReactNode>, markers: Array<Marker>): ReactNode {
-    let headNode = this.renderHead(word);
-    let sectionNodes = word.parts[this.props.store!.locale]?.sections.map((section, index) => this.renderSection(section, index));
-    let sectionNode = (sectionNodes !== undefined && sectionNodes.length > 0) && (
+    const headNode = this.renderHead(word);
+    const sectionNodes = word.parts[this.props.store!.locale]?.sections.map((section, index) => this.renderSection(section, index));
+    const sectionNode = (sectionNodes !== undefined && sectionNodes.length > 0) && (
       <div styleName="sections">
         {sectionNodes}
         <div styleName="background-name">{WordPane.createGilitString(word.name)}</div>
       </div>
     );
-    let node = (
+    const node = (
       <div styleName="word">
         {headNode}
         {sectionNode}
@@ -254,41 +254,41 @@ export default class WordPane extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let resolver = WordPane.createMarkupResolver(this.props.onLinkClick);
-    let parser = new Parser(resolver);
-    let word = parser.parse(this.props.word);
-    let markers = this.props.word.markers;
-    let node = this.renderWord(word, markers);
+    const resolver = WordPane.createMarkupResolver(this.props.onLinkClick);
+    const parser = new Parser(resolver);
+    const word = parser.parse(this.props.word);
+    const markers = this.props.word.markers;
+    const node = this.renderWord(word, markers);
     return node;
   }
 
   public static createMarkupResolver(onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void): MarkupResolver<ReactNode, ReactNode> {
-    let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
-      let node = <span styleName="link" key={Math.random()} onClick={onLinkClick && partial(onLinkClick, name)}>{children}</span>;
+    const resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
+      const node = <span styleName="link" key={Math.random()} onClick={onLinkClick && partial(onLinkClick, name)}>{children}</span>;
       return node;
     };
-    let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
-      let node = <span styleName="sans" key={Math.random()}>{children}</span>;
+    const resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
+      const node = <span styleName="sans" key={Math.random()}>{children}</span>;
       return node;
     };
-    let resolveSlash = function (string: string): ReactNode {
-      let node = <span styleName="italic" key={Math.random()}>{string}</span>;
+    const resolveSlash = function (string: string): ReactNode {
+      const node = <span styleName="italic" key={Math.random()}>{string}</span>;
       return node;
     };
-    let resolveHairia = function (hairia: number): ReactNode {
-      let node = <span styleName="hairia" key={Math.random()}>{hairia}</span>;
+    const resolveHairia = function (hairia: number): ReactNode {
+      const node = <span styleName="hairia" key={Math.random()}>{hairia}</span>;
       return node;
     };
-    let join = function (nodes: Array<ReactNode | string>): ReactNode {
+    const join = function (nodes: Array<ReactNode | string>): ReactNode {
       return nodes;
     };
-    let modifyPunctuations = true;
-    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, resolveHairia, join, modifyPunctuations});
+    const modifyPunctuations = true;
+    const resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, resolveHairia, join, modifyPunctuations});
     return resolver;
   }
 
   public static intersperse(nodes: ReadonlyArray<ReactNode>, separator: ReactNode): Array<ReactNode> {
-    let resultNodes = [];
+    const resultNodes = [];
     for (let i = 0 ; i < nodes.length ; i ++) {
       if (i !== 0) {
         resultNodes.push(separator);
@@ -300,14 +300,14 @@ export default class WordPane extends Component<Props, State> {
 
   private static createGilitString(string: string): string {
     let capital = false;
-    let gilitChars = string.split("").reverse().map((char) => {
+    const gilitChars = string.split("").reverse().map((char) => {
       if (char !== "x" && char !== "j" && char !== "n" && char !== "m" && char !== "'") {
         capital = !capital;
       }
-      let gilitChar = (char === "'") ? "" : (capital) ? char.toUpperCase() : char.toLowerCase();
+      const gilitChar = (char === "'") ? "" : (capital) ? char.toUpperCase() : char.toLowerCase();
       return gilitChar;
     });
-    let gilitString = gilitChars.reverse().join("");
+    const gilitString = gilitChars.reverse().join("");
     console.log(gilitChars);
     return gilitString;
   }
