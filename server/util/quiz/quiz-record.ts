@@ -60,6 +60,7 @@ export class QuizRecord {
           return iteration;
         }
       }
+      return undefined;
     })();
     if (iteration !== undefined) {
       const {sources, quiz} = iteration;

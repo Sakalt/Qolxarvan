@@ -76,7 +76,7 @@ export class DiscordController extends Controller {
     {name: "part", type: CommandOptionType.BOOLEAN, required: false, description: "部分一致にするかどうか (True: 部分一致, False: 完全一致)"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
-    const search = interaction.options.get("search")?.value! as string;
+    const search = interaction.options.get("search")?.value as string;
     const part = interaction.options.get("part")?.value as boolean | undefined;
     await interaction.defer();
     const dictionary = await ExtendedDictionary.fetch();
