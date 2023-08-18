@@ -1,20 +1,7 @@
 @charset "utf-8";
 
+@import "./font.scss";
 @import "/client/component/mixin.scss";
-
-
-@font-face {
-  font-family: $vekos-font-family;
-  src: url("http://ziphil.com/material/font/7.woff") format("woff"), url("http://ziphil.com/material/font/7.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: $gilit-font-family;
-  src: url("https://ziphil.com/material/font/10.woff") format("woff"), url("https://ziphil.com/material/font/10.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
 
 
 html {
@@ -28,7 +15,7 @@ body {
   margin: 0rpx;
   padding: 0rpx;
   font-family: $european-serif-font-family, $japanese-serif-font-family, serif;
-  font-feature-settings: "palt" 1, "pkna" 1;
+  font-feature-settings: "lnum" 1, "palt" 1, "pkna" 1;
   color: $black-color;
   line-height: 1;
   background: $background;
