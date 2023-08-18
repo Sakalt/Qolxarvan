@@ -18,7 +18,7 @@ import {
 } from "/client/component/store";
 
 
-export default class BaseComponent<P = {}, S = {}, Q = {}, H = any> extends Component<Props<P, Q>, S, H> {
+export default class BaseComponent<P = {}, S = {}, Q extends {[K in keyof Q]?: string} = {}, H = any> extends Component<Props<P, Q>, S, H> {
 
   public constructor(props?: any) {
     super(props);
@@ -28,9 +28,9 @@ export default class BaseComponent<P = {}, S = {}, Q = {}, H = any> extends Comp
   protected initialize(): void {
   }
 
-  protected trans(id: string | number, values?: Record<string, Primitive | FormatFunction<string, string>>): string;
-  protected trans(id: string | number, values?: Record<string, Primitive | ReactNode | FormatFunction<ReactNode, ReactNode>>): ReactNode;
-  protected trans(id: string | number, values?: Record<string, any>): ReactNode {
+  protected trans(id: string, values?: Record<string, Primitive | FormatFunction<string, string>>): string;
+  protected trans(id: string, values?: Record<string, Primitive | ReactNode | FormatFunction<ReactNode, ReactNode>>): ReactNode;
+  protected trans(id: string, values?: Record<string, any>): ReactNode {
     const defaultMessage = "[?]";
     return this.props.intl!.formatMessage({id, defaultMessage}, values);
   }
@@ -61,7 +61,7 @@ type AdditionalProps = {
   store: GlobalStore
 };
 
-type Props<P, Q> = Partial<RouteComponentProps<Q, any, any> & AdditionalProps> & P;
+type Props<P, Q extends {[K in keyof Q]?: string}> = Partial<RouteComponentProps<Q, any, any> & AdditionalProps> & P;
 
 type StylesRecord = {[key: string]: string | undefined};
 type FormatFunction<T, R> = (parts: Array<string | T>) => R;

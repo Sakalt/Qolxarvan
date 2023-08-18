@@ -2,8 +2,8 @@
 
 import {
   Client,
+  EmbedBuilder,
   Message,
-  MessageEmbed,
   Snowflake,
   TextChannel
 } from "discord.js";
@@ -112,18 +112,20 @@ export class Quiz {
       } else {
         return undefined;
       }
+    } else {
+      return undefined;
     }
   }
 
-  public createDiscordEmbed(): MessageEmbed {
-    const embed = new MessageEmbed();
-    embed.title = `第 ${this.number} 問`;
-    embed.description = this.questionMarkup;
-    embed.color = 0x33C3FF;
-    embed.addField("正解", `||${this.answer}||`, true);
-    embed.addField("難易度", `${this.difficulty ?? "?"}`, true);
-    embed.addField("投稿リンク", `[問題](${this.urls.problem}) · [解説](${this.urls.commentary})`, true);
-    embed.addField("解説", `||${this.commentary}||`, false);
+  public createDiscordEmbed(): EmbedBuilder {
+    const embed = new EmbedBuilder();
+    embed.setTitle(`第 ${this.number} 問`);
+    embed.setDescription(this.questionMarkup);
+    embed.setColor(0x33C3FF);
+    embed.addFields({name: "正解", value: `||${this.answer}||`, inline: true});
+    embed.addFields({name: "難易度", value: `${this.difficulty ?? "?"}`, inline: true});
+    embed.addFields({name: "投稿リンク", value: `[問題](${this.urls.problem}) · [解説](${this.urls.commentary})`, inline: true});
+    embed.addFields({name: "解説", value: `||${this.commentary}||`, inline: false});
     return embed;
   }
 

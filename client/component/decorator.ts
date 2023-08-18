@@ -23,9 +23,9 @@ import {
 } from "/client/component/store";
 
 
-export function style(style: any, options: DecoratorOptions = {}): ClassDecorator {
+export function style(style: any, options: DecoratorOptions = {}): any {
   const nextOptions = Object.assign({}, DEFAULT_DECORATOR_OPTIONS, options);
-  const decorator = function <P, C extends ComponentClass<P>>(component: ComponentClass<P> & C): ComponentClass<P> & C {
+  const decorator = function <P, C extends ComponentClass<P>>(component: any): ComponentClass<P> & C {
     if (style !== null && style !== undefined) {
       component = css(style, {allowMultiple: true, handleNotFoundStyleName: "ignore"})(component);
     }

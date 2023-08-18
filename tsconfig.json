@@ -20,10 +20,14 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "removeComments": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": [
     "client/**/*",
     "server/**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

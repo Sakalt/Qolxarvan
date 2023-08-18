@@ -43,7 +43,6 @@ export class Main {
     this.listen();
   }
 
-  // リクエストボディをパースするミドルウェアの設定をします。
   private setupBodyParsers(): void {
     const urlencodedParser = express.urlencoded({extended: false});
     const jsonParser = express.json();

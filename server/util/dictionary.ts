@@ -3,11 +3,7 @@
 import {
   formatToTimeZone
 } from "date-fns-timezone";
-import {
-  MessageActionRow,
-  MessageButton,
-  MessageEmbed
-} from "discord.js";
+import {ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder} from "discord.js";
 import fs from "fs";
 import * as queryParser from "query-string";
 import {
@@ -81,8 +77,8 @@ export class ExtendedDictionary extends Dictionary {
     return names.length;
   }
 
-  // 現在の単語数を Google スプレッドシートに保存します。
-  // 日付は 30 時間制のもの (0 時から 6 時までは通常の日付の前日になる) を利用します。
+  /** 現在の単語数を Google スプレッドシートに保存します。
+   * 日付は 30 時間制のもの (0 時から 6 時までは通常の日付の前日になる) を利用します。*/
   public async saveHistory(): Promise<void> {
     const spreadsheet = await GoogleClient.instance.fetchSpreadsheet(HISTORY_SPREADSHEET_ID);
     const sheet = spreadsheet.sheetsByIndex[0];
@@ -152,14 +148,14 @@ export class ExtendedDictionary extends Dictionary {
     }
   }
 
-  public static createWordDiscordEmbed(rawWord: Word): MessageEmbed | undefined {
+  public static createWordDiscordEmbed(rawWord: Word): EmbedBuilder | undefined {
     const word = Parser.createSimple().parse(rawWord);
     const section = word.parts["ja"]?.sections[0];
     if (section !== undefined) {
-      const embed = new MessageEmbed();
-      embed.title = word.name;
-      embed.url = ExtendedDictionary.createWordUrl(rawWord);
-      embed.color = 0xFFAB33;
+      const embed = new EmbedBuilder();
+      embed.setTitle(word.name);
+      embed.setURL(ExtendedDictionary.createWordUrl(rawWord));
+      embed.setColor(0xFFAB33);
       const equivalentStrings = section.getEquivalents(true).map((equivalent) => {
         let equivalentString = "";
         equivalentString += `**❬${equivalent.category}❭** `;
@@ -169,10 +165,10 @@ export class ExtendedDictionary extends Dictionary {
         equivalentString += equivalent.names.join(", ");
         return equivalentString;
       });
-      embed.description = equivalentStrings.join("\n");
-      embed.addField("品詞", `❬${section.sort}❭`, true);
-      embed.addField("発音", `/${word.pronunciation}/`, true);
-      embed.addField("造語日", `ᴴ${word.date}`, true);
+      embed.setDescription(equivalentStrings.join("\n"));
+      embed.addFields({name: "品詞", value: `❬${section.sort}❭`, inline: true});
+      embed.addFields({name: "発音", value: `/${word.pronunciation}/`, inline: true});
+      embed.addFields({name: "造語日", value: `ᴴ${word.date}`, inline: true});
       const normalInformationFields = section.getNormalInformations(true).filter((information) => information.kind !== "task" && information.kind !== "history").map((information) => {
         const normalInformationField = {name: information.getKindName("ja")!, value: information.text, inline: false};
         return normalInformationField;
@@ -201,11 +197,11 @@ export class ExtendedDictionary extends Dictionary {
     }
   }
 
-  public static createSearchResultDiscordEmbed(parameter: NormalParameter, result: SearchResult, page: number): MessageEmbed {
-    const embed = new MessageEmbed();
-    embed.title = "検索結果";
-    embed.url = ExtendedDictionary.createParameterUrl(parameter);
-    embed.description = "単語名が書かれたボタンを押すと、その単語の詳細情報が表示されます。矢印ボタンを押すと、前もしくは次のページの検索結果が表示されます。";
+  public static createSearchResultDiscordEmbed(parameter: NormalParameter, result: SearchResult, page: number): EmbedBuilder {
+    const embed = new EmbedBuilder();
+    embed.setTitle("検索結果");
+    embed.setURL(ExtendedDictionary.createParameterUrl(parameter));
+    embed.setDescription("単語名が書かれたボタンを押すと、その単語の詳細情報が表示されます。矢印ボタンを押すと、前もしくは次のページの検索結果が表示されます。");
     let value = "";
     result.sliceWords(page).forEach((word, index) => {
       const parser = Parser.createSimple();
@@ -221,36 +217,36 @@ export class ExtendedDictionary extends Dictionary {
     const firstIndex = result.sizePerPage * page + 1;
     const lastIndex = Math.min(result.words.length, result.sizePerPage * page + result.sizePerPage);
     const fieldName = `${firstIndex} 件目～ ${lastIndex} 件目 / ${result.words.length} 件`;
-    embed.addField(fieldName, value);
+    embed.addFields({name: fieldName, value});
     return embed;
   }
 
-  public static createSearchResultDiscordComponents(parameter: NormalParameter, result: SearchResult, page: number): Array<MessageActionRow> {
+  public static createSearchResultDiscordComponents(parameter: NormalParameter, result: SearchResult, page: number): Array<ActionRowBuilder> {
     const wordButtons = result.sliceWords(page).map((word, index) => {
-      const wordButton = new MessageButton();
+      const wordButton = new ButtonBuilder();
       wordButton.setLabel(word.name);
       wordButton.setEmoji((index >= 9) ? "\u{1F51F}" : `${index + 1}\u{FE0F}\u{20E3}`);
-      wordButton.setCustomID(queryParser.stringify({name: "word", uniqueName: word.uniqueName}));
-      wordButton.setStyle("SECONDARY");
+      wordButton.setCustomId(queryParser.stringify({name: "word", uniqueName: word.uniqueName}));
+      wordButton.setStyle(ButtonStyle["Secondary"]);
       return wordButton;
     });
     const wordRowCount = Math.ceil(wordButtons.length / 5);
     const wordRows = [...Array(wordRowCount)].map((value, index) => {
-      const wordRow = new MessageActionRow();
+      const wordRow = new ActionRowBuilder();
       wordRow.addComponents(...wordButtons.slice(index * 5, (index + 1) * 5));
       return wordRow;
     });
-    const previousPageButton = new MessageButton();
-    const nextPageButton = new MessageButton();
+    const previousPageButton = new ButtonBuilder();
+    const nextPageButton = new ButtonBuilder();
     previousPageButton.setEmoji("\u{2B05}\u{FE0F}");
-    previousPageButton.setCustomID(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page - 1}));
+    previousPageButton.setCustomId(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page - 1}));
     previousPageButton.setDisabled(page <= result.minPage);
-    previousPageButton.setStyle("SECONDARY");
+    previousPageButton.setStyle(ButtonStyle["Secondary"]);
     nextPageButton.setEmoji("\u{27A1}\u{FE0F}");
-    nextPageButton.setCustomID(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page + 1}));
+    nextPageButton.setCustomId(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page + 1}));
     nextPageButton.setDisabled(page >= result.maxPage);
-    nextPageButton.setStyle("SECONDARY");
-    const pageRow = new MessageActionRow();
+    nextPageButton.setStyle(ButtonStyle["Secondary"]);
+    const pageRow = new ActionRowBuilder();
     pageRow.addComponents(previousPageButton, nextPageButton);
     const components = [...wordRows, pageRow];
     return components;

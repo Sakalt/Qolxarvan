@@ -26,8 +26,7 @@ import {
   DISCORD_IDS
 } from "/server/discord/id";
 import {
-  DiscordClient,
-  TwitterClient
+  DiscordClient
 } from "/server/util/client";
 import {
   ExtendedDictionary
@@ -62,14 +61,10 @@ export class DictionaryController extends Controller {
       if (body.password === PASSWORD) {
         const path = request.file?.path;
         const dictionary = await ExtendedDictionary.upload(path);
-        const twitterPromise = TwitterClient.instance.tweet(`◆ 辞書データが更新されました (${dictionary.words.length} 語)。`);
-        const discordPromise = (async () => {
-          const channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
-          if (channel instanceof TextChannel) {
-            await channel.send(`辞書データが更新されました (${dictionary.words.length} 語)。`);
-          }
-        })();
-        await Promise.all([twitterPromise, discordPromise]);
+        const channel = DiscordClient.instance.channels.resolve(DISCORD_IDS.channel.sokad.sotik);
+        if (channel instanceof TextChannel) {
+          await channel.send(`辞書データが更新されました (${dictionary.words.length} 語)。`);
+        }
         await fs.promises.unlink(path);
         response.json(null).end();
       } else {
@@ -154,16 +149,6 @@ export class DictionaryController extends Controller {
   public async [Symbol()](): Promise<void> {
     const dictionary = await ExtendedDictionary.fetch();
     await dictionary.saveHistory();
-  }
-
-  @cron("*/15 * * * *")
-  public async [Symbol()](): Promise<void> {
-    const dictionary = await ExtendedDictionary.fetch();
-    const word = dictionary.words[Math.floor(Math.random() * dictionary.words.length)];
-    const text = ExtendedDictionary.createWordTwitterText(word);
-    if (text !== undefined) {
-      await TwitterClient.instance.tweet(text);
-    }
   }
 
   @cron("*/30 * * * *")

@@ -2,7 +2,7 @@
 
 import {
   Client,
-  MessageEmbed,
+  EmbedBuilder,
   Snowflake,
   User
 } from "discord.js";
@@ -31,7 +31,7 @@ export class QuizRecord {
     this.results = results;
   }
 
-  // 与えられた番号のクイズの結果データを Google スプレッドシートに保存します。
+  /** 与えられた番号のクイズの結果データを Google スプレッドシートに保存します。*/
   public static async save(client: Client, number: number) {
     const sheet = await QuizRecord.getSheet();
     const [quiz, statuses] = await QuizRecord.calcStatuses(client, number);
@@ -94,8 +94,8 @@ export class QuizRecord {
     }
   }
 
-  // 与えられたユーザーのクイズの成績を取得します。
-  // Google スプレッドシートのデータをもとに成績を取得するため、返されるデータはスプレッドシートに保存された段階での成績であり、最新のデータであるとは限りません。
+  /** 与えられたユーザーのクイズの成績を取得します。
+   * Google スプレッドシートのデータをもとに成績を取得するため、返されるデータはスプレッドシートに保存された段階での成績であり、最新のデータであるとは限りません。*/
   public static async fetch(client: Client, user: User): Promise<QuizRecord> {
     const sheet = await QuizRecord.getSheet();
     const header = await QuizRecord.createHeader(sheet);
@@ -124,9 +124,9 @@ export class QuizRecord {
     }
   }
 
-  // 与えられたユーザーのクイズの成績を取得します。
-  // Discord から直接情報を取得して成績を集計するため、返されるデータは常に最新のものになります。
-  // ただし、Discord API を大量に呼び出す関係上、動作は非常に低速です。
+  /** 与えられたユーザーのクイズの成績を取得します。
+   * Discord から直接情報を取得して成績を集計するため、返されるデータは常に最新のものになります。
+   * ただし、Discord API を大量に呼び出す関係上、動作は非常に低速です。*/
   public static async fetchDirect(client: Client, user: User): Promise<QuizRecord> {
     const results = new Map<number, QuizResult>();
     const iterations = [];
@@ -203,20 +203,20 @@ export class QuizRecord {
     ]);
   }
 
-  public createDiscordEmbed(): MessageEmbed {
-    const embed = new MessageEmbed();
+  public createDiscordEmbed(): EmbedBuilder {
+    const embed = new EmbedBuilder();
     const counts = this.counts;
-    embed.title = "シャレイア語検定成績";
-    embed.color = 0x33C3FF;
-    embed.setAuthor(this.user.username, this.user.avatarURL() ?? undefined);
+    embed.setTitle("シャレイア語検定成績");
+    embed.setColor(0x33C3FF);
+    embed.setAuthor({name: this.user.username, iconURL: this.user.avatarURL() ?? undefined});
     const correctPercentString = (counts.all > 0) ? `(**${(counts.correct / counts.all * 100).toFixed(1)}** %)` : "(**0.0** %)";
     const wrongPercentString = (counts.all > 0) ? `(**${(counts.wrong / counts.all * 100).toFixed(1)}** %)` : "(**0.0** %)";
     const invalidPercentString = (counts.all > 0) ? `(**${(counts.invalid / counts.all * 100).toFixed(1)}** %)` : "(**0.0** %)";
-    embed.addField("\u{2705} 正解", `**${counts.correct}** / ${counts.all} ${correctPercentString}`, true);
-    embed.addField("\u{274E} 不正解", `**${counts.wrong}** / ${counts.all} ${wrongPercentString}`, true);
-    embed.addField("\u{1F6AB} 無効", `**${counts.invalid}** / ${counts.all} ${invalidPercentString}`, true);
+    embed.addFields({name: "\u{2705} 正解", value: `**${counts.correct}** / ${counts.all} ${correctPercentString}`, inline: true});
+    embed.addFields({name: "\u{274E} 不正解", value: `**${counts.wrong}** / ${counts.all} ${wrongPercentString}`, inline: true});
+    embed.addFields({name: "\u{1F6AB} 無効", value: `**${counts.invalid}** / ${counts.all} ${invalidPercentString}`, inline: true});
     if (this.results.size > 0) {
-      embed.addField("個別成績", this.resultMarkup, false);
+      embed.addFields({name: "個別成績", value: this.resultMarkup, inline: false});
     }
     return embed;
   }

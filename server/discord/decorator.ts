@@ -138,8 +138,8 @@ function registerButton(controller: any, client: DiscordClient, metadata: Metada
 }
 
 async function setSlash(controller: any, client: DiscordClient, metadata: Metadata): Promise<void> {
-  client.application = new ClientApplication(client, {});
-  await client.application.fetch();
+  client.application = new (ClientApplication as any)(client, {});
+  await client.application?.fetch();
   const slashSpecs = metadata.filter((spec) => spec.event === "slash") as Array<SlashSpec>;
   const guild = await client.guilds.fetch(DISCORD_IDS.guild);
   const commands = slashSpecs.map((spec) => ({name: spec.commandName, description: spec.description, options: spec.options}));

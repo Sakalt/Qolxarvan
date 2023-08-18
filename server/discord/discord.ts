@@ -1,9 +1,8 @@
 //
 
+
 import {
-  ApplicationCommandOptionType as CommandOptionType
-} from "discord-api-types";
-import {
+  ApplicationCommandOptionType,
   ButtonInteraction,
   CommandInteraction,
   Message
@@ -45,7 +44,7 @@ import {
 export class DiscordController extends Controller {
 
   @listener("ready")
-  private async [Symbol()](client: DiscordClient): Promise<void> {
+  private async [Symbol()](client: DiscordClient, rawClient: any): Promise<void> {
     const url = "https://github.com/Ziphil/ShaleianOnline";
     const presence = client.user?.setPresence({activities: [{name: "xalzih", url}]});
     await client.log("Discord ready");
@@ -57,7 +56,7 @@ export class DiscordController extends Controller {
   }
 
   @slash("sotik", "オンライン辞典から指定された綴りの単語エントリーを抽出して返信します。", [
-    {name: "name", type: CommandOptionType.STRING, required: true, description: "表示する単語の綴り"}
+    {name: "name", type: ApplicationCommandOptionType["String"], required: true, description: "表示する単語の綴り"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const name = interaction.options.get("name")!.value! as string;
@@ -72,20 +71,20 @@ export class DiscordController extends Controller {
   }
 
   @slash("palev", "オンライン辞典から検索 (見出し語と訳語の両方から) を行ってその結果を返信します。", [
-    {name: "search", type: CommandOptionType.STRING, required: true, description: "検索する内容"},
-    {name: "part", type: CommandOptionType.BOOLEAN, required: false, description: "部分一致にするかどうか (True: 部分一致, False: 完全一致)"}
+    {name: "search", type: ApplicationCommandOptionType["String"], required: true, description: "検索する内容"},
+    {name: "part", type: ApplicationCommandOptionType["Boolean"], required: false, description: "部分一致にするかどうか (True: 部分一致, False: 完全一致)"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const search = interaction.options.get("search")?.value as string;
     const part = interaction.options.get("part")?.value as boolean | undefined;
-    await interaction.defer();
+    await interaction.deferReply();
     const dictionary = await ExtendedDictionary.fetch();
     const parameter = new NormalParameter(search, "both", (part) ? "part" : "exact", "ja", {diacritic: true, case: false});
     const result = dictionary.search(parameter);
     result.sizePerPage = 10;
     if (result.words.length > 0) {
       const embed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result, 0);
-      const components = ExtendedDictionary.createSearchResultDiscordComponents(parameter, result, 0);
+      const components = ExtendedDictionary.createSearchResultDiscordComponents(parameter, result, 0) as any;
       const count = result.words.length;
       await interaction.followUp({content: `kotikak a'l e sotik al'${count}.`, embeds: [embed], components});
     } else {
@@ -97,7 +96,7 @@ export class DiscordController extends Controller {
   @button("word")
   private async [Symbol()](client: DiscordClient, query: ParsedQuery, interaction: ButtonInteraction): Promise<void> {
     const uniqueName = query.uniqueName! as string;
-    await interaction.defer();
+    await interaction.deferReply();
     const dictionary = await ExtendedDictionary.fetch();
     const word = dictionary.findByUniqueName(uniqueName);
     const embed = (word !== undefined) ? ExtendedDictionary.createWordDiscordEmbed(word) : undefined;
@@ -113,14 +112,14 @@ export class DiscordController extends Controller {
     const search = query.search! as string;
     const type = query.type! as WordType;
     const page = +query.page!;
-    await interaction.defer();
+    await interaction.deferReply();
     const dictionary = await ExtendedDictionary.fetch();
     const parameter = new NormalParameter(search, "both", type, "ja", {diacritic: true, case: false});
     const result = dictionary.search(parameter);
     result.sizePerPage = 10;
     if (page >= result.minPage && page <= result.maxPage) {
       const embed = ExtendedDictionary.createSearchResultDiscordEmbed(parameter, result, page);
-      const components = ExtendedDictionary.createSearchResultDiscordComponents(parameter, result, page);
+      const components = ExtendedDictionary.createSearchResultDiscordComponents(parameter, result, page) as any;
       await interaction.followUp({embeds: [embed], components});
     } else {
       await interaction.followUp("kodak e zel atùk.");
@@ -128,22 +127,22 @@ export class DiscordController extends Controller {
   }
 
   @slash("cipas", "造語依頼を行います。", [
-    {name: "name", type: CommandOptionType.STRING, required: true, description: "造語依頼したい訳語"}
+    {name: "name", type: ApplicationCommandOptionType["String"], required: true, description: "造語依頼したい訳語"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const name = interaction.options.get("name")!.value! as string;
-    await interaction.defer();
+    await interaction.deferReply();
     const dictionary = await ExtendedDictionary.fetch();
     await dictionary.addCommissions([name]);
     await interaction.followUp("hafe e'n cipases a'c e xakoc ie sotik!");
   }
 
   @slash("zelad", "検定チャンネルに投稿された過去の問題を返信します。", [
-    {name: "number", type: CommandOptionType.INTEGER, required: true, description: "問題番号"}
+    {name: "number", type: ApplicationCommandOptionType["Integer"], required: true, description: "問題番号"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const number = interaction.options.get("number")!.value! as number;
-    await interaction.defer();
+    await interaction.deferReply();
     const quiz = await Quiz.findByNumber(client, number);
     if (quiz !== undefined) {
       const embed = quiz.createDiscordEmbed();
@@ -154,17 +153,17 @@ export class DiscordController extends Controller {
   }
 
   @slash("doklet", "検定チャンネルでの検定のこれまでの成績を返信します。", [
-    {name: "user", type: CommandOptionType.USER, required: false, description: "ユーザー (省略時はコマンド実行者)"}
+    {name: "user", type: ApplicationCommandOptionType["User"], required: false, description: "ユーザー (省略時はコマンド実行者)"}
   ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const user = interaction.options.get("user")?.user ?? interaction.user;
-    await interaction.defer();
+    await interaction.deferReply();
     const record = await QuizRecord.fetch(client, user);
     const embed = record.createDiscordEmbed();
     await interaction.followUp({embeds: [embed]});
   }
 
-  @listener("message")
+  @listener("messageCreate")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     const hasPermission = message.member?.roles.cache.find((role) => role.id === DISCORD_IDS.role.zisvalod) !== undefined;
     if (hasPermission) {
@@ -178,7 +177,7 @@ export class DiscordController extends Controller {
     }
   }
 
-  @listener("message")
+  @listener("messageCreate")
   private async [Symbol()](client: DiscordClient, message: Message): Promise<void> {
     const hasPermission = message.member?.roles.cache.find((role) => role.id === DISCORD_IDS.role.zisvalod) !== undefined;
     const correctChannel = message.channel.id === DISCORD_IDS.channel.sokad.zelad || message.channel.id === DISCORD_IDS.channel.test;

@@ -4,7 +4,7 @@ import {
   formatToTimeZone
 } from "date-fns-timezone";
 import {
-  Intents,
+  GatewayIntentBits,
   Client as OriginalDiscordClient,
   TextChannel
 } from "discord.js";
@@ -21,7 +21,7 @@ export class DiscordClient extends OriginalDiscordClient {
   public static readonly instance: DiscordClient = DiscordClient.create();
 
   private static create(): DiscordClient {
-    const client = new OriginalDiscordClient({intents: Intents.ALL}) as any;
+    const client = new OriginalDiscordClient({intents: Object.values(GatewayIntentBits).filter(Number.isInteger) as any}) as any;
     Object.setPrototypeOf(client, DiscordClient.prototype);
     client.login(DISCORD_KEY);
     return client;
@@ -42,12 +42,13 @@ export class DiscordClient extends OriginalDiscordClient {
     }
   }
 
-  public async error(message: string, error: Error): Promise<void> {
+  public async error(message: string, error: unknown): Promise<void> {
     try {
       const channel = this.channels.resolve(DISCORD_IDS.channel.bot);
       if (channel instanceof TextChannel) {
         const date = formatToTimeZone(new Date(), "YYYY/MM/DD HH:mm:ss", {timeZone: "Asia/Tokyo"});
-        const nextMessage = `__${date}__\n${message}\n\`\`\`\n${error.stack}\`\`\``;
+        const stackString = (error instanceof Error) ? error.stack : "";
+        const nextMessage = `__${date}__\n${message}\n\`\`\`\n${stackString}\`\`\``;
         await channel.send(nextMessage);
       } else {
         throw new Error("cannot happen");
