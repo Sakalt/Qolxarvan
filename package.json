@@ -48,7 +48,7 @@
     ]
   },
   "dependencies": {
-    "@formatjs/intl": "^1.4.10",
+    "@formatjs/intl": "^2.9.0",
     "@formatjs/intl-numberformat": "^5.7.6",
     "@notionhq/client": "^0.4.13",
     "axios": "^0.21.1",
