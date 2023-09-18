@@ -29,14 +29,14 @@ export default class SearchForm extends Component<Props, State> {
   private handleParameterSet(nextParameter: {search?: string, mode?: WordMode, type?: WordType, ignoreDiacritic?: boolean}): void {
     if (this.props.onParameterSet) {
       const oldParameter = ParameterUtils.getNormal(this.props.parameter);
-      const search = nextParameter.search ?? oldParameter.search;
+      const text = nextParameter.search ?? oldParameter.text;
       const mode = nextParameter.mode ?? oldParameter.mode;
       const type = nextParameter.type ?? oldParameter.type;
       const language = this.props.store!.locale;
       const ignoreCase = oldParameter.ignoreOptions.case;
       const ignoreDiacritic = nextParameter.ignoreDiacritic ?? oldParameter.ignoreOptions.diacritic;
-      const ignoreOptions = {case: ignoreCase, diacritic: ignoreDiacritic};
-      const parameter = new NormalParameter(search, mode, type, language, ignoreOptions);
+      const ignoreOptions = {case: ignoreCase, diacritic: ignoreDiacritic, space: true, wave: true};
+      const parameter = new NormalParameter(text, mode, type, language, ignoreOptions);
       this.props.onParameterSet(parameter);
     }
   }
@@ -50,7 +50,7 @@ export default class SearchForm extends Component<Props, State> {
     const node = (
       <form styleName="root" onSubmit={(event) => event.preventDefault()}>
         <div styleName="input-wrapper">
-          <Input value={parameter.search} onSet={(search) => this.handleParameterSet({search})}/>
+          <Input value={parameter.text} onSet={(search) => this.handleParameterSet({search})}/>
         </div>
         <div styleName="radio-wrapper">
           <RadioGroup name="mode" value={parameter.mode} specs={modeSpecs} onSet={(mode) => this.handleParameterSet({mode})}/>

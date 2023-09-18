@@ -57,7 +57,7 @@ export class DiscordController extends Controller {
 
   @slash("sotik", "オンライン辞典から指定された綴りの単語エントリーを抽出して返信します。", [
     {name: "name", type: ApplicationCommandOptionType["String"], required: true, description: "表示する単語の綴り"}
-  ])
+    ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const name = interaction.options.get("name")!.value! as string;
     const dictionary = await ExtendedDictionary.fetch();
@@ -73,13 +73,13 @@ export class DiscordController extends Controller {
   @slash("palev", "オンライン辞典から検索 (見出し語と訳語の両方から) を行ってその結果を返信します。", [
     {name: "search", type: ApplicationCommandOptionType["String"], required: true, description: "検索する内容"},
     {name: "part", type: ApplicationCommandOptionType["Boolean"], required: false, description: "部分一致にするかどうか (True: 部分一致, False: 完全一致)"}
-  ])
+    ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const search = interaction.options.get("search")?.value as string;
     const part = interaction.options.get("part")?.value as boolean | undefined;
     await interaction.deferReply();
     const dictionary = await ExtendedDictionary.fetch();
-    const parameter = new NormalParameter(search, "both", (part) ? "part" : "exact", "ja", {diacritic: true, case: false});
+    const parameter = new NormalParameter(search, "both", (part) ? "part" : "exact", "ja", {diacritic: true, case: false, space: true, wave: true});
     const result = dictionary.search(parameter);
     result.sizePerPage = 10;
     if (result.words.length > 0) {
@@ -114,7 +114,7 @@ export class DiscordController extends Controller {
     const page = +query.page!;
     await interaction.deferReply();
     const dictionary = await ExtendedDictionary.fetch();
-    const parameter = new NormalParameter(search, "both", type, "ja", {diacritic: true, case: false});
+    const parameter = new NormalParameter(search, "both", type, "ja", {diacritic: true, case: false, space: true, wave: true});
     const result = dictionary.search(parameter);
     result.sizePerPage = 10;
     if (page >= result.minPage && page <= result.maxPage) {
@@ -128,7 +128,7 @@ export class DiscordController extends Controller {
 
   @slash("cipas", "造語依頼を行います。", [
     {name: "name", type: ApplicationCommandOptionType["String"], required: true, description: "造語依頼したい訳語"}
-  ])
+    ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const name = interaction.options.get("name")!.value! as string;
     await interaction.deferReply();
@@ -139,7 +139,7 @@ export class DiscordController extends Controller {
 
   @slash("zelad", "検定チャンネルに投稿された過去の問題を返信します。", [
     {name: "number", type: ApplicationCommandOptionType["Integer"], required: true, description: "問題番号"}
-  ])
+    ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const number = interaction.options.get("number")!.value! as number;
     await interaction.deferReply();
@@ -154,7 +154,7 @@ export class DiscordController extends Controller {
 
   @slash("doklet", "検定チャンネルでの検定のこれまでの成績を返信します。", [
     {name: "user", type: ApplicationCommandOptionType["User"], required: false, description: "ユーザー (省略時はコマンド実行者)"}
-  ])
+    ])
   private async [Symbol()](client: DiscordClient, interaction: CommandInteraction): Promise<void> {
     const user = interaction.options.get("user")?.user ?? interaction.user;
     await interaction.deferReply();

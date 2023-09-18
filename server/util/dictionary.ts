@@ -239,11 +239,11 @@ export class ExtendedDictionary extends Dictionary {
     const previousPageButton = new ButtonBuilder();
     const nextPageButton = new ButtonBuilder();
     previousPageButton.setEmoji("\u{2B05}\u{FE0F}");
-    previousPageButton.setCustomId(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page - 1}));
+    previousPageButton.setCustomId(queryParser.stringify({name: "page", search: parameter.text, type: parameter.type, page: page - 1}));
     previousPageButton.setDisabled(page <= result.minPage);
     previousPageButton.setStyle(ButtonStyle["Secondary"]);
     nextPageButton.setEmoji("\u{27A1}\u{FE0F}");
-    nextPageButton.setCustomId(queryParser.stringify({name: "page", search: parameter.search, type: parameter.type, page: page + 1}));
+    nextPageButton.setCustomId(queryParser.stringify({name: "page", search: parameter.text, type: parameter.type, page: page + 1}));
     nextPageButton.setDisabled(page >= result.maxPage);
     nextPageButton.setStyle(ButtonStyle["Secondary"]);
     const pageRow = new ActionRowBuilder();
@@ -257,7 +257,7 @@ export class ExtendedDictionary extends Dictionary {
   }
 
   public static createParameterUrl(parameter: NormalParameter): string {
-    return `https://dic.ziphil.com?search=${encodeURIComponent(parameter.search)}&mode=${parameter.mode}&type=${parameter.type}`;
+    return `https://dic.ziphil.com?search=${encodeURIComponent(parameter.text)}&mode=${parameter.mode}&type=${parameter.type}`;
   }
 
 }

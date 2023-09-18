@@ -32,7 +32,8 @@
         {
           "destructuring": "all"
         }
-      ]
+      ],
+      "unused-imports/no-unused-imports": "off"
     }
   },
   "nodemonConfig": {
@@ -76,7 +77,7 @@
     "react-intl": "^6.4.4",
     "react-router-dom": "^5.2.0",
     "reflect-metadata": "^0.1.13",
-    "soxsot": "0.6.0",
+    "soxsot": "^0.8.1",
     "talqis": "^0.1.0",
     "ts-essentials": "^7.0.1"
   },
